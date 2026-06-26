@@ -45,7 +45,7 @@ Validate the catalog locally:
 python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
 python scripts/generate_agent_wrappers.py --check
-python scripts/check_links.py --timeout 15
+python scripts/check_links.py --timeout 15 --retries 1
 npx agnix@0.36.0 .
 ```
 
