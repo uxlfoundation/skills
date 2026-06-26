@@ -5,6 +5,8 @@ description: Repository rules for editing UXL Foundation agent skills
 
 Use `AGENTS.md` as the canonical guidance for this repository.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 - Keep skills concise, procedural, and evidence-backed.
 - Store detailed source material in `references/`.
 - Keep `skills.yaml`, `skill-cards/`, and `evals/evals.json` synchronized.

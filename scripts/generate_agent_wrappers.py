@@ -15,6 +15,8 @@ FILES = {
 
 This repository builds UXL Foundation agent skills. Read `AGENTS.md` first; it is the canonical instruction file.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 Key rules:
 
 - Treat each `skills/<skill-name>/SKILL.md` as a compact agent capability, not a documentation dump.
@@ -28,6 +30,8 @@ Claude-specific note: keep this file concise. Put durable repo knowledge in `AGE
     "GEMINI.md": """# Gemini CLI Instructions
 
 This repository builds UXL Foundation agent skills. Use `AGENTS.md` as the source of truth for repo behavior.
+
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 
 When working here:
 
@@ -43,6 +47,8 @@ If you need more detail, read `AGENTS.md`, then the specific `skills/<skill-name
 
 This repository maintains UXL Foundation agent skills. `AGENTS.md` is the canonical guidance file; use this file as the Copilot entry point and then consult `AGENTS.md` for details.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 Follow these rules:
 
 - Keep `SKILL.md` files short, procedural, and triggerable.
@@ -54,7 +60,7 @@ Follow these rules:
 For UXL library details, prefer official project repositories and documentation over generic web results.
 """,
     ".github/instructions/uxl-skills.instructions.md": """---
-applyTo: "skills/**,skill-cards/**,skills.yaml,scripts/**,README.md,AGENTS.md,CLAUDE.md,GEMINI.md,CONVENTIONS.md"
+applyTo: "**"
 ---
 
 When editing UXL skills catalog files:
@@ -66,13 +72,13 @@ When editing UXL skills catalog files:
 """,
     ".cursor/rules/uxl-skills.mdc": """---
 description: UXL skills catalog authoring and validation rules
-globs: ["**/*"]
 alwaysApply: true
 ---
 
 This repository maintains UXL Foundation agent skills.
 
 - Treat `AGENTS.md` as the canonical source of repository guidance.
+- Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 - Keep `SKILL.md` files concise and procedural.
 - Keep `skills.yaml`, `skill-cards/`, and eval files synchronized.
 - Prefer official UXL project docs, tests, examples, benchmarks, and maintainer notes.
@@ -86,6 +92,8 @@ description: Repository rules for editing UXL Foundation agent skills
 
 Use `AGENTS.md` as the canonical guidance for this repository.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 - Keep skills concise, procedural, and evidence-backed.
 - Store detailed source material in `references/`.
 - Keep `skills.yaml`, `skill-cards/`, and `evals/evals.json` synchronized.
@@ -95,6 +103,8 @@ Use `AGENTS.md` as the canonical guidance for this repository.
     "CONVENTIONS.md": """# Aider Conventions
 
 This repository maintains UXL Foundation agent skills. Load this file read-only for Aider sessions.
+
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 
 - Use `AGENTS.md` as the source of truth for repository rules.
 - Keep skill files concise and procedural.
@@ -109,6 +119,8 @@ This repository maintains UXL Foundation agent skills. Load this file read-only 
 
 Use AGENTS.md as the canonical source of repo instructions.
 
+Instruction precedence: when this wrapper and AGENTS.md differ, follow AGENTS.md.
+
 Rules:
 1. Keep SKILL.md files concise, procedural, and triggerable.
 2. Put detailed source material in references/.
@@ -121,6 +133,8 @@ Rules:
 
 Use `AGENTS.md` as the canonical source of repository instructions.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 - Keep `SKILL.md` files concise and procedural.
 - Keep detailed references in `references/`.
 - Keep `skills.yaml`, `skill-cards/`, and eval files synchronized.
@@ -130,7 +144,9 @@ Use `AGENTS.md` as the canonical source of repository instructions.
 """,
     "DEVIN.md": """# Devin Repo Notes
 
-This repository maintains UXL Foundation agent skills. Devin and similar autonomous agents should use `AGENTS.md` as the source of truth.
+This repository maintains UXL Foundation agent skills. Devin and similar autonomous agents use `AGENTS.md` as the source of truth.
+
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 
 Start with:
 
@@ -147,13 +163,15 @@ Before changing a skill, inspect:
 - `skill-cards/<skill-name>.md`
 - `skills.yaml`
 
-Do not mark a skill reviewed or project-owned without maintainer evidence.
+Mark a skill reviewed or project-owned only after maintainer evidence is recorded.
 """,
     ".agents/skills/uxl-skills-catalog.md": """# UXL Skills Catalog
 
 Use this repository skill when editing or reviewing UXL Foundation agent skills.
 
 Follow `AGENTS.md`.
+
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 
 Checklist:
 

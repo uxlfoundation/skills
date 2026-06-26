@@ -1,6 +1,6 @@
 # Repository Instructions
 
-This repository maintains UXL Foundation agent skills. `AGENTS.md` is the canonical source of repo guidance for agentic tools; tool-specific files should stay short and point back here.
+This repository maintains UXL Foundation agent skills. `AGENTS.md` is the canonical source of repo guidance for agentic tools; keep tool-specific files short and point them back here.
 
 ## Goal
 
@@ -16,14 +16,14 @@ Build a reviewable, evidence-backed catalog of skills that help coding agents us
 
 ## Authoring Rules
 
-- Keep `SKILL.md` concise and procedural. Put deep detail in `references/`.
+- Keep each per-skill instruction file concise and procedural. Move deep detail into that skill's references directory.
 - Keep each skill's frontmatter to `name` and `description` unless the publishing tool requires more metadata at install time.
-- Include both what the skill does and when it should trigger in the `description`.
+- Include both what the skill does and when it triggers in the `description`.
 - Prefer project-owned docs, READMEs, examples, tests, benchmarks, and maintainer guidance over generic internet advice.
-- Record current official sources in `references/official-sources.md`.
-- Keep `skills.yaml` and `skill-cards/<skill>.md` synchronized with every skill.
+- Record current official sources in each skill's source ledger.
+- Keep `skills.yaml` and the matching skill card synchronized with every skill.
 - Add or update eval prompts before broadening scope.
-- Do not promise speedups without correctness checks, baseline timings, and a clear measurement method.
+- Report speedups only with correctness checks, baseline timings, and a clear measurement method.
 - For "latest version", "current support", release status, or compatibility claims, check upstream docs or releases first.
 
 ## Structure
@@ -48,7 +48,7 @@ scripts/validate_catalog.py
 scripts/run_evals.py
 ```
 
-Scripts should be deterministic, standard-library-first, and safe to run on developer workstations.
+Make scripts deterministic, standard-library-first, and safe to run on developer workstations.
 
 ## Validation
 

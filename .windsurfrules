@@ -2,6 +2,8 @@ This repository maintains UXL Foundation agent skills.
 
 Use AGENTS.md as the canonical source of repo instructions.
 
+Instruction precedence: when this wrapper and AGENTS.md differ, follow AGENTS.md.
+
 Rules:
 1. Keep SKILL.md files concise, procedural, and triggerable.
 2. Put detailed source material in references/.

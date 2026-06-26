@@ -46,6 +46,7 @@ python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15
+npx agnix@0.36.0 .
 ```
 
 Validate an individual skill with Codex's skill creator helper:
@@ -71,6 +72,8 @@ Accepted answer paths are `eval-answers/<skill>/<eval-id>.md` or `eval-answers/<
 ## Agent Tools
 
 This repo includes instruction files for Codex/AGENTS-compatible agents, Claude Code, Gemini CLI, GitHub Copilot, Cursor, Continue, Aider, Windsurf, Cline, Devin-style workflows, and OpenHands-style repository skills. See [agent-tooling.md](docs/agent-tooling.md).
+
+The CI workflow also runs `agent-sh/agnix` against the repository agent configuration files using [.agnix.toml](.agnix.toml).
 
 Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). Forward-test workflow lives in [forward-testing.md](docs/forward-testing.md).
 

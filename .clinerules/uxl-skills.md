@@ -2,6 +2,8 @@
 
 Use `AGENTS.md` as the canonical source of repository instructions.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 - Keep `SKILL.md` files concise and procedural.
 - Keep detailed references in `references/`.
 - Keep `skills.yaml`, `skill-cards/`, and eval files synchronized.

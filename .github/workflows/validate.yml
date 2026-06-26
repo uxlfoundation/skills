@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate agent configs with agnix
+        uses: agent-sh/agnix@v0.36.0
+        with:
+          path: .
+          config: .agnix.toml
+          target: generic
+          version: v0.36.0
+          strict: "false"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

@@ -2,6 +2,8 @@
 
 This repository maintains UXL Foundation agent skills. Load this file read-only for Aider sessions.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 - Use `AGENTS.md` as the source of truth for repository rules.
 - Keep skill files concise and procedural.
 - Keep deep documentation in `references/`, not in `SKILL.md`.

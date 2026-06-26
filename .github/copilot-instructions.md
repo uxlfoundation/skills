@@ -2,6 +2,8 @@
 
 This repository maintains UXL Foundation agent skills. `AGENTS.md` is the canonical guidance file; use this file as the Copilot entry point and then consult `AGENTS.md` for details.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 Follow these rules:
 
 - Keep `SKILL.md` files short, procedural, and triggerable.

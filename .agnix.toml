@@ -1,0 +1,37 @@
+severity = "Warning"
+tools = ["claude-code", "codex", "cursor", "github-copilot", "generic"]
+
+exclude = [
+  ".git/**",
+  ".agnix-bin/**",
+  ".pytest_cache/**",
+  ".ruff_cache/**",
+  "eval-answers/**",
+  "eval-prompts/**",
+  "eval-results/**",
+  "node_modules/**",
+]
+
+[rules]
+skills = true
+agents = true
+agents_md = true
+copilot = true
+cursor = true
+imports = true
+memory = true
+prompt_engineering = true
+cross_platform = true
+
+[files]
+include_as_memory = [
+  "AGENTS.md",
+  "CLAUDE.md",
+  "GEMINI.md",
+  "DEVIN.md",
+  "CONVENTIONS.md",
+  ".clinerules/*.md",
+  ".continue/rules/*.md",
+  ".windsurfrules",
+  ".agents/skills/*.md",
+]

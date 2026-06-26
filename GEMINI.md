@@ -2,6 +2,8 @@
 
 This repository builds UXL Foundation agent skills. Use `AGENTS.md` as the source of truth for repo behavior.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 When working here:
 
 - Keep skills concise and procedural.

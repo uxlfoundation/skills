@@ -1,5 +1,5 @@
 ---
-applyTo: "skills/**,skill-cards/**,skills.yaml,scripts/**,README.md,AGENTS.md,CLAUDE.md,GEMINI.md,CONVENTIONS.md"
+applyTo: "**"
 ---
 
 When editing UXL skills catalog files:

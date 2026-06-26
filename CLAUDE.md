@@ -2,6 +2,8 @@
 
 This repository builds UXL Foundation agent skills. Read `AGENTS.md` first; it is the canonical instruction file.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 Key rules:
 
 - Treat each `skills/<skill-name>/SKILL.md` as a compact agent capability, not a documentation dump.

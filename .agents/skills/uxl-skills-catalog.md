@@ -4,6 +4,8 @@ Use this repository skill when editing or reviewing UXL Foundation agent skills.
 
 Follow `AGENTS.md`.
 
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
+
 Checklist:
 
 - Keep `SKILL.md` concise.

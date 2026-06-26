@@ -1,6 +1,8 @@
 # Devin Repo Notes
 
-This repository maintains UXL Foundation agent skills. Devin and similar autonomous agents should use `AGENTS.md` as the source of truth.
+This repository maintains UXL Foundation agent skills. Devin and similar autonomous agents use `AGENTS.md` as the source of truth.
+
+Instruction precedence: when this wrapper and `AGENTS.md` differ, follow `AGENTS.md`.
 
 Start with:
 
@@ -17,4 +19,4 @@ Before changing a skill, inspect:
 - `skill-cards/<skill-name>.md`
 - `skills.yaml`
 
-Do not mark a skill reviewed or project-owned without maintainer evidence.
+Mark a skill reviewed or project-owned only after maintainer evidence is recorded.
