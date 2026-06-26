@@ -1,6 +1,8 @@
 # Install and Use
 
-This catalog is currently an incubating repository. Skills can be used directly from the checkout or copied into an agent-specific skills location.
+This catalog has a public incubating release. Skills can be used directly from the checkout or copied into an agent-specific skills location.
+
+For reproducible use, pin a tag or commit SHA. The initial incubating catalog release is tagged as `v0.1.0-incubating`.
 
 ## Codex
 
@@ -57,3 +59,5 @@ The repository includes `.agents/skills/uxl-skills-catalog.md` as a lightweight 
 3. Move the reviewed skill source of truth into the owning project repository.
 4. Mirror the reviewed skill back into this catalog.
 5. Publish tags and ask users to pin by tag or commit SHA.
+
+See `docs/release-gates.md` before promoting any skill beyond `incubating` or `pilot`.

@@ -1,8 +1,8 @@
 # UXL Agent Skills
 
-Starter catalog for agent skills that teach AI coding agents how to use UXL Foundation oneAPI libraries correctly.
+Public catalog for agent skills that teach AI coding agents how to use UXL Foundation oneAPI libraries correctly.
 
-This repository is intended to become the central distribution catalog for UXL skills. The long-term source-of-truth model should be hybrid:
+This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The long-term source-of-truth model should be hybrid:
 
 - Library-owned skills live first in the owning project repositories.
 - This catalog mirrors reviewed skills for discovery, installation, validation, and release governance.
@@ -87,13 +87,9 @@ Then review the generated files and run `python scripts/generate_agent_wrappers.
 
 ## Release Gates
 
-Before publishing any skill:
+The repository now uses staged release gates:
 
-1. Remove placeholders and stale links.
-2. Confirm the owning project maintainer reviewed the skill.
-3. Run `scripts/validate_catalog.py`.
-4. Run `scripts/run_evals.py --validate`.
-5. Run `scripts/check_links.py --timeout 15`.
-6. Run realistic with-skill and without-skill evals from each skill's `evals/evals.json`.
-7. Add or update a skill card that records owner, sources, limitations, risks, and validation evidence.
-8. Publish a tagged release and encourage pinning by tag or commit SHA.
+- Incubating catalog releases make the skills public and pin-able while preserving `incubating` and `pilot` status labels.
+- Reviewed skill releases require maintainer review, current source verification, forward-test evidence, and updated skill-card evidence before a skill can be marked `reviewed` or `project-owned`.
+
+See [release-gates.md](docs/release-gates.md) and the release ledger in [docs/releases](docs/releases).

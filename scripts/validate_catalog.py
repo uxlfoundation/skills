@@ -14,8 +14,10 @@ SKILLS = ROOT / "skills"
 SKILL_CARDS = ROOT / "skill-cards"
 MANIFEST = ROOT / "skills.yaml"
 SCHEMAS = ROOT / "schemas"
+RELEASES = ROOT / "docs" / "releases"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LINK_RE = re.compile(r"\]\((references/[^)]+|scripts/[^)]+|evals/[^)]+)\)")
+ALLOWED_CATALOG_STATUSES = {"incubating", "pilot", "released"}
 ALLOWED_STATUSES = {"incubating", "pilot", "reviewed", "project-owned"}
 REQUIRED_MANIFEST_KEYS = {
     "name",
@@ -144,13 +146,17 @@ def validate_manifest(skill_names: list[str]) -> list[str]:
 
     text = MANIFEST.read_text(encoding="utf-8")
     entries = parse_manifest_entries(text)
+    scalars = parse_top_level_scalars(text)
     manifest_names = [entry.get("name", "") for entry in entries]
     if sorted(manifest_names) != sorted(skill_names):
         errors.append(f"{MANIFEST}: manifest skill list does not match skills directory")
     if 'schema_version: "1"' not in text:
         errors.append(f"{MANIFEST}: missing schema_version 1")
-    if 'catalog_status: "incubating"' not in text:
-        errors.append(f"{MANIFEST}: catalog_status should be incubating until first release")
+    catalog_status = scalars.get("catalog_status")
+    if catalog_status not in ALLOWED_CATALOG_STATUSES:
+        errors.append(f"{MANIFEST}: invalid catalog_status {catalog_status!r}")
+    if catalog_status == "released" and not any(RELEASES.glob("*.md")):
+        errors.append(f"{MANIFEST}: released catalog requires at least one docs/releases/*.md ledger entry")
     if not entries:
         errors.append(f"{MANIFEST}: no skill entries parsed")
     for entry in entries:
@@ -161,6 +167,10 @@ def validate_manifest(skill_names: list[str]) -> list[str]:
         status = entry.get("status")
         if status not in ALLOWED_STATUSES:
             errors.append(f"{MANIFEST}: {name} has invalid status {status!r}")
+        if status in {"pilot", "reviewed", "project-owned"} and "last_source_verification" not in entry:
+            errors.append(f"{MANIFEST}: {name} status {status!r} requires last_source_verification")
+        if status in {"reviewed", "project-owned"} and entry.get("maintainer_review") == "needed":
+            errors.append(f"{MANIFEST}: {name} status {status!r} requires maintainer_review evidence")
         owner_repo = entry.get("owner_repo", "")
         if owner_repo and not owner_repo.startswith("https://github.com/uxlfoundation/"):
             errors.append(f"{MANIFEST}: {name} owner_repo should point at uxlfoundation GitHub")
@@ -198,6 +208,19 @@ def parse_manifest_entries(text: str) -> list[dict[str, str]]:
     if current is not None:
         entries.append(current)
     return entries
+
+
+def parse_top_level_scalars(text: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    for raw_line in text.splitlines():
+        if raw_line.startswith(" ") or raw_line.startswith("-"):
+            continue
+        stripped = raw_line.strip()
+        if not stripped or stripped.startswith("#") or ":" not in stripped:
+            continue
+        key, value = stripped.split(":", 1)
+        values[key.strip()] = value.strip().strip('"')
+    return values
 
 
 def validate_skill_cards(skill_names: list[str]) -> list[str]:

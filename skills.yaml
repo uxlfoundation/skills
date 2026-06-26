@@ -1,5 +1,5 @@
 schema_version: "1"
-catalog_status: "incubating"
+catalog_status: "released"
 canonical_instructions: "AGENTS.md"
 skills:
   - name: "uxl-onednn"
