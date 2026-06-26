@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-onedpl",
+  "evals": [
+    {
+      "id": "onedpl-policy-choice",
+      "prompt": "Use $uxl-onedpl to decide whether to use host execution policies or a SYCL device policy for sorting a vector.",
+      "expected_output": "Explains host versus device policy tradeoffs, checks data location and device availability, preserves ordering/stability requirements, and includes a serial reference test.",
+      "checks": {
+        "must_include": ["host", "device policy", "data location", "stability", "serial"],
+        "must_not_include": ["GPU always", "ignore data movement"]
+      }
+    },
+    {
+      "id": "onedpl-device-sync",
+      "prompt": "Use $uxl-onedpl to debug wrong results after a device algorithm writes data that is immediately read on host.",
+      "expected_output": "Identifies synchronization/data lifetime as a likely issue, asks about USM/buffers/queue ownership, and proposes explicit wait or dependency handling.",
+      "checks": {
+        "must_include": ["synchronization", "USM", "buffer", "queue", "wait"],
+        "must_not_include": ["read immediately", "no synchronization"]
+      }
+    },
+    {
+      "id": "onedpl-porting",
+      "prompt": "Use $uxl-onedpl to port a std::transform plus std::reduce sequence to oneDPL on GPU.",
+      "expected_output": "Defines the serial contract, checks iterator and lambda constraints, selects device policy from an owned queue, and describes correctness/performance validation.",
+      "checks": {
+        "must_include": ["serial", "iterator", "lambda", "queue", "validation"],
+        "must_not_include": ["no reference", "ignore constraints"]
+      }
+    }
+  ]
+}

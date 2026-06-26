@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-oneccl",
+  "evals": [
+    {
+      "id": "oneccl-hang-triage",
+      "prompt": "Use $uxl-oneccl to triage a distributed training job where allreduce hangs on four ranks.",
+      "expected_output": "Collects launch command, rank mapping, per-rank logs, collective sequence, datatype/count/root assumptions, plugin/env settings, and proposes a two-rank small-tensor repro.",
+      "checks": {
+        "must_include": ["launch", "rank", "collective", "datatype", "plugin"],
+        "must_not_include": ["increase timeout", "ignore ranks"]
+      }
+    },
+    {
+      "id": "oneccl-api-choice",
+      "prompt": "Use $uxl-oneccl to choose between oneCCL C++ API and NCCL-like C API for a new example.",
+      "expected_output": "Asks for target release and interoperability needs, checks current docs, and gives a version-aware recommendation without assuming new API availability.",
+      "checks": {
+        "must_include": ["C++ API", "C API", "release", "docs", "interoperability"],
+        "must_not_include": ["always use C API", "assume available"]
+      }
+    },
+    {
+      "id": "oneccl-async-wait",
+      "prompt": "Use $uxl-oneccl to review code that submits async allreduce then immediately consumes the destination buffer.",
+      "expected_output": "Flags missing completion/wait semantics, explains result validity, and proposes a minimal correctness test.",
+      "checks": {
+        "must_include": ["async", "wait", "completion", "buffer", "correctness"],
+        "must_not_include": ["safe immediately", "no wait"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-onetbb",
+  "evals": [
+    {
+      "id": "onetbb-loop-choice",
+      "prompt": "Use $uxl-onetbb to parallelize a CPU loop that writes to a shared histogram.",
+      "expected_output": "Does not blindly use shared mutation in parallel_for; proposes partition-local aggregation or a safe concurrent pattern, plus correctness and benchmark checks.",
+      "checks": {
+        "must_include": ["shared", "parallel_for", "local", "correctness", "benchmark"],
+        "must_not_include": ["just add parallel_for", "data race is fine"]
+      }
+    },
+    {
+      "id": "onetbb-flow-graph",
+      "prompt": "Use $uxl-onetbb to choose a oneTBB pattern for a three-stage image pipeline with bounded I/O and CPU-heavy processing.",
+      "expected_output": "Considers parallel_pipeline or flow graph, explains concurrency limits, ordering, blocking I/O concerns, and validation.",
+      "checks": {
+        "must_include": ["pipeline", "flow graph", "concurrency", "I/O", "validation"],
+        "must_not_include": ["unbounded", "ignore ordering"]
+      }
+    },
+    {
+      "id": "onetbb-oversubscription",
+      "prompt": "Use $uxl-onetbb to diagnose slower performance after adding oneTBB inside an app that already owns a thread pool.",
+      "expected_output": "Focuses on oversubscription, arenas/global_control, nested parallelism, thread limits, affinity, and benchmark evidence.",
+      "checks": {
+        "must_include": ["oversubscription", "arena", "global_control", "thread", "benchmark"],
+        "must_not_include": ["more threads always help", "ignore thread pool"]
+      }
+    }
+  ]
+}

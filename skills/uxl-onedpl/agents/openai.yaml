@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneDPL"
+  short_description: "Use oneDPL algorithms correctly"
+  default_prompt: "Use $uxl-onedpl to adapt C++ algorithms to oneDPL host or device policies."

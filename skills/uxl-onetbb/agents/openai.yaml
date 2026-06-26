@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneTBB"
+  short_description: "Design oneTBB parallel C++ code"
+  default_prompt: "Use $uxl-onetbb to select oneTBB patterns for a C++ parallel workload."

@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-onednn",
+  "evals": [
+    {
+      "id": "onednn-primitive-plan",
+      "prompt": "Use $uxl-onednn to plan a oneDNN matmul integration for fp32 tensors on CPU, including memory descriptors, correctness validation, and when to use benchdnn.",
+      "expected_output": "Selects a primitive path, names tensor shape/layout assumptions, includes reorder considerations, gives a correctness check, and avoids claiming speedup without a benchmark.",
+      "checks": {
+        "must_include": ["primitive", "layout", "reorder", "correctness", "benchdnn"],
+        "must_not_include": ["guaranteed speedup", "always faster"]
+      }
+    },
+    {
+      "id": "onednn-fusion-review",
+      "prompt": "Use $uxl-onednn to review a proposal to fuse convolution, bias, and ReLU before there is an unfused reference test.",
+      "expected_output": "Rejects fusion-first workflow, asks for or creates an unfused reference, defines tolerance, then proposes post-op or graph fusion only after parity.",
+      "checks": {
+        "must_include": ["unfused", "reference", "tolerance", "parity", "fusion"],
+        "must_not_include": ["skip correctness", "fuse first"]
+      }
+    },
+    {
+      "id": "onednn-regression-triage",
+      "prompt": "Use $uxl-onednn to triage a oneDNN performance regression after a layout change introduced extra reorders.",
+      "expected_output": "Focuses on logical versus physical layout, identifies reorder boundaries, asks for shapes/backend/build, and proposes benchdnn or project benchmark evidence.",
+      "checks": {
+        "must_include": ["layout", "reorder", "shape", "backend", "benchmark"],
+        "must_not_include": ["ignore reorders", "no benchmark needed"]
+      }
+    }
+  ]
+}

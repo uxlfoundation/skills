@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-onedal",
+  "evals": [
+    {
+      "id": "onedal-path-selection",
+      "prompt": "Use $uxl-onedal to decide whether an existing sklearn KMeans script should use scikit-learn-intelex or native oneDAL C++.",
+      "expected_output": "Chooses the minimal-change sklearn extension path unless direct C++/SYCL control is required, asks for data size/device, and defines metric parity checks.",
+      "checks": {
+        "must_include": ["scikit-learn", "native", "data size", "device", "metric"],
+        "must_not_include": ["rewrite in C++ immediately", "no parity"]
+      }
+    },
+    {
+      "id": "onedal-distributed-warning",
+      "prompt": "Use $uxl-onedal to review a proposal to switch a batch PCA workflow to distributed mode for speed.",
+      "expected_output": "Checks whether data and launch environment are actually distributed, explains batch/online/distributed choice, and requires correctness and benchmark evidence.",
+      "checks": {
+        "must_include": ["distributed", "batch", "launch", "correctness", "benchmark"],
+        "must_not_include": ["distributed is always faster", "skip validation"]
+      }
+    },
+    {
+      "id": "onedal-table-layout",
+      "prompt": "Use $uxl-onedal to debug changed model quality after converting input arrays to oneDAL tables.",
+      "expected_output": "Investigates row/column orientation, dense/sparse layout, dtype, preprocessing, train/test split, seeds, and metric comparison before tuning performance.",
+      "checks": {
+        "must_include": ["row", "layout", "dtype", "preprocessing", "metric"],
+        "must_not_include": ["only performance", "ignore data conversion"]
+      }
+    }
+  ]
+}

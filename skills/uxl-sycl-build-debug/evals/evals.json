@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-sycl-build-debug",
+  "evals": [
+    {
+      "id": "sycl-configure-failure",
+      "prompt": "Use $uxl-sycl-build-debug to diagnose a CMake configure failure after changing CMAKE_CXX_COMPILER from icpx to clang++.",
+      "expected_output": "Classifies the failure as configure/toolchain, asks for cache/compiler/package roots, proposes one variable changes, and separates compiler choice from runtime backend support.",
+      "checks": {
+        "must_include": ["configure", "CMAKE_CXX_COMPILER", "cache", "compiler", "backend"],
+        "must_not_include": ["random flags", "ignore cache"]
+      }
+    },
+    {
+      "id": "sycl-device-not-found",
+      "prompt": "Use $uxl-sycl-build-debug to debug a sample that builds but cannot find a GPU at runtime.",
+      "expected_output": "Separates build success from runtime device discovery, asks for sycl-ls or probe output, checks drivers/runtime paths/device filters, and proposes a smoke test.",
+      "checks": {
+        "must_include": ["runtime", "device", "sycl-ls", "driver", "smoke test"],
+        "must_not_include": ["build success proves GPU", "ignore driver"]
+      }
+    },
+    {
+      "id": "sycl-link-error",
+      "prompt": "Use $uxl-sycl-build-debug to troubleshoot unresolved symbols when linking a oneMath compile-time dispatch example.",
+      "expected_output": "Checks selected backend wrapper libraries, third-party libraries, library search paths, and runtime loader paths instead of only changing includes.",
+      "checks": {
+        "must_include": ["link", "backend", "library", "search path", "runtime"],
+        "must_not_include": ["include path only", "ignore libraries"]
+      }
+    }
+  ]
+}

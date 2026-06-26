@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneCCL"
+  short_description: "Debug distributed oneCCL work"
+  default_prompt: "Use $uxl-oneccl to plan or troubleshoot oneCCL collectives and launch setup."

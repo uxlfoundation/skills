@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneDNN"
+  short_description: "Implement and tune oneDNN work"
+  default_prompt: "Use $uxl-onednn to design or debug a oneDNN primitive integration."

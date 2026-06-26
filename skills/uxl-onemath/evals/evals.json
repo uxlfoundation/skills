@@ -1,0 +1,50 @@
+{
+  "skill_name": "uxl-onemath",
+  "evals": [
+    {
+      "id": "onemath-dispatch-choice",
+      "prompt": "Use $uxl-onemath to choose between runtime dispatch and compile-time dispatch for an app that runs BLAS GEMM on CPU and NVIDIA GPU.",
+      "expected_output": "Explains both dispatch models, recommends based on runtime flexibility versus explicit backend control, names needed backend/link assumptions, and avoids confusing oneMath with Intel oneMKL.",
+      "checks": {
+        "must_include": ["runtime dispatch", "compile-time", "backend", "link", "oneMath"],
+        "must_not_include": ["oneMath is oneMKL", "guaranteed"]
+      }
+    },
+    {
+      "id": "onemath-build-failure",
+      "prompt": "Use $uxl-onemath to diagnose a CMake build that cannot find oneMath after the user switched from icpx to clang++.",
+      "expected_output": "Checks compiler support, package roots, CMake cache, oneMath_ROOT/CMAKE_PREFIX_PATH, selected backend libraries, and suggests using the SYCL build debug skill for toolchain evidence.",
+      "checks": {
+        "must_include": ["compiler", "CMake", "cache", "oneMath_ROOT", "backend"],
+        "must_not_include": ["just reinstall", "ignore compiler"]
+      }
+    },
+    {
+      "id": "onemath-rng-device-api",
+      "prompt": "Use $uxl-onemath to advise whether RNG should be called from host code or inside a SYCL kernel.",
+      "expected_output": "Distinguishes host API from RNG device API, asks for generator/distribution and target backend, and includes correctness and reproducibility checks.",
+      "checks": {
+        "must_include": ["host API", "device API", "generator", "backend", "reproducibility"],
+        "must_not_include": ["all RNG works in kernels", "no seed"]
+      }
+    },
+    {
+      "id": "onemath-new-backend-plan",
+      "prompt": "Use $uxl-onemath to plan adding a new BLAS backend wrapper for a third-party library.",
+      "expected_output": "Identifies headers, backend enum/map updates, wrappers, runtime dispatch table, CMake option, Find module, tests, and build isolation before claiming backend support.",
+      "checks": {
+        "must_include": ["headers", "backend", "wrapper", "CMake", "tests"],
+        "must_not_include": ["wrapper only", "no tests"]
+      }
+    },
+    {
+      "id": "onemath-runtime-library-missing",
+      "prompt": "Use $uxl-onemath to triage an app that links ONEMATH::onemath successfully but fails at runtime when selecting an NVIDIA GPU.",
+      "expected_output": "Recognizes runtime dispatch, checks backend dynamic libraries, loader paths, CUDA backend enablement, device selection, and separates link-time success from runtime availability.",
+      "checks": {
+        "must_include": ["runtime dispatch", "dynamic", "loader", "CUDA", "device"],
+        "must_not_include": ["link success is enough", "compile-time only"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "skill_name": "uxl-performance-validation",
+  "evals": [
+    {
+      "id": "perf-claim-review",
+      "prompt": "Use $uxl-performance-validation to review a claim that a GPU path is faster based on one tiny input and no synchronization.",
+      "expected_output": "Rejects the claim as under-supported, asks for representative sizes and synchronization, separates correctness from performance, and proposes a benchmark contract.",
+      "checks": {
+        "must_include": ["under-supported", "representative", "synchronization", "correctness", "benchmark"],
+        "must_not_include": ["claim accepted", "tiny input is enough"]
+      }
+    },
+    {
+      "id": "perf-report-plan",
+      "prompt": "Use $uxl-performance-validation to design a benchmark report for a oneMath backend change.",
+      "expected_output": "Includes baseline/candidate commands, hardware/software, correctness tolerance, warmup, iterations, synchronization, data movement scope, and narrow claim wording.",
+      "checks": {
+        "must_include": ["baseline", "candidate", "tolerance", "warmup", "synchronization"],
+        "must_not_include": ["single run", "no correctness"]
+      }
+    },
+    {
+      "id": "perf-floating-point",
+      "prompt": "Use $uxl-performance-validation to handle different floating point reduction results between CPU and GPU implementations.",
+      "expected_output": "Explains non-associativity, defines tolerances and comparison method, avoids bitwise parity unless required, and keeps performance work gated on correctness.",
+      "checks": {
+        "must_include": ["non-associativity", "tolerance", "comparison", "bitwise", "correctness"],
+        "must_not_include": ["must be bitwise", "ignore differences"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+---
+description: UXL skills catalog authoring and validation rules
+globs: ["**/*"]
+alwaysApply: true
+---
+
+This repository maintains UXL Foundation agent skills.
+
+- Treat `AGENTS.md` as the canonical source of repository guidance.
+- Keep `SKILL.md` files concise and procedural.
+- Keep `skills.yaml`, `skill-cards/`, and eval files synchronized.
+- Prefer official UXL project docs, tests, examples, benchmarks, and maintainer notes.
+- Verify current upstream support before making release, backend, hardware, or compatibility claims.
+- Run `python scripts/validate_catalog.py` and `python scripts/run_evals.py --validate` before finishing.

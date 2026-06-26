@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneDAL"
+  short_description: "Build oneDAL analytics workflows"
+  default_prompt: "Use $uxl-onedal to plan or debug oneDAL and scikit-learn acceleration work."

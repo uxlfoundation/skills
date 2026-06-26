@@ -1,0 +1,9 @@
+# Replace these placeholders with UXL GitHub teams before publishing.
+* @uxlfoundation/open-source-working-group
+
+skills/uxl-onednn/ @uxlfoundation/onednn-maintainers
+skills/uxl-onemath/ @uxlfoundation/onemath-maintainers
+skills/uxl-onedal/ @uxlfoundation/onedal-maintainers
+skills/uxl-onetbb/ @uxlfoundation/onetbb-maintainers
+skills/uxl-onedpl/ @uxlfoundation/onedpl-maintainers
+skills/uxl-oneccl/ @uxlfoundation/oneccl-maintainers

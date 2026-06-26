@@ -1,0 +1,11 @@
+This repository maintains UXL Foundation agent skills.
+
+Use AGENTS.md as the canonical source of repo instructions.
+
+Rules:
+1. Keep SKILL.md files concise, procedural, and triggerable.
+2. Put detailed source material in references/.
+3. Keep skills.yaml, skill-cards/, and evals/evals.json synchronized.
+4. Prefer official UXL project docs, tests, examples, benchmarks, and maintainer notes.
+5. Verify current release, backend, hardware, and compatibility claims before answering.
+6. Run python scripts/validate_catalog.py and python scripts/run_evals.py --validate before finishing.

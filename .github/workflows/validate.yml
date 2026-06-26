@@ -1,0 +1,29 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/validate_catalog.py
+      - run: python scripts/run_evals.py --validate
+      - run: python scripts/generate_agent_wrappers.py --check
+      - run: python scripts/check_links.py --timeout 15
+      - run: python skills/uxl-sycl-build-debug/scripts/sycl_probe.py
+      - run: |
+          cat > /tmp/uxl_perf_smoke.csv <<'CSV'
+          case,variant,seconds,correct
+          smoke,baseline,1.0,true
+          smoke,baseline,1.2,true
+          smoke,candidate,0.8,true
+          smoke,candidate,0.9,true
+          CSV
+          python skills/uxl-performance-validation/scripts/summarize_runs.py /tmp/uxl_perf_smoke.csv

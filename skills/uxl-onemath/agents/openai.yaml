@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL oneMath"
+  short_description: "Build portable oneMath code"
+  default_prompt: "Use $uxl-onemath to choose oneMath domains, dispatch mode, and backend setup."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL Performance Validation"
+  short_description: "Validate correctness and speedups"
+  default_prompt: "Use $uxl-performance-validation to create a correctness and benchmark plan for UXL library code."

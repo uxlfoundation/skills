@@ -1,0 +1,4 @@
+interface:
+  display_name: "UXL SYCL Build Debug"
+  short_description: "Debug SYCL compiler and runtime setup"
+  default_prompt: "Use $uxl-sycl-build-debug to diagnose a SYCL build, link, or device-selection failure."
