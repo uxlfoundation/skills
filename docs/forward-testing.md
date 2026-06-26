@@ -56,4 +56,4 @@ When a skill is ready for review, update the skill card with:
 - Summary of failures.
 - Changes made after testing.
 
-Mark a skill `reviewed` or `project-owned` only after the owning project maintainers have reviewed the content and the release gates in `docs/release-gates.md` are satisfied.
+Mark a skill `reviewed` or `project-owned` only after the owning project maintainers have reviewed the content and the promotion criteria in `docs/release-and-promotion-policy.md` are satisfied.

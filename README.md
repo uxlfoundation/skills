@@ -85,11 +85,11 @@ python scripts/generate_agent_wrappers.py
 
 Then review the generated files and run `python scripts/generate_agent_wrappers.py --check`.
 
-## Release Gates
+## Release and Promotion
 
-The repository now uses staged release gates:
+The repository is already public and released. Promotion criteria remain because individual skills are still incubating or pilot-quality until maintainers review them.
 
-- Incubating catalog releases make the skills public and pin-able while preserving `incubating` and `pilot` status labels.
-- Reviewed skill releases require maintainer review, current source verification, forward-test evidence, and updated skill-card evidence before a skill can be marked `reviewed` or `project-owned`.
+- Catalog releases make a pin-able snapshot of this repository.
+- Skill promotion requires maintainer review, current source verification, forward-test evidence, and updated skill-card evidence before a skill can be marked `reviewed` or `project-owned`.
 
-See [release-gates.md](docs/release-gates.md) and the release ledger in [docs/releases](docs/releases).
+See [release-and-promotion-policy.md](docs/release-and-promotion-policy.md) and the release ledger in [docs/releases](docs/releases).

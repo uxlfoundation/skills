@@ -13,9 +13,9 @@ This release publishes the central UXL agent skills catalog with:
 - Agent wrapper files for Codex/AGENTS-compatible agents, Claude Code, Gemini CLI, GitHub Copilot, Cursor, Continue, Aider, Windsurf, Cline, Devin-style workflows, and OpenHands-style repository skills.
 - Catalog, eval, link, wrapper-drift, agnix, and helper-script validation in CI.
 
-## Gate Results
+## Release Checklist
 
-Satisfied for this incubating catalog release:
+Completed for this incubating catalog release:
 
 - All skills have explicit status values.
 - No skill is marked `reviewed` or `project-owned`.

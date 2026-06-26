@@ -60,4 +60,4 @@ The repository includes `.agents/skills/uxl-skills-catalog.md` as a lightweight 
 4. Mirror the reviewed skill back into this catalog.
 5. Publish tags and ask users to pin by tag or commit SHA.
 
-See `docs/release-gates.md` before promoting any skill beyond `incubating` or `pilot`.
+See `docs/release-and-promotion-policy.md` before promoting any skill beyond `incubating` or `pilot`.
