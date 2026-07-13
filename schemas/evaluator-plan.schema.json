@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-skill-evaluator-plan.schema.json",
+  "title": "UXL Skill Evaluator Plan",
+  "type": "object",
+  "required": ["schema_version", "name", "arms", "tracks", "dimensions", "hardware_tiers", "promotion_thresholds"],
+  "properties": {
+    "schema_version": { "const": "0" },
+    "name": { "const": "uxl-skill-evaluator" },
+    "owner": { "type": "string" },
+    "purpose": { "type": "string", "minLength": 1 },
+    "arms": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+          "description": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "required_for", "grader_types", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+          "required_for": { "type": "array", "items": { "type": "string" } },
+          "grader_types": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "description": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "weight", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+          "weight": { "type": "number", "exclusiveMinimum": 0 },
+          "description": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "hardware_tiers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "runner_labels", "required_probes", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+          "runner_labels": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "required_probes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "description": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "promotion_thresholds": {
+      "type": "object",
+      "required": [
+        "minimum_answer_quality_tasks",
+        "minimum_negative_controls",
+        "minimum_trials_per_arm",
+        "minimum_skill_delta",
+        "maximum_critical_unsupported_claims",
+        "requires_maintainer_review",
+        "requires_hardware_task_for_hardware_sensitive_skills"
+      ],
+      "properties": {
+        "minimum_answer_quality_tasks": { "type": "integer", "minimum": 1 },
+        "minimum_negative_controls": { "type": "integer", "minimum": 0 },
+        "minimum_trials_per_arm": { "type": "integer", "minimum": 1 },
+        "minimum_skill_delta": { "type": "number", "minimum": 0 },
+        "maximum_critical_unsupported_claims": { "type": "integer", "minimum": 0 },
+        "requires_maintainer_review": { "type": "boolean" },
+        "requires_hardware_task_for_hardware_sensitive_skills": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

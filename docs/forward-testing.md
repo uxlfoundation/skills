@@ -2,6 +2,8 @@
 
 Use forward tests to learn whether a skill improves real agent behavior.
 
+The long-term evaluator plan is in `docs/skill-evaluator-plan.md`. This document describes the current lightweight workflow for collecting answer artifacts.
+
 ## Generate Prompts
 
 ```bash
@@ -44,6 +46,8 @@ The current scorer is term-based and intentionally simple. Use it as a smoke tes
 - Appropriate clarifying questions.
 - Clear correctness validation.
 - No unsupported performance or compatibility claims.
+
+For skill promotion, compare at least two answer sets: a baseline answer set without the skill and a skill-assisted answer set with the skill. Record the score delta and preserve raw outputs.
 
 ## Record Evidence
 

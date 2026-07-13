@@ -1,0 +1,127 @@
+{
+  "schema_version": "0",
+  "name": "uxl-skill-evaluator",
+  "owner": "UXL Foundation",
+  "purpose": "Measure whether UXL agent skills improve agent behavior versus a baseline agent without the skill.",
+  "arms": [
+    {
+      "id": "baseline",
+      "description": "Agent receives the task and repository context but not the skill."
+    },
+    {
+      "id": "skill_explicit",
+      "description": "Agent is explicitly instructed to use the relevant UXL skill."
+    },
+    {
+      "id": "skill_auto",
+      "description": "Agent receives normal repository/tool context and must decide whether to use the skill."
+    },
+    {
+      "id": "skill_plus_docs",
+      "description": "Agent receives the skill plus approved official documentation context."
+    }
+  ],
+  "tracks": [
+    {
+      "id": "static_skill_quality",
+      "required_for": ["catalog_ci"],
+      "grader_types": ["deterministic"],
+      "description": "Validate skill structure, source ledgers, links, wrappers, and eval definitions."
+    },
+    {
+      "id": "answer_quality_delta",
+      "required_for": ["skill_promotion"],
+      "grader_types": ["deterministic", "rubric", "human_review"],
+      "description": "Compare baseline and skill-assisted answers on UXL-specific prompts."
+    },
+    {
+      "id": "trace_quality",
+      "required_for": ["skill_promotion"],
+      "grader_types": ["deterministic"],
+      "description": "Score tool use, skill invocation, validation commands, command count, and trace hygiene."
+    },
+    {
+      "id": "executable_tasks",
+      "required_for": ["reviewed_skill_when_applicable"],
+      "grader_types": ["deterministic_tests", "static_analysis"],
+      "description": "Run generated code or patches in isolated workspaces and verify outcomes."
+    },
+    {
+      "id": "intel_hardware",
+      "required_for": ["hardware_sensitive_skill_promotion"],
+      "grader_types": ["deterministic_tests", "benchmark_contract"],
+      "description": "Run selected executable tasks on Intel CPU/GPU self-hosted runners."
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "api_workflow_correctness",
+      "weight": 0.2,
+      "description": "Chooses the right UXL API, dispatch model, execution policy, primitive, or collective workflow."
+    },
+    {
+      "id": "build_and_runtime_correctness",
+      "weight": 0.15,
+      "description": "Provides build, link, environment, and runtime guidance that can configure and run."
+    },
+    {
+      "id": "source_grounding",
+      "weight": 0.15,
+      "description": "Uses current official UXL/project sources for release, backend, hardware, and compatibility claims."
+    },
+    {
+      "id": "correctness_validation",
+      "weight": 0.15,
+      "description": "Requires reference outputs, tolerances, deterministic seeds, synchronization, and regression checks."
+    },
+    {
+      "id": "performance_validation",
+      "weight": 0.1,
+      "description": "Separates correctness from performance and demands representative benchmarks before speedup claims."
+    },
+    {
+      "id": "unsupported_claim_avoidance",
+      "weight": 0.1,
+      "description": "Avoids false claims about support, compatibility, performance, or backend availability."
+    },
+    {
+      "id": "actionability",
+      "weight": 0.1,
+      "description": "Gives concrete next steps, commands, checks, and artifacts."
+    },
+    {
+      "id": "efficiency",
+      "weight": 0.05,
+      "description": "Tracks token count, command count, tool churn, retries, and wall time."
+    }
+  ],
+  "hardware_tiers": [
+    {
+      "id": "hosted_ci",
+      "runner_labels": ["ubuntu-latest"],
+      "required_probes": ["python", "catalog_validation"],
+      "description": "GitHub-hosted CI for static checks and non-hardware evaluator validation."
+    },
+    {
+      "id": "intel_cpu_oneapi",
+      "runner_labels": ["self-hosted", "linux", "x64", "intel", "oneapi", "intel-cpu-oneapi"],
+      "required_probes": ["sycl_probe", "compiler_version", "cmake_version"],
+      "description": "Intel CPU runner with oneAPI/SYCL toolchain for CPU and oneTBB tasks."
+    },
+    {
+      "id": "intel_gpu_level_zero",
+      "runner_labels": ["self-hosted", "linux", "x64", "intel", "oneapi", "intel-gpu-level-zero"],
+      "required_probes": ["sycl_probe", "sycl-ls", "level_zero_gpu", "compiler_version", "cmake_version"],
+      "description": "Intel GPU runner with Level Zero-visible GPU for SYCL, oneDPL, oneMath, and oneDNN GPU tasks."
+    }
+  ],
+  "promotion_thresholds": {
+    "minimum_answer_quality_tasks": 3,
+    "minimum_negative_controls": 1,
+    "minimum_trials_per_arm": 3,
+    "minimum_skill_delta": 0.05,
+    "maximum_critical_unsupported_claims": 0,
+    "requires_maintainer_review": true,
+    "requires_hardware_task_for_hardware_sensitive_skills": true
+  }
+}

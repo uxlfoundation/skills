@@ -43,6 +43,7 @@ Validate the catalog locally:
 
 ```powershell
 python scripts/validate_catalog.py
+python scripts/validate_evaluator_plan.py
 python scripts/run_evals.py --validate
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15 --retries 1
@@ -75,7 +76,7 @@ This repo includes instruction files for Codex/AGENTS-compatible agents, Claude 
 
 The CI workflow also runs `agent-sh/agnix` against the repository agent configuration files using [.agnix.toml](.agnix.toml).
 
-Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). Forward-test workflow lives in [forward-testing.md](docs/forward-testing.md).
+Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). Forward-test workflow lives in [forward-testing.md](docs/forward-testing.md). The skill evaluator plan lives in [skill-evaluator-plan.md](docs/skill-evaluator-plan.md), with Intel hardware guidance in [intel-hardware-evaluation.md](docs/intel-hardware-evaluation.md).
 
 Regenerate tool wrappers after changing canonical guidance:
 
