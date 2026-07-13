@@ -47,10 +47,10 @@
       "description": "Run generated code or patches in isolated workspaces and verify outcomes."
     },
     {
-      "id": "intel_hardware",
+      "id": "hardware_backend",
       "required_for": ["hardware_sensitive_skill_promotion"],
       "grader_types": ["deterministic_tests", "benchmark_contract"],
-      "description": "Run selected executable tasks on Intel CPU/GPU self-hosted runners."
+      "description": "Run selected executable tasks on trusted CPU, GPU, accelerator, or distributed backend runners."
     }
   ],
   "dimensions": [
@@ -103,16 +103,22 @@
       "description": "GitHub-hosted CI for static checks and non-hardware evaluator validation."
     },
     {
-      "id": "intel_cpu_oneapi",
-      "runner_labels": ["self-hosted", "linux", "x64", "intel", "oneapi", "intel-cpu-oneapi"],
+      "id": "cpu_runner",
+      "runner_labels": ["self-hosted", "linux", "x64", "uxl", "cpu"],
       "required_probes": ["sycl_probe", "compiler_version", "cmake_version"],
-      "description": "Intel CPU runner with oneAPI/SYCL toolchain for CPU and oneTBB tasks."
+      "description": "CPU runner with the compiler/runtime and UXL library dependencies needed for CPU tasks."
     },
     {
-      "id": "intel_gpu_level_zero",
-      "runner_labels": ["self-hosted", "linux", "x64", "intel", "oneapi", "intel-gpu-level-zero"],
-      "required_probes": ["sycl_probe", "sycl-ls", "level_zero_gpu", "compiler_version", "cmake_version"],
-      "description": "Intel GPU runner with Level Zero-visible GPU for SYCL, oneDPL, oneMath, and oneDNN GPU tasks."
+      "id": "sycl_gpu_runner",
+      "runner_labels": ["self-hosted", "linux", "x64", "uxl", "sycl", "gpu"],
+      "required_probes": ["sycl_probe", "sycl-ls", "gpu_device", "compiler_version", "cmake_version"],
+      "description": "SYCL-capable GPU runner with a supported backend runtime for GPU tasks."
+    },
+    {
+      "id": "distributed_runner",
+      "runner_labels": ["self-hosted", "linux", "x64", "uxl", "distributed"],
+      "required_probes": ["compiler_version", "cmake_version", "multi_rank_launcher"],
+      "description": "Multi-rank or multi-node runner for oneCCL and distributed oneDAL tasks."
     }
   ],
   "promotion_thresholds": {

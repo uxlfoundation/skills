@@ -1,6 +1,6 @@
 # UXL Skill Evaluator Plan
 
-This project should build its own evaluator for UXL skills. External projects can inform the design, but the evaluator should live here because UXL skill quality depends on UXL-specific APIs, build systems, correctness expectations, and Intel hardware behavior.
+This project should build its own evaluator for UXL skills. External projects can inform the design, but the evaluator should live here because UXL skill quality depends on UXL-specific APIs, build systems, correctness expectations, and backend or hardware behavior across member ecosystems.
 
 Nikolay's `agent-benchmark` project is a useful reference, especially its treatment-arm comparison idea and executable task track. It should not be a required dependency unless we decide to reuse a stable module deliberately.
 
@@ -14,7 +14,7 @@ The evaluator should answer:
 2. Did the agent choose the right UXL API, workflow, backend, and validation plan?
 3. Did the agent ground current claims in official sources?
 4. Did generated code configure, build, and run?
-5. On Intel hardware, did the code select the expected device and produce correct results?
+5. On the target backend or hardware tier, did the code select the expected device/runtime and produce correct results?
 6. Did the skill reduce avoidable tool churn, unsupported claims, and missing validation steps?
 
 ## Design Principles
@@ -100,28 +100,28 @@ Candidate starter tasks:
 - oneCCL: identify missing wait/barrier or launch environment issue in a small multi-rank test.
 - oneDAL: preserve table orientation/dtype and verify metric parity.
 
-### Track 4: Intel Hardware Validation
+### Track 4: Hardware and Backend Validation
 
-Runs on restricted self-hosted Intel hardware, not on public fork PRs.
+Runs on restricted self-hosted or partner-provided hardware, not on public fork PRs.
 
-Use this track to test that skill-assisted agents can produce code that actually works on Intel CPU/GPU systems.
+Use this track to test that skill-assisted agents can produce code that works across relevant UXL-supported CPU, GPU, accelerator, and distributed environments. The evaluator should be vendor-neutral; member-specific hardware is selected by runner labels and task metadata, not by evaluator semantics.
 
-Hardware tiers:
+Hardware/backend tiers:
 
-- `intel-cpu-oneapi`: Intel Xeon or Core CPU with oneAPI compiler/runtime.
-- `intel-gpu-level-zero`: Intel GPU with Level Zero runtime visible to SYCL.
-- `intel-multi-gpu`: optional future tier for multi-tile or multi-card tests.
-- `intel-distributed`: optional future tier for oneCCL multi-node or multi-rank tests.
+- `cpu_runner`: CPU environment with the needed compiler/runtime and UXL library dependencies.
+- `sycl_gpu_runner`: SYCL-capable GPU environment, with the backend runtime selected by the host and supported by the relevant project.
+- `distributed_runner`: multi-rank or multi-node environment for oneCCL and distributed oneDAL tasks.
+- `backend_specific_runner`: optional project-defined tier for vendor/member-specific backend validation.
 
 Minimum probes:
 
 - `sycl-ls`.
-- `icpx --version` or `clang++ --version` for the selected toolchain.
+- Compiler version for the selected toolchain.
 - `cmake --version`.
-- `clinfo` or Level Zero device listing when available.
+- Device/runtime listing such as `clinfo`, `sycl-ls`, CUDA/HIP tools, MPI launcher probes, or project-specific backend probes when available.
 - `python skills/uxl-sycl-build-debug/scripts/sycl_probe.py`.
 
-The first Intel-hardware milestone should be one small SYCL compile/run task plus one library-specific task, probably oneTBB on CPU and oneDPL or oneMath on Intel GPU.
+The first hardware/backend milestone should be one small CPU task and one small accelerator task on whatever trusted runner is available. Good starters are oneTBB on CPU and oneDPL or oneMath on a SYCL-capable GPU.
 
 ## Metrics
 
@@ -150,7 +150,7 @@ Before a skill moves from `incubating` or `pilot` to `reviewed`, require:
 - At least one negative-control task where the skill should not be used.
 - Positive skill delta on the skill's core task set.
 - No critical unsupported-claim failures.
-- For hardware-sensitive skills, at least one successful Intel-hardware task or a documented reason why hardware execution is not applicable.
+- For hardware-sensitive skills, at least one successful hardware/backend task or a documented reason why executable hardware validation is not applicable.
 
 ## Phased Implementation
 
@@ -179,9 +179,9 @@ Before a skill moves from `incubating` or `pilot` to `reviewed`, require:
 - Verify oracle solutions in CI.
 - Run agent-produced solutions in disposable workspaces.
 
-### Phase 5: Intel Hardware Track
+### Phase 5: Hardware and Backend Track
 
-- Add a manually dispatched GitHub workflow targeting restricted self-hosted Intel runners.
+- Add a manually dispatched GitHub workflow targeting restricted self-hosted or partner-provided runners.
 - Start with probe-only jobs, then add one CPU and one GPU task.
 - Publish artifacts but keep raw model traces out of git unless curated.
 

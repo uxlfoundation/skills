@@ -29,7 +29,7 @@ Required for promotion:
 5. The skill card records owner, sources, limitations, risks, forward-test evidence, and remaining gaps.
 6. The catalog validation suite passes.
 7. The skill evaluator plan in `docs/skill-evaluator-plan.md` has been applied to the promoted skill.
-8. For hardware-sensitive skills, Intel hardware validation has passed or a documented exception is recorded.
+8. For hardware-sensitive skills, hardware/backend validation has passed or a documented exception is recorded.
 9. For `project-owned`, the owning project repository is the source of truth and this catalog is only a mirror.
 
 ## Current Status

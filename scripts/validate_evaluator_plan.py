@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLAN = ROOT / "evaluation" / "uxl-skill-evaluator.v0.json"
 SCHEMA = ROOT / "schemas" / "evaluator-plan.schema.json"
 REQUIRED_ARMS = {"baseline", "skill_explicit"}
-REQUIRED_TRACKS = {"static_skill_quality", "answer_quality_delta", "trace_quality", "executable_tasks", "intel_hardware"}
+REQUIRED_TRACKS = {"static_skill_quality", "answer_quality_delta", "trace_quality", "executable_tasks", "hardware_backend"}
 REQUIRED_DIMENSIONS = {
     "api_workflow_correctness",
     "build_and_runtime_correctness",
@@ -20,7 +20,7 @@ REQUIRED_DIMENSIONS = {
     "correctness_validation",
     "unsupported_claim_avoidance",
 }
-REQUIRED_HARDWARE_TIERS = {"hosted_ci", "intel_cpu_oneapi", "intel_gpu_level_zero"}
+REQUIRED_HARDWARE_TIERS = {"hosted_ci", "cpu_runner", "sycl_gpu_runner"}
 
 
 def load_json(path: Path) -> tuple[dict, list[str]]:
