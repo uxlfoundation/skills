@@ -2,7 +2,7 @@
 
 Use forward tests to learn whether a skill improves real agent behavior.
 
-The long-term evaluator plan is in `docs/skill-evaluator-plan.md`. This document describes the current lightweight workflow for collecting answer artifacts.
+The long-term evaluator plan is in `docs/skill-evaluator-plan.md`. The current scorecard workflow is in `docs/evaluator-reporting.md`. This document describes the lightweight workflow for collecting answer artifacts.
 
 ## Generate Prompts
 

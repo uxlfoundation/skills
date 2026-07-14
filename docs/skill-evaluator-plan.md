@@ -163,8 +163,8 @@ Before a skill moves from `incubating` or `pilot` to `reviewed`, require:
 
 ### Phase 2: Answer-Quality Runner
 
-- Extend `scripts/run_evals.py` or add a new runner that can compare `baseline` and `skill_explicit` answer directories.
-- Emit JSON reports with per-dimension scores and skill deltas.
+- Use `scripts/compare_eval_arms.py` to compare `baseline` and `skill_explicit` answer directories.
+- Emit JSON and Markdown reports with per-skill scores and skill deltas.
 - Support a structured rubric JSON for optional model or human judges.
 
 ### Phase 3: Trace Runner

@@ -24,6 +24,16 @@ jobs:
       - run: python scripts/validate_catalog.py
       - run: python scripts/validate_evaluator_plan.py
       - run: python scripts/run_evals.py --validate
+      - run: |
+          python scripts/compare_eval_arms.py \
+            --baseline-dir evaluation/fixtures/answers/baseline \
+            --skill-dir evaluation/fixtures/answers/skill-explicit \
+            --skill uxl-onemath \
+            --eval onemath-dispatch-choice \
+            --label ci-smoke \
+            --output-dir /tmp/uxl-eval-scorecard \
+            --fail-under-skill-score 1.0 \
+            --fail-under-delta 0.5
       - run: python scripts/generate_agent_wrappers.py --check
       - run: python scripts/check_links.py --timeout 15 --retries 1 --warn-transient-network-errors
       - run: python skills/uxl-sycl-build-debug/scripts/sycl_probe.py
