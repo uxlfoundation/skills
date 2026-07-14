@@ -106,3 +106,24 @@ The script writes:
 - `executable-scorecard.md`
 
 Use `--fail-under-pass-rate` for CI gates once a task set is stable.
+
+## Commit Dashboard
+
+CI generates a dashboard bundle after the answer-quality and executable scorecards finish. The bundle contains:
+
+- `dashboard/index.html`: static dashboard for the current run plus any supplied history.
+- `dashboard/dashboard-data.json`: normalized data for commit/run trend reporting.
+- `dashboard/run-record.json`: the current commit's normalized evaluator record.
+- `dashboard/summary.md`: the concise Markdown summary appended to GitHub Actions.
+
+Generate the same bundle locally with:
+
+```powershell
+python scripts/generate_eval_dashboard.py `
+  --answer-scorecard eval-results/manual-run/scorecard.json `
+  --executable-scorecard eval-results/executable-manual-run/executable-scorecard.json `
+  --output-dir eval-results/dashboard-manual-run `
+  --label manual-run
+```
+
+Pass previous `dashboard-data.json` files with `--history-file` to show commit trends and detect drops from the prior run. The first CI version uploads the dashboard as a workflow artifact named `uxl-eval-dashboard`; a later GitHub Pages workflow can publish the same `index.html` and JSON files for long-lived project reporting.
