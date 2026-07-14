@@ -109,7 +109,7 @@ Use `--fail-under-pass-rate` for CI gates once a task set is stable.
 
 ## Commit Dashboard
 
-CI generates a dashboard bundle after the answer-quality and executable scorecards finish. The bundle contains:
+CI generates a dashboard bundle after the answer-quality and executable scorecards finish. The smoke dashboard covers every answer-quality eval case with generated fixture arms, plus the hosted-CI executable task fixtures. The bundle contains:
 
 - `dashboard/index.html`: static dashboard for the current run plus any supplied history.
 - `dashboard/dashboard-data.json`: normalized data for commit/run trend reporting.
@@ -127,3 +127,39 @@ python scripts/generate_eval_dashboard.py `
 ```
 
 Pass previous `dashboard-data.json` files with `--history-file` to show commit trends and detect drops from the prior run. The first CI version uploads the dashboard as a workflow artifact named `uxl-eval-dashboard`; a later GitHub Pages workflow can publish the same `index.html` and JSON files for long-lived project reporting.
+
+## Real Model Arms
+
+Use `scripts/run_answer_model_arms.py` to replace generated fixtures with answers from real agents or model CLIs. The runner invokes one command for the baseline arm and one command for the skill-explicit arm for each selected eval.
+
+Each command receives the prompt on stdin and through environment variables:
+
+- `UXL_EVAL_ARM`
+- `UXL_EVAL_SKILL`
+- `UXL_EVAL_ID`
+- `UXL_EVAL_PROMPT`
+- `UXL_EVAL_PROMPT_FILE`
+- `UXL_EVAL_OUTPUT_FILE`
+- `UXL_SKILL_PATH`
+- `UXL_REPO_ROOT`
+
+If the command writes `UXL_EVAL_OUTPUT_FILE`, that file is used. Otherwise stdout is captured as the answer.
+Command templates may also use `{prompt_file}`, `{output_file}`, `{skill}`, `{eval_id}`, `{skill_path}`, `{repo_root}`, `{arm}`, and `{prompt}` placeholders.
+
+Example shape:
+
+```powershell
+python scripts/run_answer_model_arms.py `
+  --baseline-command "your-agent --no-skills < `"{prompt_file}`"" `
+  --skill-command "your-agent --skills-dir skills < `"{prompt_file}`"" `
+  --output-dir eval-results/real-model/answers `
+  --timeout-seconds 600
+
+python scripts/compare_eval_arms.py `
+  --baseline-dir eval-results/real-model/answers/baseline `
+  --skill-dir eval-results/real-model/answers/skill-explicit `
+  --output-dir eval-results/real-model/answer-scorecard `
+  --label real-model
+```
+
+By default the baseline arm receives the same task with the `$uxl-*` skill trigger stripped, while the skill-explicit arm receives the original skill-triggering prompt. Use `--same-prompt` only when the baseline environment is guaranteed not to load or interpret UXL skills.

@@ -25,6 +25,7 @@ jobs:
       - run: python scripts/validate_evaluator_plan.py
       - run: python scripts/run_evals.py --validate
       - run: python scripts/validate_executable_tasks.py --run-oracles
+      - run: python scripts/generate_fixture_answer_arms.py --output-dir eval-results/ci/answer-fixtures
       - run: |
           python scripts/run_executable_tasks.py \
             --candidate-dir evaluation/fixtures/executable-candidates/oracle \
@@ -33,10 +34,8 @@ jobs:
             --fail-under-pass-rate 1.0
       - run: |
           python scripts/compare_eval_arms.py \
-            --baseline-dir evaluation/fixtures/answers/baseline \
-            --skill-dir evaluation/fixtures/answers/skill-explicit \
-            --skill uxl-onemath \
-            --eval onemath-dispatch-choice \
+            --baseline-dir eval-results/ci/answer-fixtures/baseline \
+            --skill-dir eval-results/ci/answer-fixtures/skill-explicit \
             --label ci-smoke \
             --output-dir eval-results/ci/answer \
             --fail-under-skill-score 1.0 \

@@ -43,7 +43,7 @@ Checks:
 - Agnix agent-config lint.
 - Source freshness metadata for pilot/reviewed skills.
 
-Current implementation: `scripts/validate_catalog.py`, `scripts/run_evals.py --validate`, `scripts/check_links.py`, `scripts/generate_agent_wrappers.py --check`, `scripts/generate_eval_dashboard.py`, and agnix.
+Current implementation: `scripts/validate_catalog.py`, `scripts/run_evals.py --validate`, `scripts/check_links.py`, `scripts/generate_agent_wrappers.py --check`, `scripts/generate_fixture_answer_arms.py`, `scripts/run_answer_model_arms.py`, `scripts/generate_eval_dashboard.py`, and agnix.
 
 ### Track 1: Answer Quality Delta
 

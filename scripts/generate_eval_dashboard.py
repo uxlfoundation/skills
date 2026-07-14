@@ -93,6 +93,7 @@ def answer_track(answer: dict[str, Any] | None) -> dict[str, Any]:
             "missing_skill": 0,
             "forbidden_hits": 0,
             "skills": [],
+            "cases": [],
         }
     summary = answer.get("summary", {})
     return {
@@ -108,6 +109,7 @@ def answer_track(answer: dict[str, Any] | None) -> dict[str, Any]:
         "missing_skill": int(summary.get("missing_skill", 0)),
         "forbidden_hits": int(summary.get("skill_forbidden_hits", 0)),
         "skills": answer.get("skills", []),
+        "cases": answer.get("cases", []),
     }
 
 
@@ -121,6 +123,7 @@ def executable_track(executable: dict[str, Any] | None) -> dict[str, Any]:
             "missing_candidates": 0,
             "pass_rate": 0.0,
             "skills": [],
+            "tasks": [],
         }
     summary = executable.get("summary", {})
     return {
@@ -131,6 +134,7 @@ def executable_track(executable: dict[str, Any] | None) -> dict[str, Any]:
         "missing_candidates": int(summary.get("missing_candidates", 0)),
         "pass_rate": round_score(summary.get("average")),
         "skills": executable.get("skills", []),
+        "tasks": executable.get("cases", []),
     }
 
 
@@ -271,6 +275,22 @@ def fmt(value: Any, signed: bool = False) -> str:
     return f"{score:+.4f}" if signed else f"{score:.4f}"
 
 
+def fmt_optional(value: Any, signed: bool = False) -> str:
+    if value is None:
+        return "n/a"
+    return fmt(value, signed=signed)
+
+
+def count_optional(row: dict[str, Any], key: str) -> str:
+    return str(row[key]) if key in row else "n/a"
+
+
+def passed_optional(row: dict[str, Any]) -> str:
+    if "executable_passed" not in row or "executable_tasks" not in row:
+        return "n/a"
+    return f"{row['executable_passed']}/{row['executable_tasks']}"
+
+
 def metric(title: str, value: str, subtext: str, tone: str = "") -> str:
     return (
         f'<section class="metric {esc(tone)}"><div class="metric-title">{esc(title)}</div>'
@@ -306,6 +326,42 @@ def trend_svg(runs: list[dict[str, Any]], path: list[str], label: str, color: st
     )
 
 
+def test_rows(current: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    answer = current["tracks"]["answer_quality"]
+    executable = current["tracks"]["executable_tasks"]
+    for case in answer.get("cases", []):
+        skill = case.get("skill", "")
+        eval_id = case.get("eval_id", "")
+        baseline = case.get("baseline", {})
+        skill_explicit = case.get("skill_explicit", {})
+        notes = "; ".join(skill_explicit.get("notes", [])) if skill_explicit.get("notes") else "pass"
+        rows.append(
+            {
+                "track": "answer quality",
+                "skill": skill,
+                "test": eval_id,
+                "score": round_score(skill_explicit.get("score")),
+                "detail": (
+                    f"baseline {fmt(baseline.get('score'))}, skill {fmt(skill_explicit.get('score'))}, "
+                    f"delta {fmt(case.get('delta'), signed=True)}; {notes}"
+                ),
+            }
+        )
+    for case in executable.get("tasks", []):
+        notes = "; ".join(case.get("notes", [])) if case.get("notes") else "pass"
+        rows.append(
+            {
+                "track": "executable task",
+                "skill": case.get("skill", ""),
+                "test": case.get("task", ""),
+                "score": round_score(case.get("score")),
+                "detail": notes,
+            }
+        )
+    return rows
+
+
 def render_html(data: dict[str, Any]) -> str:
     current = data["current"]
     commit = current["commit"]
@@ -334,15 +390,25 @@ def render_html(data: dict[str, Any]) -> str:
         "</tr>"
         for run in data["runs"]
     )
+    latest_rows_html = "\n".join(
+        "<tr>"
+        f"<td>{esc(row['track'])}</td>"
+        f"<td><code>{esc(row['skill'])}</code></td>"
+        f"<td><code>{esc(row['test'])}</code></td>"
+        f"<td>{fmt(row['score'])}</td>"
+        f"<td>{esc(row['detail'])}</td>"
+        "</tr>"
+        for row in test_rows(current)
+    )
     skill_rows_html = "\n".join(
         "<tr>"
         f"<td><code>{esc(row.get('skill', ''))}</code></td>"
-        f"<td>{fmt(row.get('answer_skill_average'))}</td>"
-        f"<td>{fmt(row.get('answer_delta'), signed=True)}</td>"
-        f"<td>{esc(row.get('answer_cases', 0))}</td>"
-        f"<td>{fmt(row.get('executable_pass_rate'))}</td>"
-        f"<td>{esc(row.get('executable_passed', 0))}/{esc(row.get('executable_tasks', 0))}</td>"
-        f"<td>{esc(row.get('answer_forbidden_hits', 0))}</td>"
+        f"<td>{fmt_optional(row.get('answer_skill_average'))}</td>"
+        f"<td>{fmt_optional(row.get('answer_delta'), signed=True)}</td>"
+        f"<td>{esc(count_optional(row, 'answer_cases'))}</td>"
+        f"<td>{fmt_optional(row.get('executable_pass_rate'))}</td>"
+        f"<td>{esc(passed_optional(row))}</td>"
+        f"<td>{esc(count_optional(row, 'answer_forbidden_hits'))}</td>"
         "</tr>"
         for row in current["skills"]
     )
@@ -560,6 +626,13 @@ def render_html(data: dict[str, Any]) -> str:
         </div>
       </section>
       <section class="block">
+        <h2>Latest Tests</h2>
+        <table>
+          <thead><tr><th>Track</th><th>Skill</th><th>Test</th><th>Score</th><th>Detail</th></tr></thead>
+          <tbody>{latest_rows_html}</tbody>
+        </table>
+      </section>
+      <section class="block">
         <h2>Per Skill</h2>
         <table>
           <thead><tr><th>Skill</th><th>Answer avg</th><th>Delta</th><th>Cases</th><th>Executable pass rate</th><th>Passed</th><th>Forbidden hits</th></tr></thead>
@@ -605,15 +678,33 @@ def render_summary(data: dict[str, Any]) -> str:
         "| --- | ---: | --- |",
         (
             f"| Answer quality | {fmt(answer.get('skill_average'))} | "
-            f"delta {fmt(answer.get('delta'), signed=True)}, {answer.get('case_count', 0)} cases, "
+            f"delta {fmt(answer.get('delta'), signed=True)}, {answer.get('skill_count', 0)} skills, "
+            f"{answer.get('case_count', 0)} cases, "
             f"{answer.get('forbidden_hits', 0)} forbidden hits |"
         ),
         (
             f"| Executable tasks | {fmt(executable.get('pass_rate'))} | "
-            f"{executable.get('passed', 0)} of {executable.get('task_count', 0)} tasks passed, "
+            f"{executable.get('skill_count', 0)} skills, {executable.get('passed', 0)} of "
+            f"{executable.get('task_count', 0)} tasks passed, "
             f"{executable.get('missing_candidates', 0)} missing candidates |"
         ),
     ]
+    rows = test_rows(current)
+    if rows:
+        lines.extend(
+            [
+                "",
+                "## Tests",
+                "",
+                "| Track | Skill | Test | Score | Detail |",
+                "| --- | --- | --- | ---: | --- |",
+            ]
+        )
+        for row in rows:
+            detail = str(row["detail"]).replace("|", "\\|")
+            lines.append(
+                f"| {row['track']} | `{row['skill']}` | `{row['test']}` | {fmt(row['score'])} | {detail} |"
+            )
     if data["regressions"]:
         lines.extend(["", "## Regressions", ""])
         lines.extend(f"- {note}" for note in data["regressions"])

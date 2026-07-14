@@ -46,8 +46,9 @@ python scripts/validate_catalog.py
 python scripts/validate_evaluator_plan.py
 python scripts/run_evals.py --validate
 python scripts/validate_executable_tasks.py --run-oracles
+python scripts/generate_fixture_answer_arms.py --output-dir "$env:TEMP\uxl-answer-fixtures"
 python scripts/run_executable_tasks.py --candidate-dir evaluation/fixtures/executable-candidates/oracle --label local-smoke --output-dir "$env:TEMP\uxl-executable-scorecard" --fail-under-pass-rate 1.0
-python scripts/compare_eval_arms.py --baseline-dir evaluation/fixtures/answers/baseline --skill-dir evaluation/fixtures/answers/skill-explicit --skill uxl-onemath --eval onemath-dispatch-choice --label ci-smoke --output-dir "$env:TEMP\uxl-eval-scorecard"
+python scripts/compare_eval_arms.py --baseline-dir "$env:TEMP\uxl-answer-fixtures\baseline" --skill-dir "$env:TEMP\uxl-answer-fixtures\skill-explicit" --label ci-smoke --output-dir "$env:TEMP\uxl-eval-scorecard"
 python scripts/generate_eval_dashboard.py --answer-scorecard "$env:TEMP\uxl-eval-scorecard\scorecard.json" --executable-scorecard "$env:TEMP\uxl-executable-scorecard\executable-scorecard.json" --output-dir "$env:TEMP\uxl-eval-dashboard" --label local-smoke
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15 --retries 1
