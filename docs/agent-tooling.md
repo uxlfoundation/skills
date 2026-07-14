@@ -34,7 +34,7 @@ python scripts/generate_agent_wrappers.py --check
 CI also validates the agent configuration surface with `agent-sh/agnix`:
 
 ```bash
-npx agnix@0.36.0 .
+agnix . --config .agnix.toml
 ```
 
 The GitHub Action uses [.agnix.toml](../.agnix.toml) and pins agnix to `v0.36.0`.

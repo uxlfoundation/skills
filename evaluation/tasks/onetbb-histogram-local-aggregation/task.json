@@ -1,0 +1,15 @@
+{
+  "schema_version": "0",
+  "id": "onetbb-histogram-local-aggregation",
+  "skill": "uxl-onetbb",
+  "track": "executable_tasks",
+  "hardware_tier": "hosted_ci",
+  "category": "cpu-parallel-pattern",
+  "prompt": "Use $uxl-onetbb to fix the unsafe shared histogram update in this task. Preserve deterministic results and explain the correctness check.",
+  "starter": "starter",
+  "oracle": "oracle",
+  "verifier": "verify.py",
+  "expected_artifacts": ["histogram.py"],
+  "timeout_seconds": 10,
+  "notes": "Hosted-CI task models the oneTBB partition-local aggregation pattern without requiring oneTBB to be installed."
+}

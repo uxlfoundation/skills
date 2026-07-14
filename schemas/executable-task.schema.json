@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-executable-task.schema.json",
+  "title": "UXL Executable Evaluator Task",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "skill",
+    "track",
+    "hardware_tier",
+    "category",
+    "prompt",
+    "starter",
+    "oracle",
+    "verifier",
+    "expected_artifacts",
+    "timeout_seconds"
+  ],
+  "properties": {
+    "schema_version": { "const": "0" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "skill": { "type": "string", "pattern": "^uxl-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "track": { "enum": ["executable_tasks", "hardware_backend"] },
+    "hardware_tier": {
+      "enum": ["hosted_ci", "cpu_runner", "sycl_gpu_runner", "distributed_runner", "backend_specific_runner"]
+    },
+    "category": { "type": "string", "minLength": 1 },
+    "prompt": { "type": "string", "minLength": 1 },
+    "starter": { "type": "string", "pattern": "^starter$" },
+    "oracle": { "type": "string", "pattern": "^oracle$" },
+    "verifier": { "type": "string", "pattern": "^verify\\.py$" },
+    "expected_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "timeout_seconds": { "type": "integer", "minimum": 1 },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

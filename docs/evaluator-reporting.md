@@ -72,3 +72,37 @@ Use the term-based score as a first-pass signal, not final proof. A promotion re
 - Whether validation steps are realistic for the project.
 
 For a promotion candidate, run at least three trials per arm and report the average delta.
+
+## Executable Task Smoke
+
+Executable task fixtures live under `evaluation/tasks/`. Validate task metadata and oracle solutions with:
+
+```powershell
+python scripts/validate_executable_tasks.py --run-oracles
+```
+
+The first task, `onetbb-histogram-local-aggregation`, is a hosted-CI-safe CPU task that models the oneTBB partition-local aggregation pattern without requiring oneTBB to be installed.
+
+Candidate outputs should be saved as one directory per task:
+
+```text
+eval-executable-candidates/<task-id>/<expected-artifact>
+```
+
+The runner also accepts `eval-executable-candidates/<skill>/<task-id>/...` and `eval-executable-candidates/<skill>--<task-id>/...`.
+
+Produce an executable task scorecard with:
+
+```powershell
+python scripts/run_executable_tasks.py `
+  --candidate-dir eval-executable-candidates `
+  --output-dir eval-results/executable-manual-run `
+  --label executable-manual-run
+```
+
+The script writes:
+
+- `executable-scorecard.json`
+- `executable-scorecard.md`
+
+Use `--fail-under-pass-rate` for CI gates once a task set is stable.

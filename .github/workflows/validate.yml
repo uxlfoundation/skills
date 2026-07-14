@@ -24,6 +24,8 @@ jobs:
       - run: python scripts/validate_catalog.py
       - run: python scripts/validate_evaluator_plan.py
       - run: python scripts/run_evals.py --validate
+      - run: python scripts/validate_executable_tasks.py --run-oracles
+      - run: python scripts/run_executable_tasks.py --candidate-dir evaluation/fixtures/executable-candidates/oracle --label ci-smoke --fail-under-pass-rate 1.0
       - run: |
           python scripts/compare_eval_arms.py \
             --baseline-dir evaluation/fixtures/answers/baseline \

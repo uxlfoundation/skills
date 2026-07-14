@@ -176,8 +176,8 @@ Before a skill moves from `incubating` or `pilot` to `reviewed`, require:
 ### Phase 4: Executable Task Harness
 
 - Add `evaluation/tasks/` with one or two starter tasks.
-- Verify oracle solutions in CI.
-- Run agent-produced solutions in disposable workspaces.
+- Verify oracle solutions in CI with `scripts/validate_executable_tasks.py --run-oracles`.
+- Score agent-produced solutions in disposable workspaces with `scripts/run_executable_tasks.py --candidate-dir <dir>`.
 
 ### Phase 5: Hardware and Backend Track
 
