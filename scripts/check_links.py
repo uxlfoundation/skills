@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 SKIP_SCHEMES = {"mailto", "app", "plugin"}
+SKIP_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
 SKIP_DIRECTORIES = {".git", "eval-answers", "eval-prompts", "eval-results", "harbor-jobs"}
 TRANSIENT_NETWORK_ERRORS = (
     "network is unreachable",
@@ -101,6 +102,11 @@ def check_external(url: str, timeout: float, retries: int) -> tuple[str, str] | 
     return None
 
 
+def should_check_external(url: str) -> bool:
+    parsed = urllib.parse.urlparse(url)
+    return parsed.scheme in {"http", "https"} and parsed.hostname not in SKIP_HTTP_HOSTS
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--internal-only", action="store_true", help="Skip external HTTP checks.")
@@ -119,7 +125,7 @@ def main(argv: list[str]) -> int:
     for path in iter_files():
         for link in extract_links(path):
             parsed = urllib.parse.urlparse(link)
-            if parsed.scheme in {"http", "https"}:
+            if parsed.scheme in {"http", "https"} and should_check_external(link):
                 external_links.add(link)
             else:
                 error = check_local(path, link)
