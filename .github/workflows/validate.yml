@@ -8,6 +8,9 @@ on:
 jobs:
   catalog:
     runs-on: ubuntu-latest
+    env:
+      HARBOR_TELEMETRY: "off"
+      PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v4
       - name: Validate agent configs with agnix
@@ -22,36 +25,45 @@ jobs:
         with:
           python-version: "3.12"
       - run: python scripts/validate_catalog.py
-      - run: python scripts/validate_evaluator_plan.py
       - run: python scripts/run_evals.py --validate
-      - run: python scripts/validate_executable_tasks.py --run-oracles
-      - run: python scripts/generate_fixture_answer_arms.py --output-dir eval-results/ci/answer-fixtures
-      - run: |
-          python scripts/run_executable_tasks.py \
-            --candidate-dir evaluation/fixtures/executable-candidates/oracle \
-            --label ci-smoke \
-            --output-dir eval-results/ci/executable \
-            --fail-under-pass-rate 1.0
-      - run: |
-          python scripts/compare_eval_arms.py \
-            --baseline-dir eval-results/ci/answer-fixtures/baseline \
-            --skill-dir eval-results/ci/answer-fixtures/skill-explicit \
-            --label ci-smoke \
-            --output-dir eval-results/ci/answer \
-            --fail-under-skill-score 1.0 \
-            --fail-under-delta 0.5
-      - run: |
-          python scripts/generate_eval_dashboard.py \
-            --answer-scorecard eval-results/ci/answer/scorecard.json \
-            --executable-scorecard eval-results/ci/executable/executable-scorecard.json \
-            --output-dir eval-results/ci/dashboard \
-            --label ci-smoke \
-            --write-github-summary
+      - run: python -m unittest discover -s tests -p "test_*.py"
+      - run: python -m pip install harbor==0.20.0
+      - name: Validate Harbor comparison wrapper
+        shell: pwsh
+        run: >-
+          & ./scripts/compare_harbor_skill.ps1
+          -TaskName onemath-runtime-library-missing
+          -SkillName uxl-onemath
+          -PreviousRef HEAD
+          -Agent oracle
+          -Model oracle-smoke
+          -ReasoningEffort ''
+          -Attempts 1
+          -JobPrefix ci-comparison-dry-run
+          -DryRun
+      - name: Run Harbor oracle smoke tests
+        run: |
+          harbor run \
+            --path evaluation/harbor/tasks \
+            --agent oracle \
+            --include-task-name onetbb-histogram-local-aggregation \
+            --include-task-name onetbb-stable-compaction-scan \
+            --include-task-name onemath-runtime-library-missing \
+            --job-name uxl-oracle-smoke \
+            --jobs-dir harbor-jobs \
+            --n-concurrent 3 \
+            --yes
+      - name: Require successful Harbor oracle results
+        run: >-
+          python scripts/check_harbor_job.py
+          harbor-jobs/uxl-oracle-smoke/result.json
+          --expected-trials 3
+          --reward-floor 1.0
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: uxl-eval-dashboard
-          path: eval-results/ci
+          name: uxl-harbor-smoke
+          path: harbor-jobs
           retention-days: 30
       - run: python scripts/generate_agent_wrappers.py --check
       - run: python scripts/check_links.py --timeout 15 --retries 1 --warn-transient-network-errors

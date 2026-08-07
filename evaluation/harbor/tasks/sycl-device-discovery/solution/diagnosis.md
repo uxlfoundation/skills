@@ -1,0 +1,3 @@
+Build success does not establish runtime GPU availability. The attached `sycl-ls` probe is the first device-discovery check; it must show the expected GPU before application-level debugging proceeds.
+
+Check the host GPU driver, the matching Level Zero/OpenCL/CUDA runtime exposed to the container, and `LD_LIBRARY_PATH`. Record `ONEAPI_DEVICE_SELECTOR` and the legacy `SYCL_DEVICE_FILTER` because either can hide an otherwise usable device. Compare `sycl-ls` with the vendor device utility, then compile and run a minimal SYCL queue smoke test against the selected GPU. Preserve the probe, compiler version, device listing, and smoke-test output as evidence.

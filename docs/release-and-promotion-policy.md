@@ -11,7 +11,7 @@ Required for future catalog releases:
 1. All skills have explicit status values in `skills.yaml`.
 2. No skill is marked `reviewed` or `project-owned` without maintainer evidence.
 3. Skill cards record owner, source location, limitations, and validation evidence.
-4. Catalog, eval, wrapper drift, agnix, and link checks pass.
+4. Catalog, Harbor oracle, eval-definition, wrapper drift, agnix, and link checks pass.
 5. Helper scripts have smoke-test coverage in CI.
 6. A release ledger entry records what was shipped and what remains deferred.
 7. A tag or commit SHA is available for pinning.
@@ -25,12 +25,13 @@ Required for promotion:
 1. Owning project maintainer review is recorded.
 2. Current official sources were rechecked after maintainer feedback.
 3. At least three realistic eval prompts exist for the skill.
-4. With-skill and without-skill forward-test outputs are saved or summarized.
+4. Paired Harbor baseline and skill-explicit jobs use the same task, agent, model, environment, and at least three attempts per arm.
 5. The skill card records owner, sources, limitations, risks, forward-test evidence, and remaining gaps.
 6. The catalog validation suite passes.
-7. The skill evaluator plan in `docs/skill-evaluator-plan.md` has been applied to the promoted skill.
-8. For hardware-sensitive skills, hardware/backend validation has passed or a documented exception is recorded.
-9. For `project-owned`, the owning project repository is the source of truth and this catalog is only a mirror.
+7. The skill has positive mean reward delta on its core Harbor tasks and no critical unsupported-claim failure.
+8. At least one negative-control task verifies that the skill stays out of unrelated work.
+9. For hardware-sensitive skills, the Harbor hardware task has passed or a documented exception is recorded.
+10. For `project-owned`, the owning project repository is the source of truth and this catalog is only a mirror.
 
 ## Current Status
 

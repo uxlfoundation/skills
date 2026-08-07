@@ -32,8 +32,6 @@ REQUIRED_MANIFEST_KEYS = {
 REQUIRED_SCHEMA_FILES = [
     "skills.schema.json",
     "evals.schema.json",
-    "evaluator-plan.schema.json",
-    "executable-task.schema.json",
 ]
 REQUIRED_AGENT_FILES = [
     "AGENTS.md",
