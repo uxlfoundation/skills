@@ -1,0 +1,3 @@
+A framework integration creates a oneDNN convolution with destination format tag `any`, then exposes the returned memory as contiguous NCHW without inspecting the primitive descriptor or inserting a reorder. Results changed after convolution, bias, and ReLU were fused, and the new path is slower, but there is no unfused reference or recorded descriptor evidence.
+
+Write a concise diagnosis and repair/validation plan to `/app/answer.md`. Address logical versus physical layout, descriptor and reorder handling across the framework boundary, how to isolate fusion correctness, what configuration evidence to collect, and how to make a bounded performance comparison.

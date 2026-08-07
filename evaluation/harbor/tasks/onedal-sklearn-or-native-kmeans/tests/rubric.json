@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 500,
+  "groups": {
+    "decision": {
+      "minimal_change_path": [
+        ["\\b(?:Extension\\s+for\\s+Scikit-learn|scikit-learn[- ]intelex|extension\\s+path)\\b"],
+        ["\\b(?:preserve|minimal[- ]change|existing)\\w*\\b"],
+        ["\\b(?:Python|scikit-learn)\\b"]
+      ],
+      "native_path_criteria": [
+        ["\\bnative\\s+oneDAL\\b"],
+        ["C\\+\\+"],
+        ["\\b(?:SYCL\\s+queue|direct\\s+control|table[- ]level)\\b"]
+      ],
+      "mode_and_device": [
+        ["\\b(?:batch|online|distributed)\\b"],
+        ["\\b(?:CPU|GPU|device)\\b"],
+        ["\\b(?:support|supported|unverified)\\b"],
+        ["\\b(?:launcher|streaming|distributed\\s+data|single[- ]process)\\b"]
+      ]
+    },
+    "evidence": {
+      "data_contract": [
+        ["\\b(?:samples?|rows?)\\b"],
+        ["\\b(?:features?|columns?)\\b"],
+        ["\\bdtype\\b|\\bdata\\s+type\\b"],
+        ["\\b(?:dense|sparse)\\b"],
+        ["\\bpreprocess\\w*\\b"]
+      ],
+      "algorithm_contract": [
+        ["\\b(?:seed|random)\\b"],
+        ["\\b(?:initialization|init)\\b"],
+        ["\\b(?:clusters?|cluster\\s+count)\\b"],
+        ["\\b(?:iterations?|convergence|tolerance)\\b"]
+      ],
+      "integration_contract": [
+        ["\\b(?:table|array)\\b"],
+        ["\\b(?:row|column)\\b"],
+        ["\\b(?:orientation|shape|layout)\\b"],
+        ["\\b(?:deployment|version|runtime)\\b"]
+      ]
+    },
+    "validation": {
+      "model_parity": [
+        ["\\b(?:reference|baseline)\\b"],
+        ["\\b(?:inertia|objective)\\b"],
+        ["\\b(?:centers?|labels?|predictions?)\\b"],
+        ["\\b(?:permuted|align)\\w*\\b"],
+        ["\\b(?:metric|tolerance)\\b"]
+      ],
+      "conversion_aware_benchmark": [
+        ["\\brepresentative\\b"],
+        ["\\b(?:conversion|table)\\b"],
+        ["\\b(?:transfer|data\\s+movement)\\b"],
+        ["\\b(?:warm[- ]?up|iterations?|dispersion)\\b"],
+        ["\\bend[- ]to[- ]end\\b"]
+      ],
+      "bounded_claim": [
+        ["\\b(?:tested|supported\\s+claim)\\b"],
+        ["\\b(?:interface|path)\\b"],
+        ["\\b(?:data|dataset)\\b"],
+        ["\\bdevice\\b"],
+        ["\\b(?:scope|metric|conversion)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\brewrite\\s+(?:it\\s+)?in\\s+C\\+\\+\\s+immediately\\b",
+    "\\bGPU\\s+is\\s+always\\s+faster\\b",
+    "\\bdistributed\\s+(?:mode\\s+)?is\\s+always\\s+faster\\b",
+    "\\bskip\\s+(?:parity|correctness)\\b"
+  ]
+}

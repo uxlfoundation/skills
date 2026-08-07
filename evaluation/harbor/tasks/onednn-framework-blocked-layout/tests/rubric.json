@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 500,
+  "groups": {
+    "diagnosis": {
+      "logical_vs_physical": [
+        ["\\blogical\\b"],
+        ["\\b(?:physical|blocked)\\b"],
+        ["format_tag::any|\\bformat\\s+tag\\s+any\\b"]
+      ],
+      "descriptor_and_reorder": [
+        ["\\bprimitive\\s+descriptor\\b"],
+        ["\\b(?:query|inspect|actual|finalized)\\w*\\b"],
+        ["\\breorder\\b"],
+        ["\\b(?:consumer|framework|boundary)\\b"]
+      ],
+      "fusion_isolation": [
+        ["\\bunfused\\b"],
+        ["\\b(?:reference|baseline)\\b"],
+        ["\\b(?:fusion|fused|post-op|graph)\\b"],
+        ["\\b(?:parity|tolerance|compare)\\b"]
+      ]
+    },
+    "evidence": {
+      "execution_configuration": [
+        ["\\b(?:engine|device)\\b"],
+        ["\\bshapes?\\b"],
+        ["\\bdata\\s+types?\\b|\\bdtypes?\\b"],
+        ["\\b(?:build|threading|runtime)\\b"]
+      ],
+      "memory_descriptors": [
+        ["\\bsource|\\bsrc\\b"],
+        ["\\bweights?\\b"],
+        ["\\bdestination|\\bdst\\b"],
+        ["\\b(?:strides?|inner\\s+blocks?|padded)\\b"]
+      ],
+      "support_evidence": [
+        ["\\b(?:verbose|runtime\\s+error|documentation|docs|tests?)\\b"],
+        ["\\b(?:backend|support)\\w*\\b"]
+      ]
+    },
+    "validation": {
+      "deterministic_correctness": [
+        ["\\b(?:deterministic|small)\\b"],
+        ["\\b(?:reference|known[- ]answer)\\b"],
+        ["\\b(?:absolute|relative|tolerance)\\w*\\b"]
+      ],
+      "layout_pipeline": [
+        ["\\b(?:adjacent|consumer|pipeline)\\b"],
+        ["\\b(?:keep|preserve)\\w*\\b"],
+        ["\\b(?:optimized|blocked)\\b"],
+        ["\\breorder\\b"]
+      ],
+      "bounded_benchmark": [
+        ["\\b(?:benchdnn|project(?:'s)?\\s+benchmark)\\b"],
+        ["\\brepresentative\\b"],
+        ["\\bshapes?\\b"],
+        ["\\b(?:reorder|end[- ]to[- ]end)\\b"],
+        ["\\b(?:limited|measured|supported\\s+claim)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "format_tag::any\\s+(?:is|means)\\s+(?:contiguous\\s+)?nchw",
+    "\\bskip\\s+(?:all\\s+)?reorders?\\b",
+    "\\bfuse\\s+first\\b",
+    "(?:^|\\n)\\s*guaranteed\\s+speedup\\b"
+  ]
+}

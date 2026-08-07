@@ -1,0 +1,3 @@
+An application uses a oneDPL asynchronous device algorithm with USM input and output. It discards the returned `sycl::event`, immediately reads the output on the host, frees a temporary input allocation, and uses a predefined device policy whose queue has no asynchronous error handler. Results are intermittent on one GPU backend.
+
+Write a concise diagnosis and repair/validation plan to `/app/answer.md`. Address API/version support, queue and policy ownership, data location and lifetime, dependencies and completion, asynchronous error handling, serial-reference correctness, and performance measurement boundaries.

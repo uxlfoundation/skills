@@ -8,11 +8,34 @@ The repository pins Harbor `0.20.0` and runs it with Python 3.12. Disable Harbor
 $env:HARBOR_TELEMETRY = "off"
 ```
 
+## Skill suites and coverage
+
+[`suites.json`](suites.json) is the machine-readable evaluator portfolio. It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable view.
+
+The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
+
+Validate and regenerate the portfolio with:
+
+```powershell
+python scripts/validate_harbor_suites.py
+python scripts/render_harbor_suites.py
+```
+
+CI uses `python scripts/render_harbor_suites.py --check` to prevent the generated matrix from drifting from the manifest.
+
+New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/structured_answer.py) with a task-local `tests/rubric.json`. Run `python scripts/sync_harbor_answer_checkers.py` after adding or changing these tasks; CI checks that every vendored verifier matches the shared source.
+
 ## Pilot tasks
 
+- `oneccl-divergent-collective-sequence`: hosted structured collective-hang task.
+- `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
+- `onednn-framework-blocked-layout`: hosted structured layout-integration task.
+- `onedpl-missing-device-synchronization`: hosted structured async-device task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
+- `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
+- `sycl-cmake-compiler-cache`: hosted structured toolchain-diagnosis task.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -23,17 +46,23 @@ Run the hosted pilots with Harbor's oracle agent:
 harbor run `
   --path evaluation/harbor/tasks `
   --agent oracle `
+  --include-task-name oneccl-divergent-collective-sequence `
+  --include-task-name onedal-sklearn-or-native-kmeans `
+  --include-task-name onednn-framework-blocked-layout `
+  --include-task-name onedpl-missing-device-synchronization `
   --include-task-name onetbb-histogram-local-aggregation `
   --include-task-name onetbb-stable-compaction-scan `
   --include-task-name onemath-runtime-library-missing `
+  --include-task-name performance-tiny-async-gpu-claim `
+  --include-task-name sycl-cmake-compiler-cache `
   --job-name uxl-oracle-smoke `
   --jobs-dir harbor-jobs `
-  --n-concurrent 3 `
+  --n-concurrent 4 `
   --yes
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 3 `
+  --expected-trials 9 `
   --reward-floor 1.0
 ```
 

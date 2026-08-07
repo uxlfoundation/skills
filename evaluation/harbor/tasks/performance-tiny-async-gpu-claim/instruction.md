@@ -1,0 +1,3 @@
+A GPU implementation was declared 12x faster than the CPU after one run on 1,024 elements. The GPU time measures only the asynchronous kernel-submission call; the program reads the output immediately without waiting, does not compare results, and reports no hardware, build, transfer, warmup, or variance information.
+
+Write a concise review and replacement validation plan to `/app/answer.md`. State whether the speedup claim is supported, define the correctness and timing contract, identify the experiment matrix and environment evidence to collect, and describe the narrow claim that could be made after validation.

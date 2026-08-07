@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 500,
+  "groups": {
+    "diagnosis": {
+      "completion_and_lifetime": [
+        ["\\b(?:event|completion)\\b"],
+        ["\\b(?:wait_and_throw|wait\\s+and\\s+throw|wait)\\b"],
+        ["\\b(?:lifetime|free|allocation)\\w*\\b"],
+        ["\\b(?:read|consume|host)\\b"]
+      ],
+      "api_support": [
+        ["\\b(?:algorithm|API)\\b"],
+        ["\\b(?:release|version)\\b"],
+        ["\\b(?:documentation|docs|support)\\w*\\b"],
+        ["\\b(?:compiler|backend)\\b"]
+      ],
+      "queue_and_policy": [
+        ["\\bqueue\\b"],
+        ["\\bdevice\\s+policy\\b|\\bpolicy\\b"],
+        ["\\b(?:owned|application-owned|known)\\b"],
+        ["\\b(?:device|vendor|backend)\\b"]
+      ]
+    },
+    "evidence": {
+      "data_model": [
+        ["\\bUSM\\b"],
+        ["\\b(?:shared|device|host)\\s+USM\\b|\\ballocation\\s+kind\\b"],
+        ["\\b(?:iterator|range)\\b"],
+        ["\\b(?:element\\s+type|length|size)\\b"]
+      ],
+      "dependency_chain": [
+        ["\\b(?:returned|retain)\\w*\\s+(?:the\\s+)?event\\b|\\breturned\\s+`?sycl::event"],
+        ["\\bdependenc(?:y|ies)\\b"],
+        ["\\b(?:ordering|following|subsequent)\\b"],
+        ["\\b(?:input|output)\\b"]
+      ],
+      "async_errors": [
+        ["\\basynchronous\\s+error\\s+handler\\b|\\basync\\w*\\s+handler\\b"],
+        ["\\bexceptions?\\b"],
+        ["\\bwait_and_throw\\b|\\bwait\\s+and\\s+throw\\b"]
+      ]
+    },
+    "validation": {
+      "serial_reference": [
+        ["\\b(?:serial|std)\\b"],
+        ["\\b(?:reference|compare)\\b"],
+        ["\\b(?:deterministic|small)\\b"],
+        ["\\b(?:ordering|stability|tolerance)\\b"]
+      ],
+      "edge_and_backend_tests": [
+        ["\\b(?:empty|single-element|duplicates?)\\b"],
+        ["\\b(?:repeat|repeatedly|iterations?)\\b"],
+        ["\\b(?:device|backend)\\b"],
+        ["\\b(?:iterator|USM|kernel[- ]name)\\b"]
+      ],
+      "timing_boundaries": [
+        ["\\bwarm[- ]?up\\b"],
+        ["\\brepresentative\\s+sizes?\\b"],
+        ["\\b(?:submission|enqueue)\\b"],
+        ["\\b(?:event\\s+profiling|completed\\s+device\\s+execution)\\b"],
+        ["\\b(?:transfer|end[- ]to[- ]end)\\b"],
+        ["\\bsynchronization\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\bread\\s+(?:the\\s+)?output\\s+immediately\\b",
+    "\\bfree\\s+(?:the\\s+)?(?:input|allocation)\\s+before\\s+completion\\b",
+    "\\bno\\s+(?:wait|synchronization)\\s+(?:is\\s+)?needed\\b",
+    "\\bpredefined\\s+(?:device\\s+)?policy\\s+always\\s+handles\\s+errors\\b"
+  ]
+}

@@ -1,0 +1,3 @@
+A production Python pipeline uses scikit-learn `KMeans` and now needs acceleration. A proposal recommends immediately rewriting it with native oneDAL C++ and forcing a GPU, but records no dataset shape, representation, preprocessing, parameter, device-support, model-quality, conversion-cost, or deployment constraints.
+
+Write a concise interface decision and validation plan to `/app/answer.md`. Explain when to keep the scikit-learn workflow versus choosing native oneDAL, identify the evidence needed before choosing a device and computation mode, define model-parity checks, and describe a fair performance comparison.

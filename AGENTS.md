@@ -57,9 +57,12 @@ Run:
 ```powershell
 python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
+python scripts/validate_harbor_suites.py
+python scripts/render_harbor_suites.py --check
+python scripts/sync_harbor_answer_checkers.py --check
 python -m unittest discover -s tests -p "test_*.py"
-harbor run --path evaluation/harbor/tasks --agent oracle --include-task-name onetbb-histogram-local-aggregation --include-task-name onetbb-stable-compaction-scan --include-task-name onemath-runtime-library-missing --job-name uxl-oracle-smoke --jobs-dir harbor-jobs --n-concurrent 3 --yes
-python scripts/check_harbor_job.py harbor-jobs/uxl-oracle-smoke/result.json --expected-trials 3 --reward-floor 1.0
+harbor run --path evaluation/harbor/tasks --agent oracle --include-task-name oneccl-divergent-collective-sequence --include-task-name onedal-sklearn-or-native-kmeans --include-task-name onednn-framework-blocked-layout --include-task-name onedpl-missing-device-synchronization --include-task-name onetbb-histogram-local-aggregation --include-task-name onetbb-stable-compaction-scan --include-task-name onemath-runtime-library-missing --include-task-name performance-tiny-async-gpu-claim --include-task-name sycl-cmake-compiler-cache --job-name uxl-oracle-smoke --jobs-dir harbor-jobs --n-concurrent 4 --yes
+python scripts/check_harbor_job.py harbor-jobs/uxl-oracle-smoke/result.json --expected-trials 9 --reward-floor 1.0
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15
 ```

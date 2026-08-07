@@ -1,0 +1,3 @@
+A SYCL project previously configured successfully with `icpx`. The developer changed the shell's `CXX` to a different `clang++`, reused the same CMake build directory, and now configuration still identifies the old compiler while later feature checks fail. They propose adding random SYCL flags and library paths until it builds.
+
+Write a concise diagnosis and reproducible recovery plan to `/app/answer.md`. Classify the failing phase, preserve the initial evidence, distinguish shell variables from cached CMake toolchain state, define clean configure and minimal smoke-test commands, and explain how build success, runtime loading, and intended-device discovery will each be verified.
