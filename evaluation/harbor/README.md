@@ -57,6 +57,56 @@ harbor run --path evaluation/harbor/tasks `
 
 Use the same agent, model, attempt count, timeouts, and task revision for paired jobs. Inspect results with `harbor view harbor-jobs`.
 
+## Compare a skill change
+
+Use the comparison wrapper to run three matched arms: no skill, the skill from a previous Git revision, and the candidate skill in the current working tree.
+
+```powershell
+.\scripts\compare_harbor_skill.ps1 `
+  -TaskName onemath-runtime-library-missing `
+  -SkillName uxl-onemath `
+  -PreviousRef main `
+  -Model gpt-5.6-sol `
+  -Attempts 3 `
+  -DashboardBaseUrl http://127.0.0.1:8080
+```
+
+The wrapper keeps the task, model, reasoning effort, attempt count, concurrency, and treatment instruction fixed. It exports the previous skill from `-PreviousRef` and snapshots the candidate skill from the current working tree before any arm runs, so it does not modify the current checkout and later edits cannot change an in-flight comparison. On Windows it uses a native Harbor command when available and otherwise falls back to the configured Ubuntu WSL distribution.
+
+The generated report is written to `harbor-jobs/<job-prefix>-comparison.md`. It includes:
+
+- Candidate reward deltas against both no-skill and previous-skill arms.
+- Trial completion, errors, and per-trial reward distributions.
+- Component metrics from Harbor's native `result.json`.
+- Uncached input, cached input, output tokens, cost, and runtime.
+- Git commit/tree provenance and a warning when all arms hit a task ceiling.
+
+Use `-DryRun` to inspect the commands without starting jobs. Use `-FailOnRegression` when an incomplete, errored, or lower-reward candidate should produce a failing exit code. Pass `-JobPrefix` for stable job names and `-ReportPath` when a report should be recorded outside the ignored `harbor-jobs` directory.
+
+## Inspect prompts and criteria
+
+The job viewer and task-definition viewer answer different questions. Run them on separate ports:
+
+```powershell
+harbor view harbor-jobs --jobs --port 8080
+harbor view evaluation/harbor/tasks --tasks --port 8081
+```
+
+In the task-definition viewer:
+
+- **Instruction** is the base task prompt.
+- **Configuration** is the task environment and timeout contract.
+- **Files** exposes `tests/test.sh` and any verifier source that defines the exact success criterion.
+
+In the job viewer, drill into a job, task, and individual trial:
+
+- **Trajectory** shows the exact composed prompt, including treatment instructions.
+- **Verifier** shows the emitted reward and verifier output.
+- **Artifacts** shows the answer or code that was scored.
+- **Config** confirms the skill path, model, reasoning effort, and extra instruction.
+
+Treat the trial's **Reward** and verifier files as authoritative. A prominent job-list metric may be one rubric component rather than the combined reward.
+
 ## Recorded experiments
 
 - [2026-08-07 paired pilot](results/2026-08-07-paired-pilot.md): initial baseline-versus-skill runs for oneMath and oneTBB.

@@ -12,6 +12,7 @@ Thank you for improving the UXL agent skills catalog.
 ```powershell
 python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
+python -m unittest discover -s tests -p "test_*.py"
 ```
 
 5. If Codex skill tooling is available, run quick validation on changed skills.
