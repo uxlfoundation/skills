@@ -57,6 +57,10 @@ harbor run --path evaluation/harbor/tasks `
 
 Use the same agent, model, attempt count, timeouts, and task revision for paired jobs. Inspect results with `harbor view harbor-jobs`.
 
+## Recorded experiments
+
+- [2026-08-07 paired pilot](results/2026-08-07-paired-pilot.md): initial baseline-versus-skill runs for oneMath and oneTBB.
+
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
 The GPU pilot intentionally requests a GPU and is excluded from hosted CI. Run it only on a trusted SYCL-capable runner.
