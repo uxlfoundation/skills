@@ -10,8 +10,9 @@ $env:HARBOR_TELEMETRY = "off"
 
 ## Pilot tasks
 
-- `onetbb-histogram-local-aggregation`: hosted-CPU executable task.
-- `onemath-runtime-library-missing`: hosted answer-quality task.
+- `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
+- `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
+- `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -23,15 +24,16 @@ harbor run `
   --path evaluation/harbor/tasks `
   --agent oracle `
   --include-task-name onetbb-histogram-local-aggregation `
+  --include-task-name onetbb-stable-compaction-scan `
   --include-task-name onemath-runtime-library-missing `
   --job-name uxl-oracle-smoke `
   --jobs-dir harbor-jobs `
-  --n-concurrent 2 `
+  --n-concurrent 3 `
   --yes
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 2 `
+  --expected-trials 3 `
   --reward-floor 1.0
 ```
 
@@ -110,6 +112,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 ## Recorded experiments
 
 - [2026-08-07 paired pilot](results/2026-08-07-paired-pilot.md): initial baseline-versus-skill runs for oneMath and oneTBB.
+- [2026-08-07 evaluator expansion](results/2026-08-07-evaluator-expansion.md): structured oneMath rubric calibration and harder oneTBB executable-task probe.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

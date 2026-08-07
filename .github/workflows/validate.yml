@@ -47,16 +47,17 @@ jobs:
             --path evaluation/harbor/tasks \
             --agent oracle \
             --include-task-name onetbb-histogram-local-aggregation \
+            --include-task-name onetbb-stable-compaction-scan \
             --include-task-name onemath-runtime-library-missing \
             --job-name uxl-oracle-smoke \
             --jobs-dir harbor-jobs \
-            --n-concurrent 2 \
+            --n-concurrent 3 \
             --yes
       - name: Require successful Harbor oracle results
         run: >-
           python scripts/check_harbor_job.py
           harbor-jobs/uxl-oracle-smoke/result.json
-          --expected-trials 2
+          --expected-trials 3
           --reward-floor 1.0
       - uses: actions/upload-artifact@v4
         if: always()
