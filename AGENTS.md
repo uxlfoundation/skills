@@ -57,6 +57,8 @@ Run:
 ```powershell
 python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
+harbor run --path evaluation/harbor/tasks --agent oracle --include-task-name onetbb-histogram-local-aggregation --include-task-name onemath-runtime-library-missing --job-name uxl-oracle-smoke --jobs-dir harbor-jobs --n-concurrent 2 --yes
+python scripts/check_harbor_job.py harbor-jobs/uxl-oracle-smoke/result.json --expected-trials 2 --reward-floor 1.0
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15
 ```

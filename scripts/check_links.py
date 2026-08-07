@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 SKIP_SCHEMES = {"mailto", "app", "plugin"}
+SKIP_DIRECTORIES = {".git", "eval-answers", "eval-prompts", "eval-results", "harbor-jobs"}
 TRANSIENT_NETWORK_ERRORS = (
     "network is unreachable",
     "temporarily unavailable",
@@ -35,7 +36,7 @@ def iter_files() -> list[Path]:
     files: list[Path] = []
     for pattern in patterns:
         files.extend(ROOT.rglob(pattern))
-    return sorted(p for p in files if ".git" not in p.parts)
+    return sorted(p for p in files if not SKIP_DIRECTORIES.intersection(p.parts))
 
 
 def clean_url(url: str) -> str:

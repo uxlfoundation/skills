@@ -9,6 +9,7 @@ exclude = [
   "eval-answers/**",
   "eval-prompts/**",
   "eval-results/**",
+  "harbor-jobs/**",
   "node_modules/**",
 ]
 

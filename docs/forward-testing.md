@@ -1,45 +1,19 @@
 # Forward Testing
 
-Use forward tests to learn whether a skill improves real agent behavior.
-
-The long-term evaluator plan is in `docs/skill-evaluator-plan.md`. The current scorecard workflow is in `docs/evaluator-reporting.md`. This document describes the lightweight workflow for collecting answer artifacts.
-
-## Generate Prompts
-
-```bash
-python scripts/run_evals.py --write-prompts eval-prompts
-```
-
-This writes one prompt file per eval case.
+Use Harbor jobs to learn whether a skill improves real agent behavior. Harbor owns agent execution, isolated environments, repeated trials, trajectories, artifacts, and result viewing. UXL owns the tasks, verifiers, treatments, and promotion thresholds.
 
 ## Run With and Without Skills
 
-For each prompt, run at least two passes:
+For each Harbor task, run at least two jobs with the same task revision, agent, model, attempt count, timeouts, and environment:
 
-- Baseline: agent does not see the skill.
-- Skill-assisted: agent is explicitly told to use the matching skill folder.
+- Baseline: do not pass `--skill` or a skill-specific extra instruction.
+- Skill-explicit: pass the matching skill with `--skill` and the matching file from `evaluation/harbor/instructions/` with `--extra-instruction-path`.
 
-Save outputs as:
+Use at least three attempts per arm for promotion evidence. Harbor stores the task result, reward, verifier logs, trajectory, timing, usage, and collected artifacts under `harbor-jobs/`.
 
-```text
-eval-answers/<skill>/<eval-id>.md
-```
+## Review Results
 
-or:
-
-```text
-eval-answers/<skill>--<eval-id>.md
-```
-
-Keep raw outputs. Do not rewrite them to make scoring cleaner.
-
-## Score Answers
-
-```bash
-python scripts/run_evals.py --answers-dir eval-answers --fail-under 0.8
-```
-
-The current scorer is term-based and intentionally simple. Use it as a smoke test, then review answers manually for:
+Run `harbor view harbor-jobs` and compare the paired jobs. Review deterministic rewards and trajectories for:
 
 - Correct API or workflow choice.
 - Use of official sources when current support matters.
@@ -47,7 +21,7 @@ The current scorer is term-based and intentionally simple. Use it as a smoke tes
 - Clear correctness validation.
 - No unsupported performance or compatibility claims.
 
-For skill promotion, compare at least two answer sets: a baseline answer set without the skill and a skill-assisted answer set with the skill. Record the score delta and preserve raw outputs.
+For skill promotion, record the mean baseline reward, mean skill-explicit reward, delta, trial count, agent/model, Harbor version, task revision, and skill digest. Keep the raw Harbor job directories or uploaded private job references.
 
 ## Record Evidence
 
@@ -56,7 +30,7 @@ When a skill is ready for review, update the skill card with:
 - Date tested.
 - Agent/tool used.
 - Model, if known.
-- Prompt IDs tested.
+- Harbor task IDs tested.
 - Summary of failures.
 - Changes made after testing.
 

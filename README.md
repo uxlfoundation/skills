@@ -43,13 +43,8 @@ Validate the catalog locally:
 
 ```powershell
 python scripts/validate_catalog.py
-python scripts/validate_evaluator_plan.py
 python scripts/run_evals.py --validate
-python scripts/validate_executable_tasks.py --run-oracles
-python scripts/generate_fixture_answer_arms.py --output-dir "$env:TEMP\uxl-answer-fixtures"
-python scripts/run_executable_tasks.py --candidate-dir evaluation/fixtures/executable-candidates/oracle --label local-smoke --output-dir "$env:TEMP\uxl-executable-scorecard" --fail-under-pass-rate 1.0
-python scripts/compare_eval_arms.py --baseline-dir "$env:TEMP\uxl-answer-fixtures\baseline" --skill-dir "$env:TEMP\uxl-answer-fixtures\skill-explicit" --label ci-smoke --output-dir "$env:TEMP\uxl-eval-scorecard"
-python scripts/generate_eval_dashboard.py --answer-scorecard "$env:TEMP\uxl-eval-scorecard\scorecard.json" --executable-scorecard "$env:TEMP\uxl-executable-scorecard\executable-scorecard.json" --output-dir "$env:TEMP\uxl-eval-dashboard" --label local-smoke
+harbor run --path evaluation/harbor/tasks --agent oracle --include-task-name onetbb-histogram-local-aggregation --include-task-name onemath-runtime-library-missing --job-name uxl-oracle-smoke --jobs-dir harbor-jobs --n-concurrent 2 --yes
 python scripts/generate_agent_wrappers.py --check
 python scripts/check_links.py --timeout 15 --retries 1
 agnix . --config .agnix.toml
@@ -61,19 +56,7 @@ Validate an individual skill with Codex's skill creator helper:
 python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\skills\uxl-onemath
 ```
 
-Emit eval prompts for forward testing:
-
-```powershell
-python scripts/run_evals.py --write-prompts eval-prompts
-```
-
-Score saved answers:
-
-```powershell
-python scripts/run_evals.py --answers-dir eval-answers
-```
-
-Accepted answer paths are `eval-answers/<skill>/<eval-id>.md` or `eval-answers/<skill>--<eval-id>.md`.
+Harbor evaluation tasks, baseline/treatment commands, and hardware guidance live in [evaluation/harbor/README.md](evaluation/harbor/README.md). Harbor `0.20.0` is the pinned evaluation harness.
 
 ## Agent Tools
 
@@ -81,7 +64,7 @@ This repo includes instruction files for Codex/AGENTS-compatible agents, Claude 
 
 The CI workflow also runs `agent-sh/agnix` against the repository agent configuration files using [.agnix.toml](.agnix.toml).
 
-Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). Forward-test workflow lives in [forward-testing.md](docs/forward-testing.md). Evaluator reporting and dashboard guidance lives in [evaluator-reporting.md](docs/evaluator-reporting.md). The skill evaluator plan lives in [skill-evaluator-plan.md](docs/skill-evaluator-plan.md), with hardware/backend guidance in [hardware-evaluation.md](docs/hardware-evaluation.md).
+Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). The Harbor-based forward-test workflow lives in [forward-testing.md](docs/forward-testing.md).
 
 Regenerate tool wrappers after changing canonical guidance:
 
