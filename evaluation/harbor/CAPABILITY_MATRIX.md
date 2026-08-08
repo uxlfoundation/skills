@@ -19,9 +19,9 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `uxl-onedal` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onetbb` | 7 | 3 | 1 | 2 | 4 |
 | `uxl-onedpl` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-oneccl` | 6 | 2 | 1 | 0 | 4 |
-| `uxl-sycl-build-debug` | 6 | 3 | 1 | 0 | 3 |
-| `uxl-performance-validation` | 6 | 2 | 0 | 0 | 4 |
+| `uxl-oneccl` | 6 | 3 | 1 | 0 | 3 |
+| `uxl-sycl-build-debug` | 6 | 4 | 1 | 0 | 2 |
+| `uxl-performance-validation` | 6 | 3 | 0 | 0 | 3 |
 
 ## uxl-onednn (oneDNN)
 
@@ -143,7 +143,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
-| `oneccl-async-allreduce-wait` | planned | discriminating | uncalibrated | executable | hosted-distributed | `collective-contracts`, `api-and-collective-choice` |
+| `oneccl-async-allreduce-wait` | implemented | discriminating | uncalibrated | executable | hosted-cpu | `collective-contracts`, `api-and-collective-choice` |
 | `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-datatype-count-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-cpp-or-nccl-like-api` | planned | smoke | uncalibrated | answer-quality | hosted-container | `api-and-collective-choice`, `launcher-plugin-framework` |
@@ -168,7 +168,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
 | `sycl-loader-plugin-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-selector-silent-cpu-fallback` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
+| `sycl-selector-silent-cpu-fallback` | implemented | discriminating | uncalibrated | executable | hosted-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |
 
 ## uxl-performance-validation (UXL cross-project)
@@ -187,7 +187,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | --- | --- | --- | --- | --- | --- | --- |
 | `performance-tiny-async-gpu-claim` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
 | `performance-benchmark-report-repair` | implemented | smoke | uncalibrated | executable | hosted-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
-| `performance-floating-reduction-tolerance` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `invalid-claim-triage` |
+| `performance-floating-reduction-tolerance` | implemented | discriminating | uncalibrated | executable | hosted-cpu | `correctness-gated-measurement`, `invalid-claim-triage` |
 | `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
 | `performance-variance-and-outliers` | planned | smoke | uncalibrated | executable | hosted-cpu | `invalid-claim-triage`, `repeatable-performance-evidence` |
 | `performance-profile-after-regression` | planned | smoke | uncalibrated | answer-quality | hosted-container | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |
