@@ -67,22 +67,25 @@ def main(argv: list[str]) -> int:
     script = Path(argv[1])
 
     accepted = run_validator(script, CONTRACT, OBSERVATION)
-    assert accepted == {
-        "schema_version": "1.0",
-        "status": "accepted",
-        "reasons": [],
-        "selected_device": {
-            "type": "gpu",
-            "backend": "level_zero",
-            "vendor_id": "0x8086",
-            "name": "intel test gpu",
-        },
-        "kernel": {
-            "submitted": True,
-            "waited": True,
-            "async_error_count": 0,
-            "elements": 4096,
-        },
+    assert set(accepted) == {"schema_version", "status", "reasons", "selected_device", "kernel"}, accepted
+    assert accepted["schema_version"] == "1.0", accepted
+    assert accepted["status"] == "accepted" and accepted["reasons"] == [], accepted
+    selected = accepted["selected_device"]
+    required_device_fields = {"type", "backend", "vendor_id", "name"}
+    assert required_device_fields <= set(selected) <= required_device_fields | {"selector"}, selected
+    assert {field: selected[field] for field in required_device_fields} == {
+        "type": "gpu",
+        "backend": "level_zero",
+        "vendor_id": "0x8086",
+        "name": "intel test gpu",
+    }, selected
+    if "selector" in selected:
+        assert selected["selector"] == "level_zero:gpu", selected
+    assert accepted["kernel"] == {
+        "submitted": True,
+        "waited": True,
+        "async_error_count": 0,
+        "elements": 4096,
     }, accepted
 
     mutations = [

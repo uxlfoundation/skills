@@ -134,7 +134,7 @@
         {"id": "topology-worker-benchmarking", "class": "performance", "description": "Measure rank count, topology, tensor size, transport, workers, and affinity."}
       ],
       "tasks": [
-        {"name": "oneccl-async-allreduce-wait", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["collective-contracts", "api-and-collective-choice"]},
+        {"name": "oneccl-async-allreduce-wait", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["collective-contracts", "api-and-collective-choice"]},
         {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-datatype-count-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-cpp-or-nccl-like-api", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
@@ -158,7 +158,7 @@
         {"name": "sycl-cmake-compiler-cache", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
         {"name": "sycl-compile-time-backend-link", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime"]},
         {"name": "sycl-loader-plugin-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
-        {"name": "sycl-selector-silent-cpu-fallback", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["reproducible-smoke-contract", "evidence-driven-triage", "build-runtime-cost-boundaries"]},
+        {"name": "sycl-selector-silent-cpu-fallback", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["reproducible-smoke-contract", "evidence-driven-triage", "build-runtime-cost-boundaries"]},
         {"name": "sycl-reproducible-environment-report", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "toolchain-package-runtime", "build-runtime-cost-boundaries"]}
       ]
     },
@@ -176,10 +176,10 @@
       "tasks": [
         {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
         {"name": "performance-benchmark-report-repair", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["benchmark-scope-selection", "repeatable-performance-evidence"]},
-        {"name": "performance-floating-reduction-tolerance", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
+        {"name": "performance-floating-reduction-tolerance", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
         {"name": "performance-transfer-scope-comparison", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchmark-scope-selection", "library-and-hardware-context", "repeatable-performance-evidence"]},
         {"name": "performance-variance-and-outliers", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["invalid-claim-triage", "repeatable-performance-evidence"]},
-        {"name": "performance-profile-after-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["library-and-hardware-context", "invalid-claim-triage", "repeatable-performance-evidence"]}
+        {"name": "performance-profile-after-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["library-and-hardware-context", "invalid-claim-triage", "repeatable-performance-evidence"]}
       ]
     }
   ]
