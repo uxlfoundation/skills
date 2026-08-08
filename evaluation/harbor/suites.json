@@ -73,7 +73,7 @@
         {"id": "conversion-aware-benchmarking", "class": "performance", "description": "Measure representative analytics workloads including data conversion costs."}
       ],
       "tasks": [
-        {"name": "onedal-sklearn-or-native-kmeans", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
+        {"name": "onedal-sklearn-or-native-kmeans", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
         {"name": "onedal-table-orientation-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["analytics-parity", "tables-and-frameworks", "quality-regression-triage"]},
         {"name": "onedal-batch-online-distributed-choice", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
         {"name": "onedal-unavailable-gpu-path", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["interface-and-mode", "quality-regression-triage"]},
@@ -115,7 +115,7 @@
       ],
       "tasks": [
         {"name": "onedpl-host-or-device-sort", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "execution-policy-choice"]},
-        {"name": "onedpl-missing-device-synchronization", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "queue-data-and-iterators", "device-result-triage"]},
+        {"name": "onedpl-missing-device-synchronization", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "queue-data-and-iterators", "device-result-triage"]},
         {"name": "onedpl-iterator-category-failure", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["queue-data-and-iterators", "device-result-triage"]},
         {"name": "onedpl-stable-ordering-contract", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["algorithm-contracts", "execution-policy-choice"]},
         {"name": "onedpl-host-backend-configuration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["execution-policy-choice", "queue-data-and-iterators"]},

@@ -16,9 +16,9 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | --- | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onemath` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onedal` | 6 | 1 | 0 | 0 | 5 |
+| `uxl-onedal` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onetbb` | 7 | 2 | 0 | 2 | 5 |
-| `uxl-onedpl` | 6 | 1 | 0 | 0 | 5 |
+| `uxl-onedpl` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-oneccl` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-sycl-build-debug` | 6 | 2 | 1 | 0 | 4 |
 | `uxl-performance-validation` | 6 | 1 | 0 | 0 | 5 |
@@ -79,7 +79,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
-| `onedal-sklearn-or-native-kmeans` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `analytics-parity`, `interface-and-mode` |
+| `onedal-sklearn-or-native-kmeans` | implemented | discriminating | headroom | answer-quality | hosted-container | `analytics-parity`, `interface-and-mode` |
 | `onedal-table-orientation-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
 | `onedal-batch-online-distributed-choice` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `analytics-parity`, `interface-and-mode` |
 | `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `interface-and-mode`, `quality-regression-triage` |
@@ -123,7 +123,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
 | `onedpl-host-or-device-sort` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `algorithm-contracts`, `execution-policy-choice` |
-| `onedpl-missing-device-synchronization` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
+| `onedpl-missing-device-synchronization` | implemented | discriminating | headroom | answer-quality | hosted-container | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
 | `onedpl-iterator-category-failure` | planned | discriminating | uncalibrated | executable | hosted-cpu | `queue-data-and-iterators`, `device-result-triage` |
 | `onedpl-stable-ordering-contract` | planned | discriminating | uncalibrated | executable | hosted-cpu | `algorithm-contracts`, `execution-policy-choice` |
 | `onedpl-host-backend-configuration` | planned | smoke | uncalibrated | answer-quality | hosted-container | `execution-policy-choice`, `queue-data-and-iterators` |
