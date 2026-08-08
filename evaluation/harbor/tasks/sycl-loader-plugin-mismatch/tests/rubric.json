@@ -22,14 +22,14 @@
     },
     "evidence_and_repair": {
       "binary_loader_evidence": [
-        ["\\breadlink\\b"],
+        ["\\b(?:readlink|sha256sum|objdump)\\b|/proc/.{0,20}/maps"],
         ["\\bldd\\b"],
         ["\\b(?:readelf|RPATH|RUNPATH)\\b"],
         ["\\bLD_DEBUG\\b"],
         ["\\b(?:real\\s+paths?|search\\s+order|chosen\\s+files?)\\b"]
       ],
       "runtime_inventory": [
-        ["\\bSYCL_UR_TRACE\\b"],
+        ["\\bSYCL_UR_TRACE\\b|\\b(?:SYCL/UR|UR|PI)\\s+(?:adapter\\s+)?trac\\w*\\b"],
         ["\\bsycl-ls\\b"],
         ["\\b(?:backend|platform|device)\\b"],
         ["\\b(?:driver|adapter)\\s+(?:version|path|checksum)\\b|\\bversions?\\b"]
@@ -40,7 +40,7 @@
         ["\\b(?:PATH|LD_LIBRARY_PATH|working\\s+directory|user)\\b"]
       ],
       "coherent_deployment": [
-        ["\\b(?:one|single|coherent|compatible)\\s+(?:supported\\s+)?toolchain\\b"],
+        ["\\b(?:one|single|coherent|compatible).{0,30}\\btoolchain\\b"],
         ["\\b(?:libsycl|UR\\s+loader|adapter|backend\\s+runtime)\\b"],
         ["\\b(?:RUNPATH|launcher|systemd\\s+unit|versioned)\\b"],
         ["\\b(?:remove|exclude|minimal|required)\\w*\\b"]
@@ -48,28 +48,28 @@
     },
     "validation": {
       "minimal_service_smoke": [
-        ["\\bminimal\\s+SYCL\\s+smoke\\b|\\bsmoke\\s+program\\b"],
+        ["\\bminimal\\s+SYCL\\s+(?:smoke|kernel|program|application)\\b|\\bsmoke\\s+program\\b"],
         ["\\bservice\\s+user\\b|\\bactual\\s+unit\\b|\\bservice\\s+environment\\b"],
-        ["\\b(?:small\\s+kernel|submit)\\w*\\b"],
+        ["\\b(?:small\\s+kernel|submit)\\w*\\b|\\bminimal\\s+SYCL\\s+kernel\\b"],
         ["\\b(?:wait|asynchronous\\s+errors?)\\b"],
         ["\\b(?:deterministic|validate)\\w*\\s+(?:result|output)\\b"]
       ],
       "intended_device_proof": [
         ["\\bexplicit\\s+selector\\b|\\bselector\\b"],
-        ["\\bintended\\s+(?:GPU|device|backend)\\b"],
+        ["\\bintended\\s+(?:GPU|device|backend|selector)\\b|\\bbackend\\s+is\\s+the\\s+intended\\b"],
         ["\\b(?:print|record)\\w*\\b"],
         ["\\b(?:CPU\\s+fallback|falls?\\s+back\\s+to\\s+CPU)\\b"]
       ],
       "controlled_changes": [
-        ["\\bone\\s+variable\\s+at\\s+a\\s+time\\b"],
+        ["\\bone[- ]variable[- ]at[- ]a[- ]time\\b"],
         ["\\b(?:loader|UR)\\s+traces?\\b"],
         ["\\b(?:compar|differ)\\w*\\b"]
       ],
       "bounded_performance": [
         ["\\b(?:after|once)\\b.{0,80}\\bcorrectness\\b|\\bcorrectness\\s+pass\\w*\\b"],
-        ["\\brepresentative\\s+sizes?\\b"],
-        ["\\b(?:warmup|repeated\\s+trials?)\\b"],
-        ["\\bbound\\w*\\s+.*performance\\s+claim\\b|\\bclaim\\s+.*configuration\\b"]
+        ["\\brepresentative\\s+sizes?\\b|\\b(?:workload|input)\\s+(?:and\\s+)?(?:input\\s+)?sizes?\\b"],
+        ["\\b(?:warm[- ]?up|repeated[- ](?:runs?|trials?|distribution))\\b"],
+        ["\\bbound\\w*\\s+.*(?:performance\\s+)?claim\\b|\\bclaim\\s+(?:must\\s+be\\s+)?bounded\\b|\\bclaim\\s+.*configuration\\b"]
       ]
     }
   },

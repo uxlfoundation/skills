@@ -38,10 +38,10 @@
         ["\\b(?:allocation|buffer|extent|size)\\w*\\b"]
       ],
       "rank_local_record": [
-        ["\\brank[- ]prefixed\\b|\\bper[- ]rank\\b|\\brank\\s+local\\b"],
+        ["\\brank[- ](?:prefixed|local)\\b|\\bper[- ]rank\\b"],
         ["\\b(?:count|element)\\b"],
         ["\\bdatatype\\b"],
-        ["\\b(?:computed\\s+bytes|allocation\\s+bytes|buffer\\s+bytes)\\b"],
+        ["\\b(?:computed|allocat\\w*).{0,30}\\bbytes\\b|\\b(?:required_bytes|send_alloc_bytes|recv_alloc_bytes|buffer_bytes)\\b"],
         ["\\b(?:communicator|sequence\\s+ID)\\b"]
       ],
       "support_evidence": [

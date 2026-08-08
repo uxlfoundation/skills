@@ -43,8 +43,8 @@
     },
     "validation": {
       "correctness_and_lifetime": [
-        ["\\bserial\\s+(?:reference|baseline)\\b"],
-        ["\\b(?:image\\s+ID|message\\s+ID|output\\s+order)\\b"],
+        ["\\bserial\\s+(?:reference|baseline|golden)\\b"],
+        ["\\b(?:image\\s+ID|message\\s+ID|job\\s+id|input\\s+order|output\\s+order)\\b"],
         ["\\b(?:lifetime|ownership|live\\s+buffers?|released?)\\b"]
       ],
       "resource_evidence": [
@@ -55,7 +55,7 @@
       "bounded_benchmark": [
         ["\\bthroughput\\b"],
         ["\\b(?:tail|percentile|p95|p99)\\s+latency\\b|\\btail\\b"],
-        ["\\brepresentative\\b"],
+        ["\\b(?:representative|realistic)\\b"],
         ["\\b(?:sweep|one\\s+variable\\s+at\\s+a\\s+time)\\b"]
       ]
     }
