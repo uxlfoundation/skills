@@ -19,7 +19,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `uxl-onedal` | 6 | 1 | 0 | 0 | 5 |
 | `uxl-onetbb` | 7 | 2 | 0 | 2 | 5 |
 | `uxl-onedpl` | 6 | 1 | 0 | 0 | 5 |
-| `uxl-oneccl` | 6 | 1 | 0 | 0 | 5 |
+| `uxl-oneccl` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-sycl-build-debug` | 6 | 2 | 0 | 0 | 4 |
 | `uxl-performance-validation` | 6 | 1 | 0 | 0 | 5 |
 
@@ -144,7 +144,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
 | `oneccl-async-allreduce-wait` | planned | discriminating | uncalibrated | executable | hosted-distributed | `collective-contracts`, `api-and-collective-choice` |
-| `oneccl-divergent-collective-sequence` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
+| `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-datatype-count-mismatch` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-cpp-or-nccl-like-api` | planned | smoke | uncalibrated | answer-quality | hosted-container | `api-and-collective-choice`, `launcher-plugin-framework` |
 | `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `launcher-plugin-framework`, `distributed-hang-triage` |

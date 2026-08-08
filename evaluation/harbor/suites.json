@@ -135,7 +135,7 @@
       ],
       "tasks": [
         {"name": "oneccl-async-allreduce-wait", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-distributed", "covers": ["collective-contracts", "api-and-collective-choice"]},
-        {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
+        {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-datatype-count-mismatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-cpp-or-nccl-like-api", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
         {"name": "oneccl-plugin-rank-visibility", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["launcher-plugin-framework", "distributed-hang-triage"]},
