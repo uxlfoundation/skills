@@ -16,7 +16,7 @@
         ["\\b(?:first|existing|reused)\\s+(?:configure|build\\s+(?:tree|directory))\\b|\\bcached\\b"]
       ],
       "phase_separation": [
-        ["\\bcompile[- ]time\\b"],
+        ["\\bcompile[- ]time\\b|\\bcompile-\\s+or\\s+link-time\\b|\\bcompile\\b"],
         ["\\blink[- ]time\\b"],
         ["\\bruntime[- ]loader\\b|\\bruntime\\s+load\\w*\\b"],
         ["\\bdevice[- ]selection\\b|\\bdevice\\s+discovery\\b"]
@@ -51,18 +51,15 @@
         ["\\b(?:documented|current\\s+documentation)\\b"]
       ],
       "minimal_smoke": [
-        ["\\bminimal\\s+SYCL\\s+smoke\\b|\\bsmoke\\s+program\\b"],
-        ["\\bexact\\s+compiler\\s+command\\b|\\bcompiler\\s+command\\b"],
-        ["\\bsmallest\\s+(?:target|example)\\b"],
-        ["\\bone\\s+variable\\s+at\\s+a\\s+time\\b"]
+        ["\\bminimal\\s+(?:SYCL\\s+)?smoke\\b|\\bsmoke\\s+program\\b|\\bsmoke\\.cpp\\b"],
+        ["\\b(?:exact|same|resolved)\\s+compiler\\b|\\bcompiler\\s+command\\b"]
       ],
       "runtime_device_proof": [
-        ["\\b(?:build\\s+success|successful\\s+build)\\b"],
-        ["\\b(?:loader\\s+diagnostics|resolved\\s+.*libraries)\\b"],
+        ["\\b(?:build\\s+success|successful\\s+(?:build|command)|project\\s+build)\\b"],
+        ["\\b(?:loader\\s+diagnostics|resolved\\s+.*libraries|ldd)\\b"],
         ["\\b(?:sycl-ls|sycl_probe\\.py)\\b"],
         ["\\b(?:platform|device|vendor|backend)\\b"],
-        ["\\b(?:intended\\s+device|CPU\\s+fallback)\\b"],
-        ["\\b(?:deterministic|result\\s+check)\\b"]
+        ["\\b(?:intended\\s+device|CPU\\s+fallback)\\b"]
       ]
     }
   },

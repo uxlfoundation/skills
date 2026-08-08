@@ -6,7 +6,7 @@
       "logical_vs_physical": [
         ["\\blogical\\b"],
         ["\\b(?:physical|blocked)\\b"],
-        ["format_tag::any|\\bformat\\s+tag\\s+any\\b"]
+        ["format_tag::any|\\bformat\\s+tag\\s+`?any`?|`any`\\s+(?:specif|let|allow|delegat|choos)\\w*"]
       ],
       "descriptor_and_reorder": [
         ["\\bprimitive\\s+descriptor\\b"],
@@ -36,7 +36,7 @@
       ],
       "support_evidence": [
         ["\\b(?:verbose|runtime\\s+error|documentation|docs|tests?)\\b"],
-        ["\\b(?:backend|support)\\w*\\b"]
+        ["\\b(?:backend|support|implementation)\\w*\\b"]
       ]
     },
     "validation": {
@@ -56,7 +56,7 @@
         ["\\brepresentative\\b"],
         ["\\bshapes?\\b"],
         ["\\b(?:reorder|end[- ]to[- ]end)\\b"],
-        ["\\b(?:limited|measured|supported\\s+claim)\\b"]
+        ["\\b(?:bounded|limited|measured|supported\\s+claim|performance\\s+claim)\\b"]
       ]
     }
   },

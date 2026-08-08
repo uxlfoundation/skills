@@ -14,7 +14,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 | Skill | Target | Implemented | Headroom | Ceiling | Planned |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 6 | 1 | 0 | 0 | 5 |
+| `uxl-onednn` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onemath` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onedal` | 6 | 1 | 0 | 0 | 5 |
 | `uxl-onetbb` | 7 | 2 | 0 | 2 | 5 |
@@ -40,7 +40,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | `primitive-contracts`, `primitive-or-graph` |
 | `onednn-convolution-fusion-parity` | planned | discriminating | uncalibrated | executable | hosted-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-extra-reorder-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
-| `onednn-framework-blocked-layout` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
+| `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
 | `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-benchdnn-claim-review` | planned | smoke | uncalibrated | answer-quality | hosted-container | `benchdnn-and-reorders` |
 
@@ -185,7 +185,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
-| `performance-tiny-async-gpu-claim` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
+| `performance-tiny-async-gpu-claim` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
 | `performance-benchmark-report-repair` | planned | discriminating | uncalibrated | executable | hosted-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
 | `performance-floating-reduction-tolerance` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `invalid-claim-triage` |
 | `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |

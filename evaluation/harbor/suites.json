@@ -36,7 +36,7 @@
         {"name": "onednn-matmul-memory-descriptors", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph"]},
         {"name": "onednn-convolution-fusion-parity", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph", "backend-and-parity-triage"]},
         {"name": "onednn-extra-reorder-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["framework-layout-boundaries", "benchdnn-and-reorders"]},
-        {"name": "onednn-framework-blocked-layout", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-contracts", "framework-layout-boundaries", "backend-and-parity-triage"]},
+        {"name": "onednn-framework-blocked-layout", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-contracts", "framework-layout-boundaries", "backend-and-parity-triage"]},
         {"name": "onednn-backend-unimplemented-primitive", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-or-graph", "backend-and-parity-triage"]},
         {"name": "onednn-benchdnn-claim-review", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchdnn-and-reorders"]}
       ]
@@ -174,7 +174,7 @@
         {"id": "repeatable-performance-evidence", "class": "performance", "description": "Measure warmup, steady state, variance, bottlenecks, and bounded speedup claims."}
       ],
       "tasks": [
-        {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
+        {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
         {"name": "performance-benchmark-report-repair", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["benchmark-scope-selection", "repeatable-performance-evidence"]},
         {"name": "performance-floating-reduction-tolerance", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
         {"name": "performance-transfer-scope-comparison", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchmark-scope-selection", "library-and-hardware-context", "repeatable-performance-evidence"]},

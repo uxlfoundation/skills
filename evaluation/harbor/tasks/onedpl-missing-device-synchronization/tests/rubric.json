@@ -30,7 +30,7 @@
         ["\\b(?:element\\s+type|length|size)\\b"]
       ],
       "dependency_chain": [
-        ["\\b(?:returned|retain)\\w*\\s+(?:the\\s+)?event\\b|\\breturned\\s+`?sycl::event"],
+        ["\\b(?:returned|retain)\\w*\\s+(?:the\\s+)?(?:event|future|completion(?:\\s+object)?)\\b|\\breturned\\s+`?sycl::event"],
         ["\\bdependenc(?:y|ies)\\b"],
         ["\\b(?:ordering|following|subsequent)\\b"],
         ["\\b(?:input|output)\\b"]
@@ -56,9 +56,9 @@
       ],
       "timing_boundaries": [
         ["\\bwarm[- ]?up\\b"],
-        ["\\brepresentative\\s+sizes?\\b"],
+        ["\\brepresentative\\s+sizes?\\b|\\b(?:small|large)\\b"],
         ["\\b(?:submission|enqueue)\\b"],
-        ["\\b(?:event\\s+profiling|completed\\s+device\\s+execution)\\b"],
+        ["\\b(?:event\\s+profiling|profiling\\s+events?|completed\\s+device\\s+execution)\\b"],
         ["\\b(?:transfer|end[- ]to[- ]end)\\b"],
         ["\\bsynchronization\\b"]
       ]

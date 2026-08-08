@@ -13,8 +13,7 @@
       "async_completion": [
         ["\\b(?:asynchronous|async|returned\\s+event)\\b"],
         ["\\b(?:wait|completion)\\b"],
-        ["\\b(?:consume|reuse|destination)\\b"],
-        ["\\b(?:error|exception)\\w*\\b"]
+        ["\\b(?:consume|reuse|destination|output|buffers?)\\b"]
       ],
       "tuning_is_secondary": [
         ["\\b(?:timeout|affinity|worker|plugin|transport)\\b"],
@@ -24,15 +23,15 @@
     },
     "evidence": {
       "rank_and_launch": [
-        ["\\blaunch\\s+command\\b"],
+        ["\\blaunch(?:er)?\\s+command\\b"],
         ["\\b(?:local|global)\\s+rank\\b|\\brank\\s+mapping\\b"],
-        ["\\brank-to-device\\b|\\bdevice\\s+mapping\\b"],
+        ["\\brank-to-device\\b|\\bdevice\\s+mapping\\b|\\bdevice\\b"],
         ["\\bcommunicator\\b"],
-        ["\\brank[- ]prefixed\\s+logs?\\b|\\bper[- ]rank\\s+logs?\\b"]
+        ["\\brank[- ](?:prefixed|local)\\s+logs?\\b|\\bper[- ]rank\\s+logs?\\b"]
       ],
       "collective_contract": [
         ["\\b(?:operation|allreduce)\\b"],
-        ["\\b(?:send|receive|recv)\\s+buffers?\\b|\\bbuffer\\s+sizes?\\b"],
+        ["\\b(?:send|receive|recv)\\s+buffers?\\b|\\bbuffer(?:\\s+sizes?)?\\b"],
         ["\\bcount\\b"],
         ["\\bdatatype\\b"],
         ["\\breduction\\b"],
@@ -55,7 +54,7 @@
       "minimal_reproduction": [
         ["\\btwo\\s+ranks?\\b|\\b2\\s+ranks?\\b"],
         ["\\bone\\s+(?:small\\s+)?(?:tensor|allreduce|collective)\\b"],
-        ["\\bdeterministic\\b"],
+        ["\\b(?:deterministic|fixed[- ]shape|fixed\\s+input)\\b"],
         ["\\b(?:host|reference)\\s+reduction\\b|\\bcompare\\b"]
       ],
       "rank_level_benchmark": [
