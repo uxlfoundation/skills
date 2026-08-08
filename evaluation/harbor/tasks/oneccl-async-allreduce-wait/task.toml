@@ -1,0 +1,22 @@
+schema_version = "1.3"
+artifacts = ["/app/async_allreduce_pipeline.py"]
+
+[metadata]
+skill = "uxl-oneccl"
+track = "executable"
+category = "async-collective-completion"
+difficulty = "hard"
+
+[verifier]
+timeout_sec = 45.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+workdir = "/app"
+network_mode = "public"
+build_timeout_sec = 600.0
+os = "linux"
+cpus = 2
+memory_mb = 512
