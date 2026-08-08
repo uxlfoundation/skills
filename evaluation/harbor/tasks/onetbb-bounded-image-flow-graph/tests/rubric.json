@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 600,
+  "groups": {
+    "diagnosis": {
+      "unbounded_in_flight": [
+        ["\\b(?:unlimited|queueing)\\b"],
+        ["\\b(?:buffer|queue|accept)\\w*\\b"],
+        ["\\b(?:RSS|memory)\\b"]
+      ],
+      "blocking_scheduler": [
+        ["\\b(?:blocking|file\\s+I/O|decode)\\b"],
+        ["\\b(?:scheduler|workers?)\\b"],
+        ["\\b(?:starvation|oversubscription|contention)\\b"]
+      ],
+      "nested_parallelism": [
+        ["\\b(?:nested|parallel_for)\\b"],
+        ["\\b(?:oversubscription|contention|runnable\\s+threads?)\\b"],
+        ["\\b(?:foreign|framework)\\s+(?:thread\\s+)?pool\\b"]
+      ]
+    },
+    "repair": {
+      "bounded_graph": [
+        ["\\b(?:flow::graph|flow\\s+graph)\\b"],
+        ["\\b(?:limiter_node|rejecting[- ]node|rejecting\\s+.*node)\\b"],
+        ["\\b(?:threshold|in[- ]flight|backpressure|admission)\\b"]
+      ],
+      "capacity_return": [
+        ["\\b(?:decrementer|continue_msg)\\b"],
+        ["\\b(?:terminal|completion|write|cleanup)\\b"],
+        ["\\b(?:exception|failure|all\\s+.*paths?|exactly\\s+once)\\b"]
+      ],
+      "stage_limits": [
+        ["\\bfunction_node\\b"],
+        ["\\b(?:decode|inference|write)\\b"],
+        ["\\b(?:concurrency|limit|serial)\\w*\\b"]
+      ],
+      "runtime_composition": [
+        ["\\b(?:task_arena|global_control)\\b"],
+        ["\\b(?:framework|foreign|existing)\\b"],
+        ["\\b(?:threads?|cores?)\\b"]
+      ]
+    },
+    "validation": {
+      "correctness_and_lifetime": [
+        ["\\bserial\\s+(?:reference|baseline)\\b"],
+        ["\\b(?:image\\s+ID|message\\s+ID|output\\s+order)\\b"],
+        ["\\b(?:lifetime|ownership|live\\s+buffers?|released?)\\b"]
+      ],
+      "resource_evidence": [
+        ["\\b(?:RSS|memory)\\b"],
+        ["\\b(?:queue\\s+depth|in[- ]flight)\\b"],
+        ["\\b(?:thread\\s+count|CPU\\s+utilization|workers?)\\b"]
+      ],
+      "bounded_benchmark": [
+        ["\\bthroughput\\b"],
+        ["\\b(?:tail|percentile|p95|p99)\\s+latency\\b|\\btail\\b"],
+        ["\\brepresentative\\b"],
+        ["\\b(?:sweep|one\\s+variable\\s+at\\s+a\\s+time)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\b(?:make|set|use).{0,30}unlimited.{0,30}(?:fix|solve|improve)\\w*\\b",
+    "\\bblocking\\s+(?:I/O|calls?).{0,30}\\b(?:harmless|free)\\b",
+    "\\bno\\s+(?:backpressure|limit|limiter)\\s+(?:is\\s+)?needed\\b"
+  ]
+}

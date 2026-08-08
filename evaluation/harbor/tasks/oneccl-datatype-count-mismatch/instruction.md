@@ -1,0 +1,3 @@
+A four-rank training job flattens gradients before an asynchronous oneCCL allreduce. One rank pads the flattened buffer and passes its byte length as `count`; another stores BF16 values but selects the float32 oneCCL datatype. Other ranks pass the unpadded element count and matching datatype. The job sometimes hangs and sometimes returns corrupted gradients. Per-rank logs currently say only "entered allreduce," and changing worker affinity appears to move the failure.
+
+Write a concise diagnosis and repair/validation plan to `/app/answer.md`. Define the collective contract that must match across ranks, buffer sizing and async completion, exact rank-local evidence, minimal reproduction and expected result, support/version checks, and when performance tuning is legitimate.

@@ -25,17 +25,21 @@ CI uses `python scripts/render_harbor_suites.py --check` to prevent the generate
 
 New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/structured_answer.py) with a task-local `tests/rubric.json`. Run `python scripts/sync_harbor_answer_checkers.py` after adding or changing these tasks; CI checks that every vendored verifier matches the shared source.
 
-## Pilot tasks
+## Hosted tasks
 
+- `oneccl-datatype-count-mismatch`: hosted structured collective-contract task.
 - `oneccl-divergent-collective-sequence`: hosted structured collective-hang task.
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
+- `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
+- `performance-benchmark-report-repair`: hosted-CPU executable reporting task.
 - `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
 - `sycl-cmake-compiler-cache`: hosted structured toolchain-diagnosis task.
+- `sycl-loader-plugin-mismatch`: hosted structured runtime-loader task.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -46,15 +50,19 @@ Run the hosted pilots with Harbor's oracle agent:
 harbor run `
   --path evaluation/harbor/tasks `
   --agent oracle `
+  --include-task-name oneccl-datatype-count-mismatch `
   --include-task-name oneccl-divergent-collective-sequence `
   --include-task-name onedal-sklearn-or-native-kmeans `
   --include-task-name onednn-framework-blocked-layout `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onemath-runtime-library-missing `
+  --include-task-name onetbb-bounded-image-flow-graph `
   --include-task-name onetbb-histogram-local-aggregation `
   --include-task-name onetbb-stable-compaction-scan `
-  --include-task-name onemath-runtime-library-missing `
+  --include-task-name performance-benchmark-report-repair `
   --include-task-name performance-tiny-async-gpu-claim `
   --include-task-name sycl-cmake-compiler-cache `
+  --include-task-name sycl-loader-plugin-mismatch `
   --job-name uxl-oracle-smoke `
   --jobs-dir harbor-jobs `
   --n-concurrent 4 `
@@ -62,7 +70,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 9 `
+  --expected-trials 13 `
   --reward-floor 1.0
 ```
 
@@ -142,6 +150,8 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 
 - [2026-08-07 paired pilot](results/2026-08-07-paired-pilot.md): initial baseline-versus-skill runs for oneMath and oneTBB.
 - [2026-08-07 evaluator expansion](results/2026-08-07-evaluator-expansion.md): structured oneMath rubric calibration and harder oneTBB executable-task probe.
+- [2026-08-08 coverage wave 1](results/2026-08-08-coverage-wave-1.md): six-task expansion, rubric audit, and three-attempt headroom calibration.
+- [2026-08-08 coverage wave 2](results/2026-08-08-coverage-wave-2.md): four-task expansion targeting performance, oneTBB, oneCCL, and SYCL gaps.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
