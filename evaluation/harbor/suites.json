@@ -1,0 +1,186 @@
+{
+  "schema_version": "1.0",
+  "policy": {
+    "minimum_tasks_per_skill": 5,
+    "minimum_discriminating_tasks_per_skill": 2,
+    "required_capability_classes": [
+      "correctness",
+      "selection",
+      "integration",
+      "debugging",
+      "performance"
+    ],
+    "attempts": {
+      "development_probe": 1,
+      "calibration": 3,
+      "promotion": 5
+    },
+    "promotion_thresholds": {
+      "maximum_task_mean_regression": 0.1,
+      "maximum_suite_mean_regression": 0.03
+    }
+  },
+  "suites": [
+    {
+      "skill": "uxl-onednn",
+      "owner_project": "oneDNN",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "primitive-contracts", "class": "correctness", "description": "Preserve shapes, strides, data types, numerics, and memory descriptor semantics."},
+        {"id": "primitive-or-graph", "class": "selection", "description": "Choose primitive, post-op, or graph paths from the required control and fusion contract."},
+        {"id": "framework-layout-boundaries", "class": "integration", "description": "Integrate engines, streams, layouts, and framework-owned reorder boundaries."},
+        {"id": "backend-and-parity-triage", "class": "debugging", "description": "Diagnose unsupported backends, layout errors, and numerical parity failures."},
+        {"id": "benchdnn-and-reorders", "class": "performance", "description": "Use benchdnn or representative benchmarks and account for reorder costs."}
+      ],
+      "tasks": [
+        {"name": "onednn-matmul-memory-descriptors", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph"]},
+        {"name": "onednn-convolution-fusion-parity", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph", "backend-and-parity-triage"]},
+        {"name": "onednn-extra-reorder-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["framework-layout-boundaries", "benchdnn-and-reorders"]},
+        {"name": "onednn-framework-blocked-layout", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-contracts", "framework-layout-boundaries", "backend-and-parity-triage"]},
+        {"name": "onednn-backend-unimplemented-primitive", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-or-graph", "backend-and-parity-triage"]},
+        {"name": "onednn-benchdnn-claim-review", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchdnn-and-reorders"]}
+      ]
+    },
+    {
+      "skill": "uxl-onemath",
+      "owner_project": "oneMath",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "math-contracts", "class": "correctness", "description": "Preserve layout, precision, dimensions, strides, seeds, and event dependencies."},
+        {"id": "domain-and-dispatch", "class": "selection", "description": "Choose the domain, runtime or compile-time dispatch, and host or device API."},
+        {"id": "backend-build-and-link", "class": "integration", "description": "Configure backend wrappers, CMake targets, vendor libraries, and loader paths."},
+        {"id": "runtime-backend-triage", "class": "debugging", "description": "Separate link success, runtime dispatch, device discovery, and backend availability."},
+        {"id": "representative-math-validation", "class": "performance", "description": "Validate known answers before measuring representative sizes and dispatch overhead."}
+      ],
+      "tasks": [
+        {"name": "onemath-runtime-library-missing", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["domain-and-dispatch", "backend-build-and-link", "runtime-backend-triage", "representative-math-validation"]},
+        {"name": "onemath-blas-leading-dimension", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["math-contracts", "domain-and-dispatch"]},
+        {"name": "onemath-runtime-vs-compile-dispatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["domain-and-dispatch", "backend-build-and-link"]},
+        {"name": "onemath-rng-device-event-chain", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["math-contracts", "domain-and-dispatch", "runtime-backend-triage"]},
+        {"name": "onemath-third-party-backend-wrapper", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["backend-build-and-link", "runtime-backend-triage"]},
+        {"name": "onemath-dispatch-overhead-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["math-contracts", "representative-math-validation"]}
+      ]
+    },
+    {
+      "skill": "uxl-onedal",
+      "owner_project": "oneDAL",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "analytics-parity", "class": "correctness", "description": "Preserve preprocessing, seeds, model outputs, metrics, and tolerances."},
+        {"id": "interface-and-mode", "class": "selection", "description": "Choose sklearn extension or native API and batch, online, or distributed mode."},
+        {"id": "tables-and-frameworks", "class": "integration", "description": "Integrate table orientation, dense or sparse layouts, and Python or C++ boundaries."},
+        {"id": "quality-regression-triage", "class": "debugging", "description": "Diagnose changed model quality, unsupported acceleration, and conversion mistakes."},
+        {"id": "conversion-aware-benchmarking", "class": "performance", "description": "Measure representative analytics workloads including data conversion costs."}
+      ],
+      "tasks": [
+        {"name": "onedal-sklearn-or-native-kmeans", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
+        {"name": "onedal-table-orientation-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["analytics-parity", "tables-and-frameworks", "quality-regression-triage"]},
+        {"name": "onedal-batch-online-distributed-choice", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
+        {"name": "onedal-unavailable-gpu-path", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["interface-and-mode", "quality-regression-triage"]},
+        {"name": "onedal-conversion-cost-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["tables-and-frameworks", "conversion-aware-benchmarking"]},
+        {"name": "onedal-train-infer-metric-parity", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["analytics-parity", "conversion-aware-benchmarking"]}
+      ]
+    },
+    {
+      "skill": "uxl-onetbb",
+      "owner_project": "oneTBB",
+      "target_task_count": 7,
+      "capabilities": [
+        {"id": "race-order-and-exception-safety", "class": "correctness", "description": "Preserve race freedom, ordering, determinism, cancellation, and exceptions."},
+        {"id": "parallel-pattern-selection", "class": "selection", "description": "Choose loops, reductions, scans, pipelines, graphs, or explicit task trees."},
+        {"id": "runtime-composition", "class": "integration", "description": "Compose arenas, global limits, foreign thread pools, containers, and allocators."},
+        {"id": "scheduler-triage", "class": "debugging", "description": "Diagnose oversubscription, blocking work, starvation, races, and scheduler behavior."},
+        {"id": "grain-affinity-benchmarking", "class": "performance", "description": "Benchmark realistic core counts, grainsize, affinity, and scheduling overhead."}
+      ],
+      "tasks": [
+        {"name": "onetbb-histogram-local-aggregation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
+        {"name": "onetbb-stable-compaction-scan", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
+        {"name": "onetbb-bounded-image-flow-graph", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "scheduler-triage"]},
+        {"name": "onetbb-nested-thread-pool-arena", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["runtime-composition", "scheduler-triage", "grain-affinity-benchmarking"]},
+        {"name": "onetbb-cancellation-exception-propagation", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "runtime-composition"]},
+        {"name": "onetbb-grainsize-affinity-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["scheduler-triage", "grain-affinity-benchmarking"]},
+        {"name": "onetbb-legacy-api-migration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "runtime-composition"]}
+      ]
+    },
+    {
+      "skill": "uxl-onedpl",
+      "owner_project": "oneDPL",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "algorithm-contracts", "class": "correctness", "description": "Preserve serial semantics, stability, ordering, lifetime, and synchronization."},
+        {"id": "execution-policy-choice", "class": "selection", "description": "Choose host or device policies from data location, device, and workload."},
+        {"id": "queue-data-and-iterators", "class": "integration", "description": "Integrate owned queues, USM or buffers, iterator categories, and device lambdas."},
+        {"id": "device-result-triage", "class": "debugging", "description": "Diagnose synchronization, unsupported iterators, backend, and data-access failures."},
+        {"id": "transfer-aware-benchmarking", "class": "performance", "description": "Measure transfers, launch, synchronization, and representative range sizes."}
+      ],
+      "tasks": [
+        {"name": "onedpl-host-or-device-sort", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "execution-policy-choice"]},
+        {"name": "onedpl-missing-device-synchronization", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "queue-data-and-iterators", "device-result-triage"]},
+        {"name": "onedpl-iterator-category-failure", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["queue-data-and-iterators", "device-result-triage"]},
+        {"name": "onedpl-stable-ordering-contract", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["algorithm-contracts", "execution-policy-choice"]},
+        {"name": "onedpl-host-backend-configuration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["execution-policy-choice", "queue-data-and-iterators"]},
+        {"name": "onedpl-transfer-inclusive-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "transfer-aware-benchmarking"]}
+      ]
+    },
+    {
+      "skill": "uxl-oneccl",
+      "owner_project": "oneCCL",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "collective-contracts", "class": "correctness", "description": "Preserve rank symmetry, sequence, buffers, counts, datatypes, roots, and waits."},
+        {"id": "api-and-collective-choice", "class": "selection", "description": "Choose the API surface and collective matching the communication semantics."},
+        {"id": "launcher-plugin-framework", "class": "integration", "description": "Integrate launchers, communicators, plugins, devices, and framework wrappers."},
+        {"id": "distributed-hang-triage", "class": "debugging", "description": "Use per-rank evidence to diagnose divergent calls, visibility, and completion hangs."},
+        {"id": "topology-worker-benchmarking", "class": "performance", "description": "Measure rank count, topology, tensor size, transport, workers, and affinity."}
+      ],
+      "tasks": [
+        {"name": "oneccl-async-allreduce-wait", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-distributed", "covers": ["collective-contracts", "api-and-collective-choice"]},
+        {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
+        {"name": "oneccl-datatype-count-mismatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
+        {"name": "oneccl-cpp-or-nccl-like-api", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
+        {"name": "oneccl-plugin-rank-visibility", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["launcher-plugin-framework", "distributed-hang-triage"]},
+        {"name": "oneccl-worker-affinity-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["launcher-plugin-framework", "topology-worker-benchmarking"]}
+      ]
+    },
+    {
+      "skill": "uxl-sycl-build-debug",
+      "owner_project": "UXL cross-project",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "reproducible-smoke-contract", "class": "correctness", "description": "Preserve the original failure and verify build plus runtime with a minimal smoke test."},
+        {"id": "failure-phase-classification", "class": "selection", "description": "Classify configure, compile, link, load, or device-selection failures before acting."},
+        {"id": "toolchain-package-runtime", "class": "integration", "description": "Integrate compiler, CMake cache, package roots, target flags, loaders, and drivers."},
+        {"id": "evidence-driven-triage", "class": "debugging", "description": "Use exact commands, probe output, loader evidence, and one-variable changes."},
+        {"id": "build-runtime-cost-boundaries", "class": "performance", "description": "Avoid performance claims until the intended device and runtime path are proven."}
+      ],
+      "tasks": [
+        {"name": "sycl-device-discovery", "status": "implemented", "role": "hardware", "calibration": "manual", "track": "hardware", "environment": "manual-gpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-cmake-compiler-cache", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-compile-time-backend-link", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime"]},
+        {"name": "sycl-loader-plugin-mismatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-selector-silent-cpu-fallback", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "evidence-driven-triage", "build-runtime-cost-boundaries"]},
+        {"name": "sycl-reproducible-environment-report", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "toolchain-package-runtime", "build-runtime-cost-boundaries"]}
+      ]
+    },
+    {
+      "skill": "uxl-performance-validation",
+      "owner_project": "UXL cross-project",
+      "target_task_count": 6,
+      "capabilities": [
+        {"id": "correctness-gated-measurement", "class": "correctness", "description": "Define references, tolerances, ordering, limits, and failure behavior before timing."},
+        {"id": "benchmark-scope-selection", "class": "selection", "description": "Choose representative sizes, baselines, boundaries, iterations, and claims."},
+        {"id": "library-and-hardware-context", "class": "integration", "description": "Integrate library-specific hooks, data movement, async events, topology, and hardware."},
+        {"id": "invalid-claim-triage", "class": "debugging", "description": "Detect missing synchronization, biased baselines, numerical errors, and environmental noise."},
+        {"id": "repeatable-performance-evidence", "class": "performance", "description": "Measure warmup, steady state, variance, bottlenecks, and bounded speedup claims."}
+      ],
+      "tasks": [
+        {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
+        {"name": "performance-benchmark-report-repair", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["benchmark-scope-selection", "repeatable-performance-evidence"]},
+        {"name": "performance-floating-reduction-tolerance", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
+        {"name": "performance-transfer-scope-comparison", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchmark-scope-selection", "library-and-hardware-context", "repeatable-performance-evidence"]},
+        {"name": "performance-variance-and-outliers", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["invalid-claim-triage", "repeatable-performance-evidence"]},
+        {"name": "performance-profile-after-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["library-and-hardware-context", "invalid-claim-triage", "repeatable-performance-evidence"]}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 500,
+  "groups": {
+    "diagnosis": {
+      "divergent_sequence": [
+        ["\\b(?:divergent|different|mismatch\\w*)\\b"],
+        ["\\b(?:branch|skip|omits?)\\b"],
+        ["\\bcollective\\s+sequence\\b|\\bsame\\s+collective\\b"],
+        ["\\bcommunicator\\b"],
+        ["\\b(?:deadlock|hang)\\b"]
+      ],
+      "async_completion": [
+        ["\\b(?:asynchronous|async|returned\\s+event)\\b"],
+        ["\\b(?:wait|completion)\\b"],
+        ["\\b(?:consume|reuse|destination|output|buffers?)\\b"]
+      ],
+      "tuning_is_secondary": [
+        ["\\b(?:timeout|affinity|worker|plugin|transport)\\b"],
+        ["\\b(?:after|only\\s+then|does\\s+not\\s+repair|not\\s+(?:a\\s+)?fix)\\b"],
+        ["\\b(?:correctness|symmetry|sequence)\\b"]
+      ]
+    },
+    "evidence": {
+      "rank_and_launch": [
+        ["\\blaunch(?:er)?\\s+command\\b"],
+        ["\\b(?:local|global)\\s+rank\\b|\\brank\\s+mapping\\b"],
+        ["\\brank-to-device\\b|\\bdevice\\s+mapping\\b|\\bdevice\\b"],
+        ["\\bcommunicator\\b"],
+        ["\\brank[- ](?:prefixed|local)\\s+logs?\\b|\\bper[- ]rank\\s+logs?\\b"]
+      ],
+      "collective_contract": [
+        ["\\b(?:operation|allreduce)\\b"],
+        ["\\b(?:send|receive|recv)\\s+buffers?\\b|\\bbuffer(?:\\s+sizes?)?\\b"],
+        ["\\bcount\\b"],
+        ["\\bdatatype\\b"],
+        ["\\breduction\\b"],
+        ["\\b(?:root|in-place|stream|queue)\\b"]
+      ],
+      "runtime_environment": [
+        ["\\b(?:oneCCL|CCL_)\\b"],
+        ["\\b(?:API|version)\\b"],
+        ["\\b(?:plugin|transport)\\b"],
+        ["\\b(?:device\\s+runtime|framework)\\b"]
+      ]
+    },
+    "validation": {
+      "symmetric_repair": [
+        ["\\bevery\\s+rank\\b|\\ball\\s+ranks\\b"],
+        ["\\bsame\\s+collective\\s+sequence\\b|\\bsame\\s+order\\b"],
+        ["\\bempty\\s+(?:local\\s+)?batch\\b|\\bempty\\s+rank\\b"],
+        ["\\b(?:participat|communicator|control\\s+collective)\\w*\\b"]
+      ],
+      "minimal_reproduction": [
+        ["\\btwo\\s+ranks?\\b|\\b2\\s+ranks?\\b"],
+        ["\\bone\\s+(?:small\\s+)?(?:tensor|allreduce|collective)\\b"],
+        ["\\b(?:deterministic|fixed[- ]shape|fixed\\s+input)\\b"],
+        ["\\b(?:host|reference)\\s+reduction\\b|\\bcompare\\b"]
+      ],
+      "rank_level_benchmark": [
+        ["\\b(?:warm[- ]?up|iterations?)\\b"],
+        ["\\b(?:minimum|maximum|average|min|max)\\b"],
+        ["\\brank[- ]level\\b|\\bper[- ]rank\\b"],
+        ["\\b(?:topology|tensor\\s+sizes?|rank\\s+mapping)\\b"],
+        ["\\b(?:plugin|transport|affinity)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\bincrease\\s+(?:the\\s+)?timeout\\s+(?:to\\s+)?fix\\b",
+    "\\bignore\\s+(?:the\\s+)?missing\\s+rank\\b",
+    "\\branks?\\s+may\\s+safely\\s+skip\\s+collectives?\\b",
+    "\\bmore\\s+workers?\\s+always\\s+(?:fix|help)\\b"
+  ]
+}

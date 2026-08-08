@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 500,
+  "groups": {
+    "diagnosis": {
+      "configure_phase": [
+        ["\\bconfigure[- ]time\\b|\\bconfigure\\s+(?:phase|failure)\\b"],
+        ["\\btoolchain\\b"],
+        ["\\b(?:not|rather\\s+than)\\b"],
+        ["\\b(?:link|runtime|random\\s+flags?)\\b"]
+      ],
+      "cache_semantics": [
+        ["\\bCMakeCache\\.txt\\b|\\bCMake\\s+cache\\b"],
+        ["\\bCMAKE_CXX_COMPILER\\b"],
+        ["\\bCXX\\b"],
+        ["\\b(?:first|existing|reused)\\s+(?:configure|build\\s+(?:tree|directory))\\b|\\bcached\\b"]
+      ],
+      "phase_separation": [
+        ["\\bcompile[- ]time\\b|\\bcompile-\\s+or\\s+link-time\\b|\\bcompile\\b"],
+        ["\\blink[- ]time\\b"],
+        ["\\bruntime[- ]loader\\b|\\bruntime\\s+load\\w*\\b"],
+        ["\\bdevice[- ]selection\\b|\\bdevice\\s+discovery\\b"]
+      ]
+    },
+    "evidence": {
+      "preserved_failure": [
+        ["\\b(?:original|initial|first)\\b"],
+        ["\\b(?:error|failure)\\b"],
+        ["\\b(?:configure\\s+command|CMakeCache|configure\\s+logs?)\\b"],
+        ["\\b(?:save|preserve|record|capture)\\b"]
+      ],
+      "toolchain_inventory": [
+        ["\\b(?:compiler\\s+path|which|absolute\\s+path)\\b"],
+        ["--version|\\bcompiler\\s+version\\b"],
+        ["\\b(?:CMake|generator|Ninja)\\b"],
+        ["\\b(?:target\\s+hardware|backend)\\b"],
+        ["\\b(?:package\\s+roots?|environment)\\b"]
+      ],
+      "runtime_inventory": [
+        ["\\b(?:SYCL\\s+runtime|backend\\s+runtime)\\b"],
+        ["\\bdriver\\b"],
+        ["\\b(?:loader|resolved\\s+libraries|library\\s+paths?)\\b"],
+        ["\\b(?:sycl-ls|sycl_probe\\.py)\\b"]
+      ]
+    },
+    "validation": {
+      "clean_configure": [
+        ["\\b(?:new|clean)\\s+build\\s+(?:directory|tree)\\b"],
+        ["cmake\\s+-S\\s+\\.?\\s+-B\\s+|\\bCMake\\s+(?:preset|toolchain\\s+file)\\b"],
+        ["-DCMAKE_CXX_COMPILER=|\\babsolute\\s+path\\b"],
+        ["\\b(?:documented|current\\s+documentation)\\b"]
+      ],
+      "minimal_smoke": [
+        ["\\bminimal\\s+(?:SYCL\\s+)?smoke\\b|\\bsmoke\\s+program\\b|\\bsmoke\\.cpp\\b"],
+        ["\\b(?:exact|same|resolved)\\s+compiler\\b|\\bcompiler\\s+command\\b"]
+      ],
+      "runtime_device_proof": [
+        ["\\b(?:build\\s+success|successful\\s+(?:build|command)|project\\s+build)\\b"],
+        ["\\b(?:loader\\s+diagnostics|resolved\\s+.*libraries|ldd)\\b"],
+        ["\\b(?:sycl-ls|sycl_probe\\.py)\\b"],
+        ["\\b(?:platform|device|vendor|backend)\\b"],
+        ["\\b(?:intended\\s+device|CPU\\s+fallback)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\badd\\s+random\\s+(?:SYCL\\s+)?flags?\\b",
+    "\\bedit\\s+CMakeCache\\.txt\\s+until\\s+it\\s+works\\b",
+    "\\bbuild\\s+success\\s+proves\\s+(?:the\\s+)?GPU\\b",
+    "\\bignore\\s+(?:the\\s+)?cache\\b"
+  ]
+}
