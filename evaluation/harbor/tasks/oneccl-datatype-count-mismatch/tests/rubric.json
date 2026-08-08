@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 650,
+  "groups": {
+    "diagnosis": {
+      "collective_contract": [
+        ["\\b(?:every|all)\\s+ranks?\\b"],
+        ["\\b(?:same|compatible|identical)\\b"],
+        ["\\b(?:sequence|collective|allreduce)\\b"],
+        ["\\b(?:count|datatype)\\b"]
+      ],
+      "element_not_bytes": [
+        ["\\bcount\\b"],
+        ["\\belements?\\b"],
+        ["\\b(?:not|rather\\s+than)\\s+(?:a\\s+)?bytes?\\b|\\bnot\\s+(?:a\\s+)?byte\\s+length\\b"]
+      ],
+      "storage_type_mismatch": [
+        ["\\bBF16\\b|\\bbfloat16\\b"],
+        ["\\bfloat32\\b|\\bFP32\\b"],
+        ["\\b(?:storage|datatype|type)\\b"],
+        ["\\b(?:corrupt|overrun|extent|interpret)\\w*\\b"]
+      ],
+      "tuning_secondary": [
+        ["\\b(?:affinity|workers?|transport|plugin)\\b"],
+        ["\\b(?:cannot|not|only\\s+after)\\b"],
+        ["\\b(?:contract|correctness)\\b"]
+      ]
+    },
+    "repair_and_evidence": {
+      "canonical_metadata": [
+        ["\\b(?:canonical|identical|same)\\b"],
+        ["\\b(?:metadata|descriptor|contract)\\b"],
+        ["\\b(?:assert|validate|hash|compare)\\w*\\b"]
+      ],
+      "buffer_extent": [
+        ["count\\s*\\*\\s*sizeof|\\bcount\\b.{0,30}\\bbytes?\\b"],
+        ["\\b(?:send|receive|recv)\\b"],
+        ["\\b(?:allocation|buffer|extent|size)\\w*\\b"]
+      ],
+      "rank_local_record": [
+        ["\\brank[- ]prefixed\\b|\\bper[- ]rank\\b|\\brank\\s+local\\b"],
+        ["\\b(?:count|element)\\b"],
+        ["\\bdatatype\\b"],
+        ["\\b(?:computed\\s+bytes|allocation\\s+bytes|buffer\\s+bytes)\\b"],
+        ["\\b(?:communicator|sequence\\s+ID)\\b"]
+      ],
+      "support_evidence": [
+        ["\\boneCCL\\s+(?:version|build)\\b"],
+        ["\\b(?:backend|plugin|transport)\\b"],
+        ["\\b(?:support|documented|installed)\\w*\\b"]
+      ],
+      "async_completion": [
+        ["\\b(?:asynchronous|async|event|request)\\b"],
+        ["\\b(?:wait|dependency|completion)\\w*\\b"],
+        ["\\b(?:consume|reuse|free|unflatten)\\w*\\b"]
+      ]
+    },
+    "validation": {
+      "minimal_expected_result": [
+        ["\\btwo\\s+ranks?\\b|\\b2\\s+ranks?\\b"],
+        ["\\bfixed\\b"],
+        ["\\b(?:vector|tensor|values?)\\b"],
+        ["\\b(?:expected|host\\s+reference|receive)\\w*\\b"]
+      ],
+      "memory_and_sizes": [
+        ["\\b(?:guard|memory\\s+checker|overwrite|overrun)\\w*\\b"],
+        ["\\b(?:one[- ]element|odd|padded|representative)\\b"],
+        ["\\b(?:tolerance|exact)\\w*\\b"]
+      ],
+      "rank_wide_parity": [
+        ["\\b(?:every|all)\\s+ranks?\\b"],
+        ["\\b(?:compare|match|parity)\\w*\\b"],
+        ["\\b(?:reference|expected)\\b"]
+      ],
+      "bounded_benchmark": [
+        ["\\brepresentative\\s+(?:tensor\\s+)?sizes?\\b"],
+        ["\\b(?:rank\\s+counts?|topology)\\b"],
+        ["\\b(?:warmup|repeated|iterations?)\\b"],
+        ["\\bone\\s+variable\\s+at\\s+a\\s+time\\b|\\bbound\\w*\\s+.*claim\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\b(?:affinity|workers?|transport).{0,30}\\b(?:fixes?|repairs?)\\b.{0,30}\\b(?:count|datatype)\\b",
+    "\\bcount\\s+(?:is|means)\\s+(?:the\\s+)?(?:number\\s+of\\s+)?bytes\\b",
+    "\\bno\\s+(?:wait|completion)\\s+(?:is\\s+)?needed\\b"
+  ]
+}

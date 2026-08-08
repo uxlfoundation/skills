@@ -17,11 +17,11 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `uxl-onednn` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onemath` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onedal` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onetbb` | 7 | 2 | 0 | 2 | 5 |
+| `uxl-onetbb` | 7 | 3 | 0 | 2 | 4 |
 | `uxl-onedpl` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-oneccl` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-sycl-build-debug` | 6 | 2 | 1 | 0 | 4 |
-| `uxl-performance-validation` | 6 | 1 | 0 | 0 | 5 |
+| `uxl-oneccl` | 6 | 2 | 1 | 0 | 4 |
+| `uxl-sycl-build-debug` | 6 | 3 | 1 | 0 | 3 |
+| `uxl-performance-validation` | 6 | 2 | 0 | 0 | 4 |
 
 ## uxl-onednn (oneDNN)
 
@@ -102,7 +102,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | --- | --- | --- | --- | --- | --- | --- |
 | `onetbb-histogram-local-aggregation` | implemented | smoke | ceiling | executable | hosted-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
 | `onetbb-stable-compaction-scan` | implemented | smoke | ceiling | executable | hosted-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
-| `onetbb-bounded-image-flow-graph` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `parallel-pattern-selection`, `scheduler-triage` |
+| `onetbb-bounded-image-flow-graph` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `parallel-pattern-selection`, `scheduler-triage` |
 | `onetbb-nested-thread-pool-arena` | planned | discriminating | uncalibrated | executable | hosted-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
 | `onetbb-cancellation-exception-propagation` | planned | discriminating | uncalibrated | executable | hosted-cpu | `race-order-and-exception-safety`, `runtime-composition` |
 | `onetbb-grainsize-affinity-regression` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `scheduler-triage`, `grain-affinity-benchmarking` |
@@ -145,7 +145,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | --- | --- | --- | --- | --- | --- | --- |
 | `oneccl-async-allreduce-wait` | planned | discriminating | uncalibrated | executable | hosted-distributed | `collective-contracts`, `api-and-collective-choice` |
 | `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
-| `oneccl-datatype-count-mismatch` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
+| `oneccl-datatype-count-mismatch` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-cpp-or-nccl-like-api` | planned | smoke | uncalibrated | answer-quality | hosted-container | `api-and-collective-choice`, `launcher-plugin-framework` |
 | `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `launcher-plugin-framework`, `distributed-hang-triage` |
 | `oneccl-worker-affinity-regression` | planned | smoke | uncalibrated | answer-quality | hosted-container | `launcher-plugin-framework`, `topology-worker-benchmarking` |
@@ -167,7 +167,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
-| `sycl-loader-plugin-mismatch` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-loader-plugin-mismatch` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |
 
@@ -186,7 +186,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
 | `performance-tiny-async-gpu-claim` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
-| `performance-benchmark-report-repair` | planned | discriminating | uncalibrated | executable | hosted-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
+| `performance-benchmark-report-repair` | implemented | discriminating | uncalibrated | executable | hosted-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
 | `performance-floating-reduction-tolerance` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `invalid-claim-triage` |
 | `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
 | `performance-variance-and-outliers` | planned | smoke | uncalibrated | executable | hosted-cpu | `invalid-claim-triage`, `repeatable-performance-evidence` |

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 650,
+  "groups": {
+    "diagnosis": {
+      "runtime_phase": [
+        ["\\bruntime\\b"],
+        ["\\b(?:loader|adapter|plugin|device\\s+discovery)\\b"],
+        ["\\bnot\\s+(?:a\\s+)?(?:configure|compile|link)\\b|\\b(?:configure|compile|link).{0,40}\\b(?:succeeded|success)\\b"]
+      ],
+      "mixed_installation": [
+        ["\\b(?:mixed|incompatible|toolchains?\\s+A.{0,20}B)\\b"],
+        ["\\blibsycl\\b"],
+        ["\\b(?:adapter|plugin|Unified\\s+Runtime|UR)\\b"],
+        ["\\b(?:ABI|version|dependent)\\w*\\b"]
+      ],
+      "copying_is_not_repair": [
+        ["\\b(?:copy|copied|copying|symlink)\\w*\\b"],
+        ["\\b(?:adapter|plugin|\\.so)\\b"],
+        ["\\b(?:not\\s+a\\s+(?:fix|repair)|do\\s+not|avoid)\\b"]
+      ]
+    },
+    "evidence_and_repair": {
+      "binary_loader_evidence": [
+        ["\\breadlink\\b"],
+        ["\\bldd\\b"],
+        ["\\b(?:readelf|RPATH|RUNPATH)\\b"],
+        ["\\bLD_DEBUG\\b"],
+        ["\\b(?:real\\s+paths?|search\\s+order|chosen\\s+files?)\\b"]
+      ],
+      "runtime_inventory": [
+        ["\\bSYCL_UR_TRACE\\b"],
+        ["\\bsycl-ls\\b"],
+        ["\\b(?:backend|platform|device)\\b"],
+        ["\\b(?:driver|adapter)\\s+(?:version|path|checksum)\\b|\\bversions?\\b"]
+      ],
+      "service_reproduction": [
+        ["\\bsystemd\\b|\\bservice\\s+(?:user|environment|unit)\\b"],
+        ["\\b(?:EnvironmentFile|unit|clean\\s+environment|service\\s+environment)\\b"],
+        ["\\b(?:PATH|LD_LIBRARY_PATH|working\\s+directory|user)\\b"]
+      ],
+      "coherent_deployment": [
+        ["\\b(?:one|single|coherent|compatible)\\s+(?:supported\\s+)?toolchain\\b"],
+        ["\\b(?:libsycl|UR\\s+loader|adapter|backend\\s+runtime)\\b"],
+        ["\\b(?:RUNPATH|launcher|systemd\\s+unit|versioned)\\b"],
+        ["\\b(?:remove|exclude|minimal|required)\\w*\\b"]
+      ]
+    },
+    "validation": {
+      "minimal_service_smoke": [
+        ["\\bminimal\\s+SYCL\\s+smoke\\b|\\bsmoke\\s+program\\b"],
+        ["\\bservice\\s+user\\b|\\bactual\\s+unit\\b|\\bservice\\s+environment\\b"],
+        ["\\b(?:small\\s+kernel|submit)\\w*\\b"],
+        ["\\b(?:wait|asynchronous\\s+errors?)\\b"],
+        ["\\b(?:deterministic|validate)\\w*\\s+(?:result|output)\\b"]
+      ],
+      "intended_device_proof": [
+        ["\\bexplicit\\s+selector\\b|\\bselector\\b"],
+        ["\\bintended\\s+(?:GPU|device|backend)\\b"],
+        ["\\b(?:print|record)\\w*\\b"],
+        ["\\b(?:CPU\\s+fallback|falls?\\s+back\\s+to\\s+CPU)\\b"]
+      ],
+      "controlled_changes": [
+        ["\\bone\\s+variable\\s+at\\s+a\\s+time\\b"],
+        ["\\b(?:loader|UR)\\s+traces?\\b"],
+        ["\\b(?:compar|differ)\\w*\\b"]
+      ],
+      "bounded_performance": [
+        ["\\b(?:after|once)\\b.{0,80}\\bcorrectness\\b|\\bcorrectness\\s+pass\\w*\\b"],
+        ["\\brepresentative\\s+sizes?\\b"],
+        ["\\b(?:warmup|repeated\\s+trials?)\\b"],
+        ["\\bbound\\w*\\s+.*performance\\s+claim\\b|\\bclaim\\s+.*configuration\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\b(?:copy|copied|copying).{0,30}(?:adapter|plugin|\\.so).{0,20}\\bwill\\s+(?:fix|repair|solve)\\b",
+    "\\bsuccessful\\s+compile.{0,50}\\bproves?\\b.{0,30}\\b(?:GPU|runtime|device)\\b",
+    "\\bCPU\\s+fallback\\s+(?:is\\s+)?(?:acceptable|equivalent)\\b"
+  ]
+}
