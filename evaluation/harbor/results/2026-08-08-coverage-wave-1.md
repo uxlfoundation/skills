@@ -12,10 +12,10 @@ These rewards are post-hoc scores from the current audited rubrics. They are use
 | `uxl-onedal` | `onedal-sklearn-or-native-kmeans` | 0.6667 | 1.0000 | +0.3333 | Directional headroom |
 | `uxl-onednn` | `onednn-framework-blocked-layout` | 0.5556 | 1.0000 | +0.4444 | Advanced to calibration |
 | `uxl-onedpl` | `onedpl-missing-device-synchronization` | 0.6667 | 1.0000 | +0.3333 | Directional headroom |
-| `uxl-sycl-build-debug` | `sycl-cmake-compiler-cache` | 0.4444 | 0.8889 | +0.4445 | Directional headroom |
+| `uxl-sycl-build-debug` | `sycl-cmake-compiler-cache` | 0.4444 | 0.8889 | +0.4445 | Advanced to calibration |
 | `uxl-performance-validation` | `performance-tiny-async-gpu-claim` | 0.8889 | 0.8889 | 0.0000 | Smoke/near-ceiling |
 
-The performance task was reclassified from discriminating to smoke because both arms were near ceiling and the sampled skill produced no lift. The other three directional tasks remain `uncalibrated` until they receive the manifest's required three attempts per arm.
+The performance task was reclassified from discriminating to smoke because both arms were near ceiling and the sampled skill produced no lift. The other two directional tasks remain `uncalibrated` until they receive the manifest's required three attempts per arm.
 
 ## oneDNN three-attempt calibration
 
@@ -40,6 +40,18 @@ The two additional attempts per arm used the unchanged oneCCL task, skill, and a
 | Difference |  | +0.2593 |  |  |  |  |
 
 All six valid oneCCL trials completed without errors. This confirms measurable headroom for `oneccl-divergent-collective-sequence`, so its calibration state is `headroom`. The skill arm improved diagnosis and evidence collection, although validation remained the weakest rubric group in the two additional samples; future oneCCL tasks should therefore test executable collective contracts as well as answer quality.
+
+## SYCL three-attempt calibration
+
+The two additional attempts per arm used the unchanged SYCL task, skill, and audited rubric. The first attempt in each arm is the earlier probe re-scored with that same rubric.
+
+| Arm | Trial rewards | Mean reward | Input tokens | Cache-read tokens | Output tokens | Cost (USD) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| No skill | 0.4444, 0.6667, 0.2222 | 0.4444 | 168,302 | 114,176 | 6,381 | $0.519148 |
+| `uxl-sycl-build-debug` | 0.8889, 0.5556, 0.3333 | 0.5926 | 260,535 | 219,904 | 9,103 | $0.586197 |
+| Difference |  | +0.1482 |  |  |  |  |
+
+All six valid SYCL trials completed without errors. The repeated samples show more variance than the first pair, but the three-attempt skill mean remains higher, so `sycl-cmake-compiler-cache` is marked `headroom`. Its next companion task should emphasize clean reconfiguration and runtime-device proof, the least consistent validation behaviors in this sample.
 
 ## Reliability note
 
@@ -70,6 +82,13 @@ Jobs used for the oneCCL calibration:
 - Initial skill probe: `coverage-wave1-oneccl-skill-gpt56-probe`
 - Additional baseline attempts: `coverage-wave1-oneccl-baseline-gpt56-calibration-r2`
 - Additional skill attempts: `coverage-wave1-oneccl-skill-gpt56-calibration-r2`
+
+Jobs used for the SYCL calibration:
+
+- Initial baseline probe: `coverage-wave1-baseline-gpt56-probe`
+- Initial skill probe: `coverage-wave1-sycl-skill-gpt56-probe`
+- Additional baseline attempts: `coverage-wave1-sycl-baseline-gpt56-calibration-r2`
+- Additional skill attempts: `coverage-wave1-sycl-skill-gpt56-calibration-r2`
 
 The other skill-arm jobs use the corresponding `coverage-wave1-<skill>-skill-gpt56-probe` names. The initial valid baseline results for oneCCL, oneDAL, and SYCL came from `coverage-wave1-baseline-gpt56-probe`; the retry job above supplied oneDNN, oneDPL, and performance. Raw Harbor jobs remain in the ignored local `harbor-jobs` directory and can be inspected with:
 

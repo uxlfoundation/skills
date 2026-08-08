@@ -20,7 +20,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `uxl-onetbb` | 7 | 2 | 0 | 2 | 5 |
 | `uxl-onedpl` | 6 | 1 | 0 | 0 | 5 |
 | `uxl-oneccl` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-sycl-build-debug` | 6 | 2 | 0 | 0 | 4 |
+| `uxl-sycl-build-debug` | 6 | 2 | 1 | 0 | 4 |
 | `uxl-performance-validation` | 6 | 1 | 0 | 0 | 5 |
 
 ## uxl-onednn (oneDNN)
@@ -165,7 +165,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | Task | Status | Role | Calibration | Track | Environment | Covers |
 | --- | --- | --- | --- | --- | --- | --- |
 | `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-cmake-compiler-cache` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
 | `sycl-loader-plugin-mismatch` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
