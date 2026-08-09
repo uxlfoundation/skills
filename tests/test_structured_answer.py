@@ -67,6 +67,36 @@ class StructuredAnswerTests(unittest.TestCase):
                 for criteria in details["criteria"].values():
                     self.assertTrue(all(criteria.values()), details)
 
+    def test_onetbb_rubric_accepts_equivalent_identity_and_queue_evidence(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onetbb-bounded-image-flow-graph"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Compare the bounded graph with a serial small-data baseline. Verify exactly
+        one output or error per input, record admission IDs, and prove buffer
+        ownership is released after every completion and failure. During a long
+        overload run, sample RSS, live jobs, per-stage queued counts, total thread
+        count, and CPU utilization. The queue and ownership evidence must plateau
+        under the configured limit. This paragraph intentionally uses equivalent
+        operational language rather than one exact phrase from the reference answer.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(
+            details["criteria"]["validation"]["correctness_and_lifetime"], details
+        )
+        self.assertTrue(
+            details["criteria"]["validation"]["resource_evidence"], details
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,6 +14,7 @@ Guide agents through oneTBB pattern selection, shared-state analysis, grainsize 
 ## Supported Tasks
 
 - Choose between `parallel_for`, reductions, scans, pipelines, flow graph, and task groups.
+- Bound resource-owning flow graphs with explicit admission, stage concurrency, and capacity return.
 - Review shared mutable state and race risks.
 - Diagnose nested parallelism and oversubscription issues.
 - Require serial correctness and realistic CPU benchmarks.

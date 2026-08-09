@@ -43,13 +43,13 @@
     },
     "validation": {
       "correctness_and_lifetime": [
-        ["\\bserial\\s+(?:reference|baseline|golden)\\b"],
-        ["\\b(?:image\\s+ID|message\\s+ID|job\\s+id|input\\s+order|output\\s+order)\\b"],
-        ["\\b(?:lifetime|ownership|live\\s+buffers?|released?)\\b"]
+        ["\\bserial\\b.{0,40}\\b(?:reference|baseline|golden)\\b"],
+        ["\\b(?:image|message|job|item|request|admission)\\s+IDs?\\b", "\\bIDs?\\b", "\\b(?:one|exactly\\s+one)\\s+(?:output|result|completion|outcome|error).{0,40}\\b(?:input|item|message|request)\\b", "\\bevery\\s+(?:input|item|message|request).{0,40}\\b(?:one|exactly\\s+one)\\s+(?:output|result|completion|outcome|error)\\b", "\\b(?:input|output)\\s+order\\b"],
+        ["\\b(?:lifetime|ownership|live\\s+(?:buffers?|items?|jobs?|bytes)|releas(?:e|ed|es|ing))\\b"]
       ],
       "resource_evidence": [
         ["\\b(?:RSS|memory)\\b"],
-        ["\\b(?:queue\\s+depth|in[- ]flight)\\b"],
+        ["\\b(?:queues?\\s+(?:depths?|sizes?)|queued\\s+(?:work|counts?|items?)|in[- ]flight|admissions?|live\\s+(?:items?|jobs?))\\b"],
         ["\\b(?:thread\\s+count|CPU\\s+utilization|workers?)\\b"]
       ],
       "bounded_benchmark": [

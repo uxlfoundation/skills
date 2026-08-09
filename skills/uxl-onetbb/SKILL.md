@@ -26,6 +26,17 @@ Help an agent map CPU parallelism problems to composable oneTBB patterns while p
 - Use `task_group` for explicit fork/join work.
 - Use `task_arena` or `global_control` when integrating with existing runtimes or limiting parallelism.
 
+## Bound Resource-Owning Flow Graphs
+
+When messages retain buffers, handles, or other scarce resources across stages:
+
+1. Bound admission before acquiring the expensive resource. Use a `limiter_node` threshold with feedback to `decrementer()`, or a rejecting-node/input-node pull pattern when upstream must stop producing. Handle rejected `try_put` calls; do not move the unbounded queue in front of the graph.
+2. Give every `function_node` an explicit finite concurrency matched to its resource: for example, a small I/O-stage limit, a measured compute-stage limit, and a serial or device-appropriate sink limit. A finite concurrency value with the default queueing policy limits active body invocations but can still buffer accepted messages, so it does not replace a global in-flight bound.
+3. Return capacity exactly once after ownership is released on success, failure, exception, and cancellation paths. Prefer one non-throwing terminal/error path or an RAII completion guard; do not connect only the successful edge to the decrementer.
+4. Move blocking external work to a bounded executor through `async_node` when practical. Balance gateway reservations and releases on every callback path, and keep the graph alive until callbacks finish.
+5. Treat outer-node concurrency, nested oneTBB work, arena size, and foreign thread pools as one runtime budget. Avoid many concurrent node bodies that each start an unconstrained nested `parallel_for`.
+6. Validate the bound directly: track admissions, completions, live resources, queue depths, RSS, thread counts, throughput, and tail latency during long runs and injected failures.
+
 ## Implementation Workflow
 
 1. Prove the serial behavior with a small test or existing baseline.
@@ -49,6 +60,7 @@ When delivering oneTBB work, include:
 - Selected oneTBB pattern and why alternatives were rejected.
 - Shared-state and ordering analysis.
 - Threading limits or arena assumptions.
+- Admission, in-flight ownership, and capacity-return rules when resources cross stages.
 - Correctness test and benchmark plan.
 - Remaining race, determinism, or scheduling risks.
 
