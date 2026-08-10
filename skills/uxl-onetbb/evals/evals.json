@@ -36,6 +36,15 @@
         "must_include": ["capacity", "exactly once", "failure", "concurrency", "validation"],
         "must_not_include": ["ignore failures", "unlimited", "serial loop"]
       }
+    },
+    {
+      "id": "onetbb-grainsize-affinity-evidence",
+      "prompt": "Use $uxl-onetbb to investigate a cheap parallel loop that regressed with grainsize 1 and whose timings also change when the process spans NUMA nodes.",
+      "expected_output": "Separates scheduling-granularity overhead from OS and NUMA placement, treats affinity_partitioner as a measured cache hint rather than thread pinning, and proposes correctness-gated sweeps across sizes, body costs, grainsizes, partitioners, concurrency, reuse, and placement.",
+      "checks": {
+        "must_include": ["grainsize", "scheduling", "affinity", "NUMA", "benchmark"],
+        "must_not_include": ["one grainsize always wins", "affinity pins threads", "more threads always help"]
+      }
     }
   ]
 }

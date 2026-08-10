@@ -36,6 +36,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
 - `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
+- `onetbb-grainsize-affinity-regression`: hosted evidence-driven grainsize, cache-affinity, and NUMA-placement diagnostic task.
 - `onetbb-nested-thread-pool-arena`: hosted-CPU executable process-wide runtime-budget task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
@@ -64,6 +65,7 @@ harbor run `
   --include-task-name onemath-runtime-library-missing `
   --include-task-name onetbb-bounded-image-flow-graph `
   --include-task-name onetbb-cancellation-exception-propagation `
+  --include-task-name onetbb-grainsize-affinity-regression `
   --include-task-name onetbb-histogram-local-aggregation `
   --include-task-name onetbb-nested-thread-pool-arena `
   --include-task-name onetbb-stable-compaction-scan `
@@ -80,7 +82,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 18 `
+  --expected-trials 19 `
   --reward-floor 1.0
 ```
 

@@ -98,7 +98,7 @@
         {"name": "onetbb-bounded-image-flow-graph", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "scheduler-triage"]},
         {"name": "onetbb-nested-thread-pool-arena", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["runtime-composition", "scheduler-triage", "grain-affinity-benchmarking"]},
         {"name": "onetbb-cancellation-exception-propagation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "runtime-composition"]},
-        {"name": "onetbb-grainsize-affinity-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["scheduler-triage", "grain-affinity-benchmarking"]},
+        {"name": "onetbb-grainsize-affinity-regression", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["scheduler-triage", "grain-affinity-benchmarking"]},
         {"name": "onetbb-legacy-api-migration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "runtime-composition"]}
       ]
     },
