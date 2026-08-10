@@ -27,6 +27,15 @@
         "must_include": ["oversubscription", "arena", "global_control", "thread", "benchmark"],
         "must_not_include": ["more threads always help", "ignore thread pool"]
       }
+    },
+    {
+      "id": "onetbb-flow-failure-capacity",
+      "prompt": "Use $uxl-onetbb to repair a multi-stage flow graph where each admitted job owns a scarce scratch lease, individual stages can fail, and failures sometimes strand capacity so later jobs hang.",
+      "expected_output": "Bounds admission across the full ownership lifetime, returns capacity exactly once after success or failure, prevents per-job exceptions from cancelling unrelated work, keeps finite stage concurrency, and validates outcomes, ownership, and continued progress under injected failures.",
+      "checks": {
+        "must_include": ["capacity", "exactly once", "failure", "concurrency", "validation"],
+        "must_not_include": ["ignore failures", "unlimited", "serial loop"]
+      }
     }
   ]
 }

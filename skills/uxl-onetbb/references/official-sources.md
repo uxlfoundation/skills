@@ -7,6 +7,8 @@ Use these first when answering oneTBB questions.
 - Flow-graph concurrency limits: https://uxlfoundation.github.io/oneTBB/main/tbb_userguide/use_concurrency_limits.html
 - `limiter_node` reference: https://uxlfoundation.github.io/oneTBB/main/specification/source/flow_graph/limiter_node_cls.html
 - `async_node` reference: https://uxlfoundation.github.io/oneTBB/main/specification/source/flow_graph/async_node_cls.html
+- Flow-graph object lifetime and completion: https://uxlfoundation.github.io/oneTBB/main/tbb_userguide/Graph_Object.html
+- Exceptions and cancellation: https://uxlfoundation.github.io/oneTBB/main/tbb_userguide/Exceptions_and_Cancellation.html
 - oneTBB specification: https://oneapi-spec.uxlfoundation.org/specifications/oneapi/v1.4-rev-1/elements/onetbb/source/nested-index
 - oneTBB system requirements: https://github.com/uxlfoundation/oneTBB/blob/master/SYSTEM_REQUIREMENTS.md
 - oneTBB release notes: https://github.com/uxlfoundation/oneTBB/releases

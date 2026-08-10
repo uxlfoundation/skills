@@ -17,7 +17,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `uxl-onednn` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onemath` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-onedal` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onetbb` | 7 | 3 | 1 | 2 | 4 |
+| `uxl-onetbb` | 7 | 4 | 1 | 2 | 3 |
 | `uxl-onedpl` | 6 | 1 | 1 | 0 | 5 |
 | `uxl-oneccl` | 6 | 3 | 1 | 1 | 3 |
 | `uxl-sycl-build-debug` | 6 | 4 | 1 | 1 | 2 |
@@ -104,7 +104,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 | `onetbb-stable-compaction-scan` | implemented | smoke | ceiling | executable | hosted-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
 | `onetbb-bounded-image-flow-graph` | implemented | discriminating | headroom | answer-quality | hosted-container | `parallel-pattern-selection`, `scheduler-triage` |
 | `onetbb-nested-thread-pool-arena` | planned | discriminating | uncalibrated | executable | hosted-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
-| `onetbb-cancellation-exception-propagation` | planned | discriminating | uncalibrated | executable | hosted-cpu | `race-order-and-exception-safety`, `runtime-composition` |
+| `onetbb-cancellation-exception-propagation` | implemented | discriminating | uncalibrated | executable | hosted-cpu | `race-order-and-exception-safety`, `runtime-composition` |
 | `onetbb-grainsize-affinity-regression` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `scheduler-triage`, `grain-affinity-benchmarking` |
 | `onetbb-legacy-api-migration` | planned | smoke | uncalibrated | answer-quality | hosted-container | `parallel-pattern-selection`, `runtime-composition` |
 
