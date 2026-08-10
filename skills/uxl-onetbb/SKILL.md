@@ -50,7 +50,7 @@ When messages retain buffers, handles, or other scarce resources across stages:
 1. Start with the default `auto_partitioner`. Add a minimum grainsize or serial cutoff only when completed-call measurements show scheduling overhead for the target body and input sizes. Sweep the body cost, problem size, grainsize, and concurrency; tiny chunks waste scheduling work, while coarse chunks can idle cores or worsen tails.
 2. Use `affinity_partitioner` as a cache-affinity hint for repeated loops over the same or similarly mapped, cache-resident data. Retain the same partitioner object across those repetitions. Confirm benefit against cold/new-buffer and oversized working sets instead of treating affinity as a universal improvement.
 3. Separate oneTBB task affinity from operating-system placement. An affinity partitioner does not pin threads or place NUMA pages. Record the effective CPU set, topology, arena concurrency, first-touch and memory placement, migrations, cache misses, bandwidth, and the oneTBB/build version. Apply `task_arena` constraints or external placement only when controlled comparisons justify them.
-4. Gate every tuning result on a serial correctness reference, then report warmup, repetitions, median and tail latency, throughput, task/body counts, and the exact workload and placement where the choice wins.
+4. Gate every tuning result on a serial correctness reference, then report warmup, repetitions, median and tail latency, throughput, task/body counts, active-worker counts, CPU utilization, and the exact workload and placement where the choice wins.
 
 ## Gotchas
 

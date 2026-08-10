@@ -6,7 +6,7 @@
       "oversplitting": [
         ["\\b(?:grain|chunk)\\w*\\b"],
         ["\\b(?:simple_partitioner|simple\\s+partitioner)\\b"],
-        ["\\b(?:schedul|dispatch|task|split)\\w*\\b.{0,45}\\boverhead\\b|\\boverhead\\b.{0,45}\\b(?:schedul|dispatch|task|split)\\w*\\b"],
+        ["\\boverhead\\b"],
         ["\\b(?:cheap|inexpensive|low[- ](?:cost|work|intensity)|memory[- ](?:heavy|bound))\\b"]
       ],
       "coarse_grain_risk": [
@@ -23,10 +23,10 @@
     },
     "repair": {
       "adaptive_chunking": [
-        ["\\b(?:auto_partitioner|auto\\s+partitioner|default\\s+(?:partitioner|chunking))\\b"],
+        ["\\b(?:auto_partitioner|auto\\s+partitioner|default\\s+(?:automatic\\s+)?(?:partitioner|partitioning|chunking))\\b"],
         ["\\b(?:grain|chunk)\\w*\\b"],
         ["\\b(?:sweep|measure|benchmark|tune|crossover)\\w*\\b"],
-        ["\\b(?:serial\\s+(?:cutoff|fallback|path)|parallel\\s+cutoff)\\b"]
+        ["\\b(?:serial\\s+(?:cutoff|fallback|path|candidate)|parallel\\s+cutoff)\\b"]
       ],
       "qualified_affinity": [
         ["\\baffinity_partitioner\\b|\\baffinity\\s+partitioner\\b"],
@@ -43,7 +43,7 @@
     "validation": {
       "correctness_gate": [
         ["\\bserial\\b"],
-        ["\\b(?:reference|baseline|stencil)\\b"],
+        ["\\b(?:reference|baseline|oracle|stencil)\\b"],
         ["\\b(?:tolerance|checksum|compare|parity)\\w*\\b"],
         ["\\b(?:boundary|odd|sizes?|inputs?)\\b"]
       ],

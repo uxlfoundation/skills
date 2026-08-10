@@ -97,6 +97,33 @@ class StructuredAnswerTests(unittest.TestCase):
             details["criteria"]["validation"]["resource_evidence"], details
         )
 
+    def test_onetbb_grainsize_rubric_accepts_equivalent_tuning_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onetbb-grainsize-affinity-regression"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        The cheap body now pays dominant overhead because grainsize 1 with
+        simple_partitioner creates one body call per element. Start with the
+        default automatic partitioning, measure several grains, and retain a serial
+        path as a candidate around the crossover. Gate the experiment on a
+        serial oracle, compare every output at odd and boundary sizes, and use
+        an explicit tolerance. This wording intentionally describes the same
+        contracts without requiring the reference answer's exact phrases.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["diagnosis"]["oversplitting"], details)
+        self.assertTrue(details["criteria"]["repair"]["adaptive_chunking"], details)
+        self.assertTrue(details["criteria"]["validation"]["correctness_gate"], details)
+
 
 if __name__ == "__main__":
     unittest.main()
