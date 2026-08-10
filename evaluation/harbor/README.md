@@ -165,6 +165,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-08 coverage wave 3](results/2026-08-08-coverage-wave-3.md): executable async-completion, device-proof, and numerical-validation tasks.
 - [2026-08-09 oneTBB bounded-flow skill iteration](results/2026-08-09-onetbb-bounded-flow-skill.md): three-arm skill comparison and audited verifier correction.
 - [2026-08-10 oneTBB failure-flow generalization probe](results/2026-08-10-onetbb-failure-flow-generalization.md): executable task calibration and implementation-neutral verifier audit.
+- [2026-08-10 oneTBB runtime-composition calibration](results/2026-08-10-onetbb-runtime-composition.md): shared-arena executable task, alternate-submission verifier audit, and ceiling classification.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
