@@ -109,16 +109,20 @@ class StructuredAnswerTests(unittest.TestCase):
         )
         rubric = ENGINE.load_rubric(rubric_path)
         answer = """
-        The cheap body now pays dominant overhead because grainsize 1 with
+        The refactor cheapened the body, which now pays dominant overhead because grainsize 1 with
         simple_partitioner creates one body call per element. Start with the
-        default automatic partitioning, measure several grains, and retain a serial
-        path as a candidate around the crossover. Gate the experiment on a
+        auto partitioning, measure several grains, and retain serial
+        execution for a possible measured cutoff around the crossover. Record the
+        CPU set and arena concurrency, and compare local first-touch with remote
+        placement. Gate the experiment on a
         serial oracle, compare every output at odd and boundary sizes, and use
         an explicit tolerance. A retained affinity_partitioner must live across
         calls only for repeated same buffers and only after a measured benchmark
         win. Record body/task calls, active-worker count, CPU utilization,
-        migrations, and cache misses. This wording intentionally describes the
-        same contracts without requiring the reference answer's exact phrases.
+        migrations, and cache misses. Sweep production sizes and body intensity,
+        worker counts, NUMA placement, warmups, repetitions, and median latency.
+        This wording intentionally describes the same contracts without requiring
+        the reference answer's exact phrases.
         """
 
         _, details = ENGINE.score_answer(answer, rubric)
@@ -126,7 +130,9 @@ class StructuredAnswerTests(unittest.TestCase):
         self.assertTrue(details["criteria"]["diagnosis"]["oversplitting"], details)
         self.assertTrue(details["criteria"]["repair"]["adaptive_chunking"], details)
         self.assertTrue(details["criteria"]["repair"]["qualified_affinity"], details)
+        self.assertTrue(details["criteria"]["repair"]["placement_control"], details)
         self.assertTrue(details["criteria"]["validation"]["correctness_gate"], details)
+        self.assertTrue(details["criteria"]["validation"]["experiment_matrix"], details)
         self.assertTrue(
             details["criteria"]["validation"]["scheduler_and_locality_evidence"],
             details,

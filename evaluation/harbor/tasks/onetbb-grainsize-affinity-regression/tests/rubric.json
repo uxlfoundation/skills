@@ -7,7 +7,7 @@
         ["\\b(?:grain|chunk)\\w*\\b"],
         ["\\b(?:simple_partitioner|simple\\s+partitioner)\\b"],
         ["\\boverhead\\b"],
-        ["\\b(?:cheap|inexpensive|low[- ](?:cost|work|intensity)|memory[- ](?:heavy|bound))\\b"]
+        ["\\b(?:cheap(?:en\\w*)?|inexpensive|low[- ](?:cost|work|intensity)|memory[- ](?:heavy|bound))\\b"]
       ],
       "coarse_grain_risk": [
         ["\\b(?:coarse|large|65536|too[- ]large)\\b.{0,40}\\b(?:grain|chunk|bod(?:y|ies))\\b|\\b(?:grain|chunk)\\w*\\b.{0,40}\\b(?:coarse|large|65536|too[- ]large)\\b"],
@@ -23,10 +23,10 @@
     },
     "repair": {
       "adaptive_chunking": [
-        ["\\b(?:auto_partitioner|auto\\s+partitioner|default\\s+(?:automatic\\s+)?(?:partitioner|partitioning|chunking))\\b"],
+        ["\\b(?:auto_partitioner|auto(?:matic)?\\s+partition(?:er|ing)|default\\s+(?:automatic\\s+)?(?:partitioner|partitioning|chunking))\\b"],
         ["\\b(?:grain|chunk)\\w*\\b"],
         ["\\b(?:sweep|measure|benchmark|tune|crossover)\\w*\\b"],
-        ["\\b(?:serial\\s+(?:cutoff|fallback|path|candidate)|parallel\\s+cutoff)\\b"]
+        ["\\b(?:serial\\s+(?:cutoff|fallback|path|candidate)|serial\\b.{0,60}\\bcutoff|parallel\\s+cutoff)\\b"]
       ],
       "qualified_affinity": [
         ["\\baffinity_partitioner\\b|\\baffinity\\s+partitioner\\b"],
@@ -35,7 +35,7 @@
         ["\\b(?:conditional|only|measure|benchmark|not\\s+universal|little\\s+benefit)\\b"]
       ],
       "placement_control": [
-        ["\\b(?:task_arena|task\\s+arena|cpuset|taskset|numactl|NUMA\\s+constraint)\\b"],
+        ["\\b(?:task_arena|task\\s+arena|arena\\s+(?:limit|concurrency)|CPU\\s+set|cpuset|taskset|numactl|NUMA\\s+constraint)\\b"],
         ["\\b(?:max(?:imum)?\\s+concurrency|thread\\s+count|worker\\s+count|effective\\s+concurrency)\\b"],
         ["\\b(?:first[- ]touch|local\\s+(?:memory|allocation)|memory\\s+placement|remote\\s+memory)\\b"]
       ]
@@ -49,7 +49,7 @@
       ],
       "experiment_matrix": [
         ["\\b(?:grain|chunk)\\w*\\b"],
-        ["\\bpartitioner\\w*\\b"],
+        ["\\bpartition(?:er|ing)\\w*\\b|\\baffinity(?:_partitioner|\\s+partitioner)?\\b"],
         ["\\b(?:sizes?|elements?|work\\s+per\\s+element|body\\s+cost|intensity)\\b"],
         ["\\b(?:cold|warm|same\\s+buffer|new\\s+buffer|reuse|repeated)\\b"],
         ["\\b(?:thread|worker|concurrency)\\w*\\b"],
