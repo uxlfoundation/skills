@@ -30,7 +30,7 @@
       ],
       "qualified_affinity": [
         ["\\baffinity_partitioner\\b|\\baffinity\\s+partitioner\\b"],
-        ["\\b(?:retain|reuse|persistent|same)\\w*\\b.{0,45}\\b(?:object|partitioner|instance)\\b|\\b(?:object|partitioner|instance)\\b.{0,45}\\b(?:retain|reuse|persistent|same)\\w*\\b"],
+        ["\\b(?:retain|reuse|persistent|same)\\w*\\b.{0,45}\\b(?:affinity_partitioner|affinity\\s+partitioner|object|partitioner|instance)\\b|\\b(?:affinity_partitioner|affinity\\s+partitioner|object|partitioner|instance)\\b.{0,45}\\b(?:retain|reuse|persistent|same)\\w*\\b|\\b(?:live|persist)\\w*\\b.{0,30}\\bacross\\s+(?:calls?|runs?|iterations?|repetitions?)\\b"],
         ["\\b(?:repeated|same\\s+(?:data|buffer)|cache[- ]resident|cache\\s+fit|warm)\\b"],
         ["\\b(?:conditional|only|measure|benchmark|not\\s+universal|little\\s+benefit)\\b"]
       ],
@@ -57,10 +57,10 @@
         ["\\b(?:warmup|repetitions?|median|p95|one\\s+(?:factor|variable))\\b"]
       ],
       "scheduler_and_locality_evidence": [
-        ["\\b(?:body|task)\\s+(?:count|duration|time)\\b"],
+        ["\\b(?:body(?:/task)?|task(?:/body)?)\\s+(?:calls?|counts?|invocations?|duration|time)\\b"],
         ["\\b(?:CPU\\s+utilization|active\\s+(?:workers?|threads?)|idle\\s+(?:workers?|threads?))\\b"],
         ["\\b(?:context\\s+switch|migration)\\w*\\b"],
-        ["\\b(?:cache\\s+miss|memory\\s+bandwidth|remote[- ]NUMA|NUMA\\s+traffic)\\b"]
+        ["\\b(?:cache\\s+miss(?:es)?|memory\\s+bandwidth|remote[- ]NUMA|NUMA\\s+traffic)\\b"]
       ],
       "bounded_claim": [
         ["\\b(?:tested|measured)\\b"],

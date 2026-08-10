@@ -114,15 +114,23 @@ class StructuredAnswerTests(unittest.TestCase):
         default automatic partitioning, measure several grains, and retain a serial
         path as a candidate around the crossover. Gate the experiment on a
         serial oracle, compare every output at odd and boundary sizes, and use
-        an explicit tolerance. This wording intentionally describes the same
-        contracts without requiring the reference answer's exact phrases.
+        an explicit tolerance. A retained affinity_partitioner must live across
+        calls only for repeated same buffers and only after a measured benchmark
+        win. Record body/task calls, active-worker count, CPU utilization,
+        migrations, and cache misses. This wording intentionally describes the
+        same contracts without requiring the reference answer's exact phrases.
         """
 
         _, details = ENGINE.score_answer(answer, rubric)
 
         self.assertTrue(details["criteria"]["diagnosis"]["oversplitting"], details)
         self.assertTrue(details["criteria"]["repair"]["adaptive_chunking"], details)
+        self.assertTrue(details["criteria"]["repair"]["qualified_affinity"], details)
         self.assertTrue(details["criteria"]["validation"]["correctness_gate"], details)
+        self.assertTrue(
+            details["criteria"]["validation"]["scheduler_and_locality_evidence"],
+            details,
+        )
 
 
 if __name__ == "__main__":
