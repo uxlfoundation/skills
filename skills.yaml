@@ -35,7 +35,7 @@ skills:
     skill_card: "skill-cards/uxl-onetbb.md"
     source_of_truth_target: "project-repo-after-maintainer-review"
     maintainer_review: "needed"
-    last_source_verification: "2026-08-09"
+    last_source_verification: "2026-08-10"
   - name: "uxl-onedpl"
     status: "incubating"
     owner_project: "oneDPL"
