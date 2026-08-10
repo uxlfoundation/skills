@@ -60,22 +60,11 @@ PipelineResult run_pipeline(
     flow::graph graph;
     ScratchTracker tracker;
     std::vector<PipelineOutcome> outcomes(jobs.size());
-    std::size_t next_job = 0;
-
-    flow::input_node<IndexedJob> source(
-        graph, [&](oneapi::tbb::flow_control& control) {
-            if (next_job == jobs.size()) {
-                control.stop();
-                return IndexedJob{};
-            }
-            const std::size_t index = next_job++;
-            return IndexedJob{index, jobs[index]};
-        });
-
+    flow::queue_node<IndexedJob> pending(graph);
     flow::limiter_node<IndexedJob> admission(graph, capacity);
 
     flow::function_node<IndexedJob, Envelope> prepare(
-        graph, capacity, [&](const IndexedJob& indexed) {
+        graph, flow::unlimited, [&](const IndexedJob& indexed) {
             Envelope envelope;
             envelope.index = indexed.index;
             envelope.job = indexed.job;
@@ -87,7 +76,7 @@ PipelineResult run_pipeline(
         });
 
     flow::function_node<Envelope, Envelope> transform(
-        graph, capacity, [](Envelope envelope) {
+        graph, flow::unlimited, [](Envelope envelope) {
             try {
                 std::this_thread::sleep_for(std::chrono::milliseconds(2));
                 if (envelope.job.failure == FailurePoint::transform) {
@@ -103,7 +92,7 @@ PipelineResult run_pipeline(
         });
 
     flow::function_node<Envelope, Envelope> persist(
-        graph, capacity, [](Envelope envelope) {
+        graph, flow::unlimited, [](Envelope envelope) {
             if (!envelope.outcome.success) {
                 return envelope;
             }
@@ -122,20 +111,22 @@ PipelineResult run_pipeline(
         });
 
     flow::function_node<Envelope, flow::continue_msg> complete(
-        graph, flow::serial, [&](Envelope envelope) {
+        graph, flow::unlimited, [&](Envelope envelope) {
             envelope.scratch.reset();
             outcomes[envelope.index] = std::move(envelope.outcome);
             return flow::continue_msg{};
         });
 
-    flow::make_edge(source, admission);
+    flow::make_edge(pending, admission);
     flow::make_edge(admission, prepare);
     flow::make_edge(prepare, transform);
     flow::make_edge(transform, persist);
     flow::make_edge(persist, complete);
     flow::make_edge(complete, admission.decrementer());
 
-    source.activate();
+    for (std::size_t index = 0; index != jobs.size(); ++index) {
+        pending.try_put(IndexedJob{index, jobs[index]});
+    }
     graph.wait_for_all();
 
     return PipelineResult{

@@ -34,7 +34,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
-- `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure task.
+- `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
@@ -162,6 +162,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-08 coverage wave 2](results/2026-08-08-coverage-wave-2.md): four-task expansion targeting performance, oneTBB, oneCCL, and SYCL gaps.
 - [2026-08-08 coverage wave 3](results/2026-08-08-coverage-wave-3.md): executable async-completion, device-proof, and numerical-validation tasks.
 - [2026-08-09 oneTBB bounded-flow skill iteration](results/2026-08-09-onetbb-bounded-flow-skill.md): three-arm skill comparison and audited verifier correction.
+- [2026-08-10 oneTBB failure-flow generalization probe](results/2026-08-10-onetbb-failure-flow-generalization.md): executable task calibration and implementation-neutral verifier audit.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
