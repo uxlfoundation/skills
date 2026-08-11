@@ -10,9 +10,13 @@ $env:HARBOR_TELEMETRY = "off"
 
 ## Skill suites and coverage
 
-[`suites.json`](suites.json) is the machine-readable evaluator portfolio. It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable view.
+[`suites.json`](suites.json) is the machine-readable evaluator portfolio, governed by [`schemas/harbor-suites.schema.json`](../../schemas/harbor-suites.schema.json). It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, reproduction mode, scenario origin, workflow stages, hardware requirements, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable audit.
+
+The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
+
+Answer-quality fixtures test interpretation and reasoning but do not receive live-triage credit. A debugging capability must have planned coverage from a task that reproduces live and exercises reproduce, investigate, repair, and verify. Implemented real end-to-end credit additionally requires a maintainer incident or upstream regression as the task origin.
 
 Validate and regenerate the portfolio with:
 
@@ -130,9 +134,12 @@ The generated report is written to `harbor-jobs/<job-prefix>-comparison.md`. It 
 - Trial completion, errors, and per-trial reward distributions.
 - Component metrics from Harbor's native `result.json`.
 - Uncached input, cached input, output tokens, cost, and runtime.
+- Verified successes, token burn per verified success, and cost per verified success.
 - Git commit/tree provenance and a warning when all arms hit a task ceiling.
 
 Use `-DryRun` to inspect the commands without starting jobs. Use `-FailOnRegression` when an incomplete, errored, or lower-reward candidate should produce a failing exit code. Pass `-JobPrefix` for stable job names and `-ReportPath` when a report should be recorded outside the ignored `harbor-jobs` directory.
+
+Use `-VerifiedRewardFloor` when a task's deterministic success threshold differs from the portfolio default. Quality remains the gate: lower cost cannot compensate for fewer verified successes.
 
 ## Inspect prompts and criteria
 

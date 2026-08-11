@@ -20,11 +20,57 @@ ALLOWED_STATUSES = {"implemented", "planned"}
 ALLOWED_ROLES = {"smoke", "discriminating", "hardware"}
 ALLOWED_CALIBRATIONS = {"uncalibrated", "headroom", "ceiling", "manual"}
 ALLOWED_TRACKS = {"executable", "answer-quality", "hardware"}
+ALLOWED_REPRODUCTIONS = {"live", "fixture", "review"}
+ALLOWED_ORIGINS = {
+    "constructed",
+    "maintainer-incident",
+    "upstream-regression",
+    "unassigned",
+    "not-applicable",
+}
+ALLOWED_WORKFLOW_STAGES = {"reproduce", "investigate", "repair", "verify"}
+ALLOWED_HARDWARE = {
+    "none",
+    "generic-cpu",
+    "target-cpu",
+    "target-gpu",
+    "target-device",
+    "target-distributed",
+}
 ALLOWED_ENVIRONMENTS = {
     "hosted-cpu",
     "hosted-container",
     "hosted-distributed",
     "manual-gpu",
+    "target-cpu",
+    "target-gpu",
+    "target-device",
+    "target-distributed",
+}
+ENVIRONMENT_HARDWARE = {
+    "hosted-cpu": "generic-cpu",
+    "hosted-container": "none",
+    "hosted-distributed": "generic-cpu",
+    "manual-gpu": "target-gpu",
+    "target-cpu": "target-cpu",
+    "target-gpu": "target-gpu",
+    "target-device": "target-device",
+    "target-distributed": "target-distributed",
+}
+TARGET_ENVIRONMENTS = {
+    "manual-gpu",
+    "target-cpu",
+    "target-gpu",
+    "target-device",
+    "target-distributed",
+}
+REQUIRED_COMPARISON_ARMS = {"no-skill", "previous-skill", "candidate-skill"}
+REQUIRED_EFFICIENCY_METRICS = {
+    "uncached-input-tokens",
+    "cached-input-tokens",
+    "output-tokens",
+    "cost-usd",
+    "runtime-seconds",
 }
 
 
@@ -67,8 +113,8 @@ def validate_manifest(
     skills_root = skills_root or ROOT / "skills"
     tasks_root = tasks_root or TASKS_ROOT
 
-    if data.get("schema_version") != "1.0":
-        errors.append("schema_version must be '1.0'")
+    if data.get("schema_version") != "2.0":
+        errors.append("schema_version must be '2.0'")
 
     policy = data.get("policy")
     if not isinstance(policy, dict):
@@ -98,6 +144,84 @@ def validate_manifest(
             errors.append("all policy.attempts values must be positive integers")
         elif values != sorted(values):
             errors.append("policy.attempts must not decrease from development to promotion")
+
+    comparison_arms = policy.get("comparison_arms")
+    if (
+        not isinstance(comparison_arms, list)
+        or len(comparison_arms) != len(set(comparison_arms))
+        or set(comparison_arms) != REQUIRED_COMPARISON_ARMS
+    ):
+        errors.append(
+            "policy.comparison_arms must contain exactly "
+            f"{sorted(REQUIRED_COMPARISON_ARMS)}"
+        )
+
+    triage = policy.get("triage")
+    required_workflow: set[str] = set(ALLOWED_WORKFLOW_STAGES)
+    accepted_origins = {"maintainer-incident", "upstream-regression"}
+    if not isinstance(triage, dict):
+        errors.append("policy.triage must be an object")
+    else:
+        configured_workflow = triage.get("required_workflow")
+        if (
+            not isinstance(configured_workflow, list)
+            or len(configured_workflow) != len(set(configured_workflow))
+            or set(configured_workflow) != ALLOWED_WORKFLOW_STAGES
+        ):
+            errors.append(
+                "policy.triage.required_workflow must contain exactly "
+                f"{sorted(ALLOWED_WORKFLOW_STAGES)}"
+            )
+        else:
+            required_workflow = set(configured_workflow)
+        if triage.get("requires_live_reproduction") is not True:
+            errors.append("policy.triage.requires_live_reproduction must be true")
+        configured_origins = triage.get("accepted_origins")
+        if (
+            not isinstance(configured_origins, list)
+            or not configured_origins
+            or len(configured_origins) != len(set(configured_origins))
+            or not set(configured_origins).issubset(ALLOWED_ORIGINS)
+            or "unassigned" in configured_origins
+            or "constructed" in configured_origins
+            or "not-applicable" in configured_origins
+        ):
+            errors.append(
+                "policy.triage.accepted_origins must contain reviewed real-world origins"
+            )
+        else:
+            accepted_origins = set(configured_origins)
+
+    efficiency = policy.get("efficiency")
+    if not isinstance(efficiency, dict):
+        errors.append("policy.efficiency must be an object")
+    else:
+        if efficiency.get("quality_gate") != "verified-success":
+            errors.append("policy.efficiency.quality_gate must be 'verified-success'")
+        reward_floor = efficiency.get("verified_reward_floor")
+        if not isinstance(reward_floor, (int, float)) or not 0 <= reward_floor <= 1:
+            errors.append(
+                "policy.efficiency.verified_reward_floor must be between 0 and 1"
+            )
+        if efficiency.get("primary_metric") != "cost-per-verified-success":
+            errors.append(
+                "policy.efficiency.primary_metric must be 'cost-per-verified-success'"
+            )
+        required_metrics = efficiency.get("required_metrics")
+        if not isinstance(required_metrics, list) or not REQUIRED_EFFICIENCY_METRICS.issubset(
+            set(required_metrics)
+        ):
+            errors.append(
+                "policy.efficiency.required_metrics is missing required telemetry"
+            )
+        desired_metrics = efficiency.get("desired_metrics")
+        if not isinstance(desired_metrics, list):
+            errors.append("policy.efficiency.desired_metrics must be an array")
+
+    if policy.get("infrastructure_failure_policy") != "exclude-and-rerun":
+        errors.append(
+            "policy.infrastructure_failure_policy must be 'exclude-and-rerun'"
+        )
 
     thresholds = policy.get("promotion_thresholds")
     if not isinstance(thresholds, dict):
@@ -139,6 +263,7 @@ def validate_manifest(
             capabilities = []
         capability_ids: set[str] = set()
         capability_classes: set[str] = set()
+        debugging_capability_ids: set[str] = set()
         for capability in capabilities:
             if not isinstance(capability, dict):
                 errors.append(f"{context}: capability must be an object")
@@ -155,6 +280,8 @@ def validate_manifest(
             _check_enum(errors, f"{context}.{capability_id}.class", capability_class, ALLOWED_CLASSES)
             if isinstance(capability_class, str):
                 capability_classes.add(capability_class)
+                if capability_class == "debugging" and isinstance(capability_id, str):
+                    debugging_capability_ids.add(capability_id)
             if not isinstance(description, str) or not description.strip():
                 errors.append(f"{context}.{capability_id}: description must be non-empty")
         missing_classes = ALLOWED_CLASSES - capability_classes
@@ -176,6 +303,7 @@ def validate_manifest(
             )
 
         covered_ids: set[str] = set()
+        live_workflow_debugging_ids: set[str] = set()
         for task_index, task in enumerate(tasks):
             task_context = f"{context}.tasks[{task_index}]"
             if not isinstance(task, dict):
@@ -194,7 +322,61 @@ def validate_manifest(
             _check_enum(errors, f"{name}.role", task.get("role"), ALLOWED_ROLES)
             _check_enum(errors, f"{name}.calibration", calibration, ALLOWED_CALIBRATIONS)
             _check_enum(errors, f"{name}.track", task.get("track"), ALLOWED_TRACKS)
-            _check_enum(errors, f"{name}.environment", task.get("environment"), ALLOWED_ENVIRONMENTS)
+            environment = task.get("environment")
+            reproduction = task.get("reproduction")
+            origin = task.get("origin")
+            hardware = task.get("hardware")
+            _check_enum(errors, f"{name}.environment", environment, ALLOWED_ENVIRONMENTS)
+            _check_enum(errors, f"{name}.reproduction", reproduction, ALLOWED_REPRODUCTIONS)
+            _check_enum(errors, f"{name}.origin", origin, ALLOWED_ORIGINS)
+            _check_enum(errors, f"{name}.hardware", hardware, ALLOWED_HARDWARE)
+            workflow = task.get("workflow")
+            workflow_stages: set[str] = set()
+            if (
+                not isinstance(workflow, list)
+                or not workflow
+                or len(workflow) != len(set(workflow))
+                or not set(workflow).issubset(ALLOWED_WORKFLOW_STAGES)
+            ):
+                errors.append(
+                    f"{name}.workflow must be a non-empty array of unique workflow stages"
+                )
+            else:
+                workflow_stages = set(workflow)
+
+            expected_hardware = ENVIRONMENT_HARDWARE.get(environment)
+            if expected_hardware is not None and hardware != expected_hardware:
+                errors.append(
+                    f"{name}: environment {environment!r} requires hardware {expected_hardware!r}"
+                )
+            if reproduction == "live":
+                if not {"reproduce", "verify"}.issubset(workflow_stages):
+                    errors.append(
+                        f"{name}: live reproduction must include reproduce and verify stages"
+                    )
+                if task.get("track") == "answer-quality":
+                    errors.append(f"{name}: live reproduction cannot use answer-quality track")
+                if environment == "hosted-container" or hardware == "none":
+                    errors.append(f"{name}: live reproduction requires an executable environment")
+            elif reproduction in {"fixture", "review"}:
+                if {"reproduce", "verify"} & workflow_stages:
+                    errors.append(
+                        f"{name}: {reproduction} evaluation cannot claim reproduce or verify stages"
+                    )
+                if environment != "hosted-container" or hardware != "none":
+                    errors.append(
+                        f"{name}: {reproduction} evaluation must use hosted-container with no hardware"
+                    )
+                if task.get("track") != "answer-quality":
+                    errors.append(
+                        f"{name}: {reproduction} evaluation must use answer-quality track"
+                    )
+            if environment in TARGET_ENVIRONMENTS and reproduction != "live":
+                errors.append(f"{name}: target environment requires live reproduction")
+            if origin == "unassigned" and status == "implemented":
+                errors.append(f"{name}: implemented task origin cannot be unassigned")
+            if reproduction == "review" and origin != "not-applicable":
+                errors.append(f"{name}: review task origin must be not-applicable")
             covers = task.get("covers")
             if not isinstance(covers, list) or not covers:
                 errors.append(f"{name}.covers must be a non-empty array")
@@ -203,6 +385,10 @@ def validate_manifest(
                 if invalid:
                     errors.append(f"{name}: covers unknown capabilities {sorted(invalid)}")
                 covered_ids.update(item for item in covers if isinstance(item, str))
+                if reproduction == "live" and required_workflow.issubset(workflow_stages):
+                    live_workflow_debugging_ids.update(
+                        item for item in covers if item in debugging_capability_ids
+                    )
 
             task_path_exists = (tasks_root / name / "task.toml").exists()
             if status == "implemented":
@@ -224,6 +410,12 @@ def validate_manifest(
         uncovered = capability_ids - covered_ids
         if uncovered:
             errors.append(f"{context}: capabilities have no planned task coverage {sorted(uncovered)}")
+        missing_live_debugging = debugging_capability_ids - live_workflow_debugging_ids
+        if missing_live_debugging:
+            errors.append(
+                f"{context}: debugging capabilities lack planned live end-to-end coverage "
+                f"{sorted(missing_live_debugging)}"
+            )
 
     if sorted(manifest_skills) != catalog_skills:
         errors.append("manifest skill list does not match the skills directory")

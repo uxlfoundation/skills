@@ -41,6 +41,21 @@ class JobSummary:
             and self.unfinished_trials == 0
         )
 
+    @property
+    def total_tokens(self) -> int:
+        return self.uncached_input_tokens + self.cached_input_tokens + self.output_tokens
+
+    def verified_successes(self, reward_floor: float) -> int:
+        return sum(reward >= reward_floor for reward in self.trial_rewards)
+
+    def tokens_per_verified_success(self, reward_floor: float) -> float | None:
+        successes = self.verified_successes(reward_floor)
+        return self.total_tokens / successes if successes else None
+
+    def cost_per_verified_success(self, reward_floor: float) -> float | None:
+        successes = self.verified_successes(reward_floor)
+        return self.cost_usd / successes if successes else None
+
 
 def _number(value: Any) -> float | None:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
@@ -193,6 +208,14 @@ def _format_runtime(value: float | None) -> str:
     return f"{minutes}m {seconds:02d}s" if minutes else f"{seconds}s"
 
 
+def _format_tokens_per_success(value: float | None) -> str:
+    return "n/a" if value is None else f"{round(value):,}"
+
+
+def _format_cost_per_success(value: float | None) -> str:
+    return "n/a" if value is None else f"${value:.6f}"
+
+
 def _format_trial_rewards(values: tuple[float, ...]) -> str:
     if not values:
         return "n/a"
@@ -219,7 +242,10 @@ def _display_path(path: Path) -> str:
 
 
 def assess_candidate(
-    previous: JobSummary, candidate: JobSummary, tolerance: float
+    previous: JobSummary,
+    candidate: JobSummary,
+    tolerance: float,
+    verified_reward_floor: float = 1.0,
 ) -> tuple[str, bool]:
     if not candidate.reliable:
         return "INVALID: candidate run is incomplete or errored", True
@@ -227,12 +253,35 @@ def assess_candidate(
         return "INVALID: candidate run has no aggregate reward", True
     if previous.mean_reward is None:
         return "UNKNOWN: previous run has no aggregate reward", False
+    previous_successes = previous.verified_successes(verified_reward_floor)
+    candidate_successes = candidate.verified_successes(verified_reward_floor)
+    if candidate_successes < previous_successes:
+        return (
+            "REGRESSION: candidate verified successes changed from "
+            f"{previous_successes} to {candidate_successes}",
+            True,
+        )
     delta = candidate.mean_reward - previous.mean_reward
     if delta < -tolerance:
         return f"REGRESSION: candidate reward changed by {delta:+.4f}", True
     if delta > tolerance:
         return f"IMPROVEMENT: candidate reward changed by {delta:+.4f}", False
     return f"NO QUALITY CHANGE: reward changed by {delta:+.4f}", False
+
+
+def assess_efficiency(
+    previous: JobSummary, candidate: JobSummary, verified_reward_floor: float
+) -> str:
+    previous_cost = previous.cost_per_verified_success(verified_reward_floor)
+    candidate_cost = candidate.cost_per_verified_success(verified_reward_floor)
+    if candidate_cost is None:
+        return "UNAVAILABLE: candidate produced no verified success"
+    if previous_cost is None:
+        return "IMPROVEMENT: candidate produced a verified success and previous did not"
+    return (
+        f"candidate cost per verified success changed by "
+        f"{_format_percent(candidate_cost, previous_cost)}"
+    )
 
 
 def render_report(
@@ -250,8 +299,14 @@ def render_report(
     attempts: int,
     dashboard_base_url: str | None,
     tolerance: float,
+    verified_reward_floor: float = 1.0,
 ) -> tuple[str, bool]:
-    assessment, failed = assess_candidate(previous, candidate, tolerance)
+    assessment, failed = assess_candidate(
+        previous, candidate, tolerance, verified_reward_floor
+    )
+    efficiency_assessment = assess_efficiency(
+        previous, candidate, verified_reward_floor
+    )
     jobs = (no_skill, previous, candidate)
     all_reliable = all(job.reliable for job in jobs)
     ceiling = all(
@@ -270,6 +325,10 @@ def render_report(
         f"- Candidate versus no skill: {_format_delta(candidate.mean_reward, no_skill.mean_reward)} reward.",
         f"- Candidate versus previous: {_format_delta(candidate.mean_reward, previous.mean_reward)} reward, "
         f"{_format_percent(candidate.cost_usd, previous.cost_usd)} cost.",
+        f"- Quality gate at reward `{verified_reward_floor:.4f}`: candidate "
+        f"{candidate.verified_successes(verified_reward_floor)}/{candidate.completed_trials}, "
+        f"previous {previous.verified_successes(verified_reward_floor)}/{previous.completed_trials}.",
+        f"- Efficiency: {efficiency_assessment}.",
         f"- Reliability: {'all runs completed without errors' if all_reliable else 'one or more runs are incomplete or errored'}.",
     ]
     if ceiling:
@@ -293,6 +352,25 @@ def render_report(
             f"{job.errored_trials} | {_format_trial_rewards(job.trial_rewards)} | "
             f"{job.uncached_input_tokens:,} | {job.cached_input_tokens:,} | "
             f"{job.output_tokens:,} | ${job.cost_usd:.6f} | {_format_runtime(job.runtime_seconds)} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Verified-success efficiency",
+            "",
+            f"Quality gate: trial reward at least `{verified_reward_floor:.4f}`.",
+            "",
+            "| Arm | Verified successes | Total token burn | Tokens / verified success | Cost / verified success |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for job in jobs:
+        lines.append(
+            f"| {job.label} | {job.verified_successes(verified_reward_floor)}/{job.completed_trials} | "
+            f"{job.total_tokens:,} | "
+            f"{_format_tokens_per_success(job.tokens_per_verified_success(verified_reward_floor))} | "
+            f"{_format_cost_per_success(job.cost_per_verified_success(verified_reward_floor))} |"
         )
 
     metric_names = sorted(
@@ -327,6 +405,7 @@ def render_report(
             f"- Candidate skill: `{candidate_ref}`",
             f"- Agent/model: `{agent}` / `{model}`",
             f"- Attempts per arm: `{attempts}`",
+            f"- Verified reward floor: `{verified_reward_floor:.4f}`",
             f"- No-skill result: `{_display_path(no_skill.path)}`",
             f"- Previous result: `{_display_path(previous.path)}`",
             f"- Candidate result: `{_display_path(candidate.path)}`",
@@ -355,11 +434,14 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--dashboard-base-url")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reward-tolerance", type=float, default=1e-6)
+    parser.add_argument("--verified-reward-floor", type=float, default=1.0)
     parser.add_argument("--fail-on-regression", action="store_true")
     args = parser.parse_args(argv)
 
     if args.reward_tolerance < 0:
         parser.error("--reward-tolerance cannot be negative")
+    if not 0 <= args.verified_reward_floor <= 1:
+        parser.error("--verified-reward-floor must be between 0 and 1")
 
     try:
         no_skill = load_job(args.no_skill, "No skill")
@@ -383,6 +465,7 @@ def main(argv: list[str]) -> int:
         attempts=args.attempts,
         dashboard_base_url=args.dashboard_base_url,
         tolerance=args.reward_tolerance,
+        verified_reward_floor=args.verified_reward_floor,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="utf-8")

@@ -50,6 +50,58 @@ class HarborSuiteManifestTests(unittest.TestCase):
             errors,
         )
 
+    def test_task_requires_reproduction_audit_fields(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        task = manifest["suites"][0]["tasks"][0]
+        del task["reproduction"]
+        del task["origin"]
+        del task["workflow"]
+        del task["hardware"]
+
+        errors = VALIDATOR.validate_manifest(manifest)
+
+        self.assertTrue(any(".reproduction" in error for error in errors))
+        self.assertTrue(any(".origin" in error for error in errors))
+        self.assertTrue(any(".workflow" in error for error in errors))
+        self.assertTrue(any(".hardware" in error for error in errors))
+
+    def test_fixture_cannot_claim_live_workflow_stages(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        task = manifest["suites"][0]["tasks"][3]
+        task["workflow"] = ["reproduce", "investigate", "verify"]
+
+        errors = VALIDATOR.validate_manifest(manifest)
+
+        self.assertTrue(
+            any("fixture evaluation cannot claim reproduce or verify" in error for error in errors)
+        )
+
+    def test_debugging_capability_requires_planned_live_end_to_end_coverage(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        suite = manifest["suites"][0]
+        for task in suite["tasks"]:
+            if task["reproduction"] == "live":
+                task["covers"] = [
+                    item for item in task["covers"] if item != "backend-and-parity-triage"
+                ]
+
+        errors = VALIDATOR.validate_manifest(manifest)
+
+        self.assertTrue(
+            any("debugging capabilities lack planned live end-to-end coverage" in error for error in errors)
+        )
+
+    def test_target_environment_must_match_hardware(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        task = manifest["suites"][0]["tasks"][4]
+        task["hardware"] = "generic-cpu"
+
+        errors = VALIDATOR.validate_manifest(manifest)
+
+        self.assertTrue(
+            any("requires hardware 'target-device'" in error for error in errors)
+        )
+
     def test_generated_matrix_matches_manifest(self) -> None:
         output = ROOT / "evaluation" / "harbor" / "CAPABILITY_MATRIX.md"
         self.assertEqual(output.read_text(encoding="utf-8"), RENDERER.render(self.manifest))

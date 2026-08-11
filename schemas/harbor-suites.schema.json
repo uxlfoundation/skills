@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-harbor-suites.schema.json",
+  "title": "UXL Harbor Skill Suite Manifest",
+  "type": "object",
+  "required": ["schema_version", "policy", "suites"],
+  "properties": {
+    "schema_version": { "const": "2.0" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "suites": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/suite" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "minimum_tasks_per_skill",
+        "minimum_discriminating_tasks_per_skill",
+        "required_capability_classes",
+        "attempts",
+        "comparison_arms",
+        "triage",
+        "efficiency",
+        "infrastructure_failure_policy",
+        "promotion_thresholds"
+      ],
+      "properties": {
+        "minimum_tasks_per_skill": { "type": "integer", "minimum": 1 },
+        "minimum_discriminating_tasks_per_skill": { "type": "integer", "minimum": 1 },
+        "required_capability_classes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["correctness", "selection", "integration", "debugging", "performance"]
+          }
+        },
+        "attempts": {
+          "type": "object",
+          "required": ["development_probe", "calibration", "promotion"],
+          "properties": {
+            "development_probe": { "type": "integer", "minimum": 1 },
+            "calibration": { "type": "integer", "minimum": 1 },
+            "promotion": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "comparison_arms": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["no-skill", "previous-skill", "candidate-skill"] }
+        },
+        "triage": {
+          "type": "object",
+          "required": ["required_workflow", "requires_live_reproduction", "accepted_origins"],
+          "properties": {
+            "required_workflow": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["reproduce", "investigate", "repair", "verify"] }
+            },
+            "requires_live_reproduction": { "const": true },
+            "accepted_origins": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["maintainer-incident", "upstream-regression"] }
+            }
+          },
+          "additionalProperties": false
+        },
+        "efficiency": {
+          "type": "object",
+          "required": [
+            "quality_gate",
+            "verified_reward_floor",
+            "primary_metric",
+            "required_metrics",
+            "desired_metrics"
+          ],
+          "properties": {
+            "quality_gate": { "const": "verified-success" },
+            "verified_reward_floor": { "type": "number", "minimum": 0, "maximum": 1 },
+            "primary_metric": { "const": "cost-per-verified-success" },
+            "required_metrics": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "uncached-input-tokens",
+                  "cached-input-tokens",
+                  "output-tokens",
+                  "cost-usd",
+                  "runtime-seconds"
+                ]
+              }
+            },
+            "desired_metrics": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "enum": ["tool-calls"] }
+            }
+          },
+          "additionalProperties": false
+        },
+        "infrastructure_failure_policy": { "const": "exclude-and-rerun" },
+        "promotion_thresholds": {
+          "type": "object",
+          "required": ["maximum_task_mean_regression", "maximum_suite_mean_regression"],
+          "properties": {
+            "maximum_task_mean_regression": { "type": "number", "minimum": 0, "maximum": 1 },
+            "maximum_suite_mean_regression": { "type": "number", "minimum": 0, "maximum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "capability": {
+      "type": "object",
+      "required": ["id", "class", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/name" },
+        "class": {
+          "enum": ["correctness", "selection", "integration", "debugging", "performance"]
+        },
+        "description": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "name",
+        "status",
+        "role",
+        "calibration",
+        "track",
+        "environment",
+        "reproduction",
+        "origin",
+        "workflow",
+        "hardware",
+        "covers"
+      ],
+      "properties": {
+        "name": { "$ref": "#/$defs/name" },
+        "status": { "enum": ["implemented", "planned"] },
+        "role": { "enum": ["smoke", "discriminating", "hardware"] },
+        "calibration": { "enum": ["uncalibrated", "headroom", "ceiling", "manual"] },
+        "track": { "enum": ["executable", "answer-quality", "hardware"] },
+        "environment": {
+          "enum": [
+            "hosted-cpu",
+            "hosted-container",
+            "hosted-distributed",
+            "manual-gpu",
+            "target-cpu",
+            "target-gpu",
+            "target-device",
+            "target-distributed"
+          ]
+        },
+        "reproduction": { "enum": ["live", "fixture", "review"] },
+        "origin": {
+          "enum": [
+            "constructed",
+            "maintainer-incident",
+            "upstream-regression",
+            "unassigned",
+            "not-applicable"
+          ]
+        },
+        "workflow": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["reproduce", "investigate", "repair", "verify"] }
+        },
+        "hardware": {
+          "enum": [
+            "none",
+            "generic-cpu",
+            "target-cpu",
+            "target-gpu",
+            "target-device",
+            "target-distributed"
+          ]
+        },
+        "covers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/name" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "suite": {
+      "type": "object",
+      "required": ["skill", "owner_project", "target_task_count", "capabilities", "tasks"],
+      "properties": {
+        "skill": { "$ref": "#/$defs/name" },
+        "owner_project": { "type": "string", "minLength": 1 },
+        "target_task_count": { "type": "integer", "minimum": 1 },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/capability" }
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/task" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

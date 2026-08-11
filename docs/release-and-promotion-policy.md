@@ -25,13 +25,14 @@ Required for promotion:
 1. Owning project maintainer review is recorded.
 2. Current official sources were rechecked after maintainer feedback.
 3. At least three realistic eval prompts exist for the skill.
-4. Paired Harbor baseline and skill-explicit jobs use the same task, agent, model, environment, and at least three attempts per arm.
+4. Matched no-skill, previous-skill, and candidate-skill Harbor jobs use the same task, agent, model, environment, and at least five attempts per arm.
 5. The skill card records owner, sources, limitations, risks, forward-test evidence, and remaining gaps.
 6. The catalog validation suite passes.
-7. The skill has positive mean reward delta on its core Harbor tasks and no critical unsupported-claim failure.
+7. The candidate preserves verified success, has no critical unsupported-claim failure, and reports cost per verified success against both comparison arms.
 8. At least one negative-control task verifies that the skill stays out of unrelated work.
-9. For hardware-sensitive skills, the Harbor hardware task has passed or a documented exception is recorded.
-10. For `project-owned`, the owning project repository is the source of truth and this catalog is only a mirror.
+9. At least one core debugging capability has an implemented real end-to-end task sourced from a maintainer incident or upstream regression.
+10. Every target-hardware task used as promotion evidence passed on its declared hardware with environment provenance, or a documented gap remains open.
+11. For `project-owned`, the owning project repository is the source of truth and this catalog is only a mirror.
 
 ## Current Status
 

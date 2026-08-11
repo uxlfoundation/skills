@@ -22,6 +22,8 @@ param(
     [int]$Attempts = 3,
     [ValidateRange(1, 100)]
     [int]$Concurrency = 1,
+    [ValidateRange(0.0, 1.0)]
+    [double]$VerifiedRewardFloor = 1.0,
     [string]$ReasoningEffort = 'medium',
     [string]$TaskPath = 'evaluation/harbor/tasks',
     [string]$ExtraInstructionPath = '',
@@ -363,6 +365,7 @@ try {
         '--agent', $Agent,
         '--model', $Model,
         '--attempts', $Attempts.ToString(),
+        '--verified-reward-floor', $VerifiedRewardFloor.ToString([Globalization.CultureInfo]::InvariantCulture),
         '--output', $reportHost
     )) {
         $summaryArguments.Add($value)

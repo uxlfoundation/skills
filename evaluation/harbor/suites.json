@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
   "policy": {
     "minimum_tasks_per_skill": 5,
     "minimum_discriminating_tasks_per_skill": 2,
@@ -15,6 +15,40 @@
       "calibration": 3,
       "promotion": 5
     },
+    "comparison_arms": [
+      "no-skill",
+      "previous-skill",
+      "candidate-skill"
+    ],
+    "triage": {
+      "required_workflow": [
+        "reproduce",
+        "investigate",
+        "repair",
+        "verify"
+      ],
+      "requires_live_reproduction": true,
+      "accepted_origins": [
+        "maintainer-incident",
+        "upstream-regression"
+      ]
+    },
+    "efficiency": {
+      "quality_gate": "verified-success",
+      "verified_reward_floor": 1.0,
+      "primary_metric": "cost-per-verified-success",
+      "required_metrics": [
+        "uncached-input-tokens",
+        "cached-input-tokens",
+        "output-tokens",
+        "cost-usd",
+        "runtime-seconds"
+      ],
+      "desired_metrics": [
+        "tool-calls"
+      ]
+    },
+    "infrastructure_failure_policy": "exclude-and-rerun",
     "promotion_thresholds": {
       "maximum_task_mean_regression": 0.1,
       "maximum_suite_mean_regression": 0.03
@@ -33,12 +67,12 @@
         {"id": "benchdnn-and-reorders", "class": "performance", "description": "Use benchdnn or representative benchmarks and account for reorder costs."}
       ],
       "tasks": [
-        {"name": "onednn-matmul-memory-descriptors", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph"]},
-        {"name": "onednn-convolution-fusion-parity", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["primitive-contracts", "primitive-or-graph", "backend-and-parity-triage"]},
-        {"name": "onednn-extra-reorder-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["framework-layout-boundaries", "benchdnn-and-reorders"]},
-        {"name": "onednn-framework-blocked-layout", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-contracts", "framework-layout-boundaries", "backend-and-parity-triage"]},
-        {"name": "onednn-backend-unimplemented-primitive", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["primitive-or-graph", "backend-and-parity-triage"]},
-        {"name": "onednn-benchdnn-claim-review", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchdnn-and-reorders"]}
+        {"name": "onednn-matmul-memory-descriptors", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["primitive-contracts", "primitive-or-graph"]},
+        {"name": "onednn-convolution-fusion-parity", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["primitive-contracts", "primitive-or-graph", "backend-and-parity-triage"]},
+        {"name": "onednn-extra-reorder-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["framework-layout-boundaries", "benchdnn-and-reorders"]},
+        {"name": "onednn-framework-blocked-layout", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["primitive-contracts", "framework-layout-boundaries", "backend-and-parity-triage"]},
+        {"name": "onednn-backend-unimplemented-primitive", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["primitive-or-graph", "backend-and-parity-triage"]},
+        {"name": "onednn-benchdnn-claim-review", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "review", "origin": "not-applicable", "workflow": ["investigate"], "hardware": "none", "covers": ["benchdnn-and-reorders"]}
       ]
     },
     {
@@ -53,12 +87,12 @@
         {"id": "representative-math-validation", "class": "performance", "description": "Validate known answers before measuring representative sizes and dispatch overhead."}
       ],
       "tasks": [
-        {"name": "onemath-runtime-library-missing", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["domain-and-dispatch", "backend-build-and-link", "runtime-backend-triage", "representative-math-validation"]},
-        {"name": "onemath-blas-leading-dimension", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["math-contracts", "domain-and-dispatch"]},
-        {"name": "onemath-runtime-vs-compile-dispatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["domain-and-dispatch", "backend-build-and-link"]},
-        {"name": "onemath-rng-device-event-chain", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["math-contracts", "domain-and-dispatch", "runtime-backend-triage"]},
-        {"name": "onemath-third-party-backend-wrapper", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["backend-build-and-link", "runtime-backend-triage"]},
-        {"name": "onemath-dispatch-overhead-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["math-contracts", "representative-math-validation"]}
+        {"name": "onemath-runtime-library-missing", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["domain-and-dispatch", "backend-build-and-link", "runtime-backend-triage", "representative-math-validation"]},
+        {"name": "onemath-blas-leading-dimension", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["math-contracts", "domain-and-dispatch"]},
+        {"name": "onemath-runtime-vs-compile-dispatch", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["domain-and-dispatch", "backend-build-and-link"]},
+        {"name": "onemath-rng-device-event-chain", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["math-contracts", "domain-and-dispatch", "runtime-backend-triage"]},
+        {"name": "onemath-third-party-backend-wrapper", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["backend-build-and-link", "runtime-backend-triage"]},
+        {"name": "onemath-dispatch-overhead-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["math-contracts", "representative-math-validation"]}
       ]
     },
     {
@@ -73,12 +107,12 @@
         {"id": "conversion-aware-benchmarking", "class": "performance", "description": "Measure representative analytics workloads including data conversion costs."}
       ],
       "tasks": [
-        {"name": "onedal-sklearn-or-native-kmeans", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
-        {"name": "onedal-table-orientation-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["analytics-parity", "tables-and-frameworks", "quality-regression-triage"]},
-        {"name": "onedal-batch-online-distributed-choice", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["analytics-parity", "interface-and-mode"]},
-        {"name": "onedal-unavailable-gpu-path", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["interface-and-mode", "quality-regression-triage"]},
-        {"name": "onedal-conversion-cost-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["tables-and-frameworks", "conversion-aware-benchmarking"]},
-        {"name": "onedal-train-infer-metric-parity", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["analytics-parity", "conversion-aware-benchmarking"]}
+        {"name": "onedal-sklearn-or-native-kmeans", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["analytics-parity", "interface-and-mode"]},
+        {"name": "onedal-table-orientation-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["analytics-parity", "tables-and-frameworks", "quality-regression-triage"]},
+        {"name": "onedal-batch-online-distributed-choice", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "review", "origin": "not-applicable", "workflow": ["investigate"], "hardware": "none", "covers": ["analytics-parity", "interface-and-mode"]},
+        {"name": "onedal-unavailable-gpu-path", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-gpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-gpu", "covers": ["interface-and-mode", "quality-regression-triage"]},
+        {"name": "onedal-conversion-cost-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["tables-and-frameworks", "conversion-aware-benchmarking"]},
+        {"name": "onedal-train-infer-metric-parity", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["analytics-parity", "conversion-aware-benchmarking"]}
       ]
     },
     {
@@ -93,13 +127,13 @@
         {"id": "grain-affinity-benchmarking", "class": "performance", "description": "Benchmark realistic core counts, grainsize, affinity, and scheduling overhead."}
       ],
       "tasks": [
-        {"name": "onetbb-histogram-local-aggregation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
-        {"name": "onetbb-stable-compaction-scan", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
-        {"name": "onetbb-bounded-image-flow-graph", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "scheduler-triage"]},
-        {"name": "onetbb-nested-thread-pool-arena", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["runtime-composition", "scheduler-triage", "grain-affinity-benchmarking"]},
-        {"name": "onetbb-cancellation-exception-propagation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["race-order-and-exception-safety", "runtime-composition"]},
-        {"name": "onetbb-grainsize-affinity-regression", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["scheduler-triage", "grain-affinity-benchmarking"]},
-        {"name": "onetbb-legacy-api-migration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["parallel-pattern-selection", "runtime-composition"]}
+        {"name": "onetbb-histogram-local-aggregation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
+        {"name": "onetbb-stable-compaction-scan", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["race-order-and-exception-safety", "parallel-pattern-selection"]},
+        {"name": "onetbb-bounded-image-flow-graph", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["parallel-pattern-selection", "scheduler-triage"]},
+        {"name": "onetbb-nested-thread-pool-arena", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["runtime-composition", "scheduler-triage", "grain-affinity-benchmarking"]},
+        {"name": "onetbb-cancellation-exception-propagation", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["race-order-and-exception-safety", "runtime-composition"]},
+        {"name": "onetbb-grainsize-affinity-regression", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["scheduler-triage", "grain-affinity-benchmarking"]},
+        {"name": "onetbb-legacy-api-migration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["parallel-pattern-selection", "runtime-composition"]}
       ]
     },
     {
@@ -114,12 +148,12 @@
         {"id": "transfer-aware-benchmarking", "class": "performance", "description": "Measure transfers, launch, synchronization, and representative range sizes."}
       ],
       "tasks": [
-        {"name": "onedpl-host-or-device-sort", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "execution-policy-choice"]},
-        {"name": "onedpl-missing-device-synchronization", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "queue-data-and-iterators", "device-result-triage"]},
-        {"name": "onedpl-iterator-category-failure", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["queue-data-and-iterators", "device-result-triage"]},
-        {"name": "onedpl-stable-ordering-contract", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["algorithm-contracts", "execution-policy-choice"]},
-        {"name": "onedpl-host-backend-configuration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["execution-policy-choice", "queue-data-and-iterators"]},
-        {"name": "onedpl-transfer-inclusive-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["algorithm-contracts", "transfer-aware-benchmarking"]}
+        {"name": "onedpl-host-or-device-sort", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["algorithm-contracts", "execution-policy-choice"]},
+        {"name": "onedpl-missing-device-synchronization", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["algorithm-contracts", "queue-data-and-iterators", "device-result-triage"]},
+        {"name": "onedpl-iterator-category-failure", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["queue-data-and-iterators", "device-result-triage"]},
+        {"name": "onedpl-stable-ordering-contract", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["algorithm-contracts", "execution-policy-choice"]},
+        {"name": "onedpl-host-backend-configuration", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["execution-policy-choice", "queue-data-and-iterators"]},
+        {"name": "onedpl-transfer-inclusive-benchmark", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["algorithm-contracts", "transfer-aware-benchmarking"]}
       ]
     },
     {
@@ -134,12 +168,12 @@
         {"id": "topology-worker-benchmarking", "class": "performance", "description": "Measure rank count, topology, tensor size, transport, workers, and affinity."}
       ],
       "tasks": [
-        {"name": "oneccl-async-allreduce-wait", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["collective-contracts", "api-and-collective-choice"]},
-        {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
-        {"name": "oneccl-datatype-count-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["collective-contracts", "distributed-hang-triage"]},
-        {"name": "oneccl-cpp-or-nccl-like-api", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
-        {"name": "oneccl-plugin-rank-visibility", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["launcher-plugin-framework", "distributed-hang-triage"]},
-        {"name": "oneccl-worker-affinity-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["launcher-plugin-framework", "topology-worker-benchmarking"]}
+        {"name": "oneccl-async-allreduce-wait", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["collective-contracts", "api-and-collective-choice"]},
+        {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["collective-contracts", "distributed-hang-triage"]},
+        {"name": "oneccl-datatype-count-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["collective-contracts", "distributed-hang-triage"]},
+        {"name": "oneccl-cpp-or-nccl-like-api", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "review", "origin": "not-applicable", "workflow": ["investigate"], "hardware": "none", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
+        {"name": "oneccl-plugin-rank-visibility", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-distributed", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-distributed", "covers": ["launcher-plugin-framework", "distributed-hang-triage"]},
+        {"name": "oneccl-worker-affinity-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "target-distributed", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-distributed", "covers": ["launcher-plugin-framework", "topology-worker-benchmarking"]}
       ]
     },
     {
@@ -154,12 +188,12 @@
         {"id": "build-runtime-cost-boundaries", "class": "performance", "description": "Avoid performance claims until the intended device and runtime path are proven."}
       ],
       "tasks": [
-        {"name": "sycl-device-discovery", "status": "implemented", "role": "hardware", "calibration": "manual", "track": "hardware", "environment": "manual-gpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
-        {"name": "sycl-cmake-compiler-cache", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
-        {"name": "sycl-compile-time-backend-link", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime"]},
-        {"name": "sycl-loader-plugin-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
-        {"name": "sycl-selector-silent-cpu-fallback", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["reproducible-smoke-contract", "evidence-driven-triage", "build-runtime-cost-boundaries"]},
-        {"name": "sycl-reproducible-environment-report", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["reproducible-smoke-contract", "toolchain-package-runtime", "build-runtime-cost-boundaries"]}
+        {"name": "sycl-device-discovery", "status": "implemented", "role": "hardware", "calibration": "manual", "track": "hardware", "environment": "manual-gpu", "reproduction": "live", "origin": "not-applicable", "workflow": ["reproduce", "verify"], "hardware": "target-gpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-cmake-compiler-cache", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-compile-time-backend-link", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime"]},
+        {"name": "sycl-loader-plugin-mismatch", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-selector-silent-cpu-fallback", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["reproducible-smoke-contract", "evidence-driven-triage", "build-runtime-cost-boundaries"]},
+        {"name": "sycl-reproducible-environment-report", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "hardware", "environment": "target-device", "reproduction": "live", "origin": "not-applicable", "workflow": ["reproduce", "verify"], "hardware": "target-device", "covers": ["reproducible-smoke-contract", "toolchain-package-runtime", "build-runtime-cost-boundaries"]}
       ]
     },
     {
@@ -174,12 +208,12 @@
         {"id": "repeatable-performance-evidence", "class": "performance", "description": "Measure warmup, steady state, variance, bottlenecks, and bounded speedup claims."}
       ],
       "tasks": [
-        {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
-        {"name": "performance-benchmark-report-repair", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["benchmark-scope-selection", "repeatable-performance-evidence"]},
-        {"name": "performance-floating-reduction-tolerance", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
-        {"name": "performance-transfer-scope-comparison", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["benchmark-scope-selection", "library-and-hardware-context", "repeatable-performance-evidence"]},
-        {"name": "performance-variance-and-outliers", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "covers": ["invalid-claim-triage", "repeatable-performance-evidence"]},
-        {"name": "performance-profile-after-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "covers": ["library-and-hardware-context", "invalid-claim-triage", "repeatable-performance-evidence"]}
+        {"name": "performance-tiny-async-gpu-claim", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["correctness-gated-measurement", "benchmark-scope-selection", "invalid-claim-triage"]},
+        {"name": "performance-benchmark-report-repair", "status": "implemented", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["benchmark-scope-selection", "repeatable-performance-evidence"]},
+        {"name": "performance-floating-reduction-tolerance", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["correctness-gated-measurement", "invalid-claim-triage"]},
+        {"name": "performance-transfer-scope-comparison", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["benchmark-scope-selection", "library-and-hardware-context", "repeatable-performance-evidence"]},
+        {"name": "performance-variance-and-outliers", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["invalid-claim-triage", "repeatable-performance-evidence"]},
+        {"name": "performance-profile-after-regression", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-device", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-device", "covers": ["library-and-hardware-context", "invalid-claim-triage", "repeatable-performance-evidence"]}
       ]
     }
   ]

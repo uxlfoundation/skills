@@ -73,6 +73,10 @@ class HarborComparisonTests(unittest.TestCase):
         self.assertEqual(job.uncached_input_tokens, 300)
         self.assertEqual(job.cached_input_tokens, 700)
         self.assertEqual(job.trial_rewards, (0.9, 0.9, 0.9))
+        self.assertEqual(job.total_tokens, 1100)
+        self.assertEqual(job.verified_successes(0.9), 3)
+        self.assertAlmostEqual(job.tokens_per_verified_success(0.9), 1100 / 3)
+        self.assertAlmostEqual(job.cost_per_verified_success(0.9), 0.3)
         self.assertTrue(job.reliable)
 
     def test_mean_metric_is_normalized_to_reward_and_ceiling_is_flagged(self) -> None:
@@ -107,7 +111,24 @@ class HarborComparisonTests(unittest.TestCase):
         self.assertFalse(failed)
         self.assertIn("NO QUALITY CHANGE", report)
         self.assertIn("Ceiling warning", report)
+        self.assertIn("Verified-success efficiency", report)
+        self.assertIn("Tokens / verified success", report)
         self.assertIn("http://127.0.0.1:8080/jobs/candidate", report)
+
+    def test_efficiency_requires_verified_success(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            previous = summary.load_job(
+                self.write_job(root, "previous", result_data(0.8)), "Previous"
+            )
+            candidate = summary.load_job(
+                self.write_job(root, "candidate", result_data(1.0)), "Candidate"
+            )
+
+        self.assertIn(
+            "previous did not",
+            summary.assess_efficiency(previous, candidate, 1.0),
+        )
 
     def test_regression_and_incomplete_candidate_fail_policy(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
