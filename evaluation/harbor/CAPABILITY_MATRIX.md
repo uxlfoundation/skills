@@ -23,7 +23,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | Skill | Target | Implemented | Live implemented | Fixture/review implemented | Target hardware | Real end-to-end | Planned |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 6 | 1 | 0 | 1 | 1 | 0 | 5 |
-| `uxl-onemath` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
+| `uxl-onemath` | 6 | 2 | 1 | 1 | 2 | 1 | 4 |
 | `uxl-onedal` | 6 | 1 | 0 | 1 | 1 | 0 | 5 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
@@ -68,7 +68,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onemath-runtime-library-missing` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `domain-and-dispatch`, `backend-build-and-link`, `runtime-backend-triage`, `representative-math-validation` |
 | `onemath-blas-leading-dimension` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `domain-and-dispatch` |
-| `onemath-runtime-vs-compile-dispatch` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `domain-and-dispatch`, `backend-build-and-link` |
+| `onemath-deprecated-header-include` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-build-and-link` |
 | `onemath-rng-device-event-chain` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `math-contracts`, `domain-and-dispatch`, `runtime-backend-triage` |
 | `onemath-third-party-backend-wrapper` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `backend-build-and-link`, `runtime-backend-triage` |
 | `onemath-dispatch-overhead-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |

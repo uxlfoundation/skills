@@ -40,6 +40,7 @@ Help an agent build portable oneMath code that targets the right domain, usage m
 - Backend support differs by domain, compiler, OS, and hardware. Check current docs before making compatibility claims.
 - Runtime dispatch assumes dynamic backend libraries are available at runtime.
 - Compile-time dispatch requires linking the backend wrapper libraries explicitly.
+- Prefer `oneapi/math.hpp` for new work, but preserve supported compatibility includes. Reproduce against the installed include tree and repair packaging or include paths instead of silently changing consumer code.
 - Leading dimensions, matrix layout, and batch strides are part of correctness, not tuning trivia.
 - Small examples validate correctness; they rarely prove acceleration.
 

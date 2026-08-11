@@ -14,7 +14,7 @@ $env:HARBOR_TELEMETRY = "off"
 
 The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
-Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md), and the first source-screened candidate ledger is in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md).
+Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md) and [wave 2](results/2026-08-11-incident-sourcing-wave-2.md).
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
@@ -47,6 +47,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onetbb-nested-thread-pool-arena`: hosted-CPU executable process-wide runtime-budget task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
+- `onemath-deprecated-header-include`: hosted-CPU preprocessing task sourced from a public compatibility-header incident.
 - `performance-benchmark-report-repair`: hosted-CPU executable reporting task.
 - `performance-floating-reduction-tolerance`: hosted-CPU executable numerical-validation task.
 - `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
@@ -69,6 +70,7 @@ harbor run `
   --include-task-name onedal-sklearn-or-native-kmeans `
   --include-task-name onednn-framework-blocked-layout `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onemath-deprecated-header-include `
   --include-task-name onemath-runtime-library-missing `
   --include-task-name onetbb-bounded-image-flow-graph `
   --include-task-name onetbb-cancellation-exception-propagation `
@@ -90,7 +92,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 20 `
+  --expected-trials 21 `
   --reward-floor 1.0
 ```
 
@@ -181,6 +183,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-10 oneTBB runtime-composition calibration](results/2026-08-10-onetbb-runtime-composition.md): shared-arena executable task, alternate-submission verifier audit, and ceiling classification.
 - [2026-08-10 oneTBB grainsize/affinity skill iteration](results/2026-08-10-onetbb-grainsize-affinity-skill.md): evidence-driven task, implementation-neutral rubric audit, and three-attempt skill calibration.
 - [2026-08-10 evaluator reproducibility audit](results/2026-08-10-reproducibility-audit.md): schema v2 task audit, live-versus-fixture coverage, hardware requirements, and the next incident-sourcing wave.
+- [2026-08-11 maintainer incident sourcing wave 2](results/2026-08-11-incident-sourcing-wave-2.md): verified oneMath installed-header coverage and evidence-based oneDPL toolchain deferral.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

@@ -55,6 +55,7 @@ jobs:
             --include-task-name onedal-sklearn-or-native-kmeans \
             --include-task-name onednn-framework-blocked-layout \
             --include-task-name onedpl-missing-device-synchronization \
+            --include-task-name onemath-deprecated-header-include \
             --include-task-name onemath-runtime-library-missing \
             --include-task-name onetbb-bounded-image-flow-graph \
             --include-task-name onetbb-cancellation-exception-propagation \
@@ -77,7 +78,7 @@ jobs:
         run: >-
           python scripts/check_harbor_job.py
           harbor-jobs/uxl-oracle-smoke/result.json
-          --expected-trials 20
+          --expected-trials 21
           --reward-floor 1.0
       - uses: actions/upload-artifact@v4
         if: always()

@@ -13,6 +13,8 @@ Verified by: Codex local catalog hardening pass
 - Selecting a compiler: https://uxlfoundation.github.io/oneMath/selecting_a_compiler.html
 - Using oneMath with CMake: https://uxlfoundation.github.io/oneMath/using_onemath_with_cmake.html
 - Integrating a third-party library: https://uxlfoundation.github.io/oneMath/create_new_backend.html
+- Compatibility-header incident: https://github.com/uxlfoundation/oneMath/issues/623
+- Compatibility-header fix: https://github.com/uxlfoundation/oneMath/pull/625
 
 ## Refresh Rule
 
