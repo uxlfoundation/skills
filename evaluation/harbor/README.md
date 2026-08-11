@@ -188,6 +188,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-11 maintainer incident sourcing wave 2](results/2026-08-11-incident-sourcing-wave-2.md): verified oneMath installed-header coverage and evidence-based oneDPL toolchain deferral.
 - [2026-08-11 maintainer incident sourcing wave 3](results/2026-08-11-incident-sourcing-wave-3.md): verified deterministic oneTBB cgroup-quota triage on a generic hosted CPU.
 - [2026-08-11 oneMath compatibility-header calibration](results/2026-08-11-onemath-header-skill-calibration.md): ceiling classification with verified-success token and cost measurements.
+- [2026-08-11 performance cgroup-concurrency calibration](results/2026-08-11-performance-cgroup-skill-calibration.md): ceiling classification after the candidate increased token burn at unchanged quality.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

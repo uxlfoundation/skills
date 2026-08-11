@@ -37,6 +37,6 @@ The performance skill now tells agents to distinguish CPU affinity from cgroup q
 
 The portfolio remains 49 planned tasks and now has 23 implemented tasks. Three implemented tasks meet the full live reproduce/investigate/repair/verify and maintainer-incident standard: `onetbb-join-node-ordering`, `onemath-deprecated-header-include`, and `performance-cgroup-concurrency-quota`.
 
-The next gate is matched calibration of this task with no skill, the previous performance skill, and the candidate performance skill. Quality remains the gate; token usage, cost per verified success, and runtime will determine whether the new guidance improves efficiency or remains regression coverage.
+The task's [matched calibration](2026-08-11-performance-cgroup-skill-calibration.md) reached full reward in all three arms. The candidate increased token burn versus both the previous skill and no skill, so the task is classified as a ceiling and retained as regression coverage rather than evidence of skill value.
 
 Two initial Harbor attempts were preserved but excluded as infrastructure failures: WSL Docker could not reach Docker Hub metadata or Debian packages until the workstation's existing proxy was supplied to build containers. The successful retry used the identical task, solution, verifier, and pinned base image.
