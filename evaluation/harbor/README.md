@@ -14,6 +14,8 @@ $env:HARBOR_TELEMETRY = "off"
 
 The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
+Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The current evidence baseline and prioritized sourcing wave are recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md).
+
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
 Answer-quality fixtures test interpretation and reasoning but do not receive live-triage credit. A debugging capability must have planned coverage from a task that reproduces live and exercises reproduce, investigate, repair, and verify. Implemented real end-to-end credit additionally requires a maintainer incident or upstream regression as the task origin.
@@ -176,6 +178,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-10 oneTBB failure-flow generalization probe](results/2026-08-10-onetbb-failure-flow-generalization.md): executable task calibration and implementation-neutral verifier audit.
 - [2026-08-10 oneTBB runtime-composition calibration](results/2026-08-10-onetbb-runtime-composition.md): shared-arena executable task, alternate-submission verifier audit, and ceiling classification.
 - [2026-08-10 oneTBB grainsize/affinity skill iteration](results/2026-08-10-onetbb-grainsize-affinity-skill.md): evidence-driven task, implementation-neutral rubric audit, and three-attempt skill calibration.
+- [2026-08-10 evaluator reproducibility audit](results/2026-08-10-reproducibility-audit.md): schema v2 task audit, live-versus-fixture coverage, hardware requirements, and the next incident-sourcing wave.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
