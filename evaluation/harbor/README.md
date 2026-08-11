@@ -14,7 +14,7 @@ $env:HARBOR_TELEMETRY = "off"
 
 The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
-Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The current evidence baseline and prioritized sourcing wave are recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md).
+Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md), and the first source-screened candidate ledger is in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md).
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
@@ -42,6 +42,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
 - `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
+- `onetbb-join-node-ordering`: hosted-CPU executable task sourced from a public maintainer incident about flow-graph ordering.
 - `onetbb-grainsize-affinity-regression`: hosted evidence-driven grainsize, cache-affinity, and NUMA-placement diagnostic task.
 - `onetbb-nested-thread-pool-arena`: hosted-CPU executable process-wide runtime-budget task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
@@ -73,6 +74,7 @@ harbor run `
   --include-task-name onetbb-cancellation-exception-propagation `
   --include-task-name onetbb-grainsize-affinity-regression `
   --include-task-name onetbb-histogram-local-aggregation `
+  --include-task-name onetbb-join-node-ordering `
   --include-task-name onetbb-nested-thread-pool-arena `
   --include-task-name onetbb-stable-compaction-scan `
   --include-task-name performance-benchmark-report-repair `
@@ -88,7 +90,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 19 `
+  --expected-trials 20 `
   --reward-floor 1.0
 ```
 

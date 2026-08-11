@@ -59,6 +59,7 @@ When messages retain buffers, handles, or other scarce resources across stages:
 - Nested parallelism and foreign thread pools can oversubscribe unless controlled.
 - Blocking I/O inside oneTBB tasks can harm scheduler behavior.
 - Flow graph concurrency limits are part of correctness for resource-bound stages.
+- A `queueing` `join_node` pairs messages by arrival, not logical identity, and delivery through parallel graph work can reorder them. Use `key_matching` when inputs must correlate by ID; use a `sequencer_node` when the output contract requires sequence order. Test multiple workers for mismatches, duplicates, and gaps.
 
 ## Output Contract
 

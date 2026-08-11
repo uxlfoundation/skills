@@ -25,7 +25,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-onednn` | 6 | 1 | 0 | 1 | 1 | 0 | 5 |
 | `uxl-onemath` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
 | `uxl-onedal` | 6 | 1 | 0 | 1 | 1 | 0 | 5 |
-| `uxl-onetbb` | 7 | 6 | 4 | 2 | 0 | 0 | 1 |
+| `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
 | `uxl-oneccl` | 6 | 3 | 1 | 2 | 2 | 0 | 3 |
 | `uxl-sycl-build-debug` | 6 | 4 | 2 | 2 | 2 | 0 | 2 |
@@ -114,7 +114,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `onetbb-nested-thread-pool-arena` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
 | `onetbb-cancellation-exception-propagation` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `runtime-composition` |
 | `onetbb-grainsize-affinity-regression` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `scheduler-triage`, `grain-affinity-benchmarking` |
-| `onetbb-legacy-api-migration` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `parallel-pattern-selection`, `runtime-composition` |
+| `onetbb-join-node-ordering` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection`, `scheduler-triage` |
 
 ## uxl-onedpl (oneDPL)
 
