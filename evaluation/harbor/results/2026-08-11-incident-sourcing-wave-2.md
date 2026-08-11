@@ -13,6 +13,8 @@ This wave applied the reproducibility gate to the next two public candidates fro
 
 `onemath-deprecated-header-include` pins oneMath immediately before the accepted fix and preprocesses the deprecated public compatibility header against the installed include tree. The agent must preserve the compatibility entry point, its domain includes, and the deprecated namespace alias while repairing the incorrect relative include path. Read-only verifier inputs prevent solving the task by changing the consumer.
 
+The task vendors the two exact affected upstream headers and stubs unrelated domain headers. Its build therefore preserves the reported preprocessing failure without downloading GitHub source during evaluation.
+
 | Check | Result |
 | --- | ---: |
 | Pinned pre-fix baseline | Reward 0 in 3 of 3 runs |
