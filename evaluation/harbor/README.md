@@ -184,6 +184,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-10 oneTBB grainsize/affinity skill iteration](results/2026-08-10-onetbb-grainsize-affinity-skill.md): evidence-driven task, implementation-neutral rubric audit, and three-attempt skill calibration.
 - [2026-08-10 evaluator reproducibility audit](results/2026-08-10-reproducibility-audit.md): schema v2 task audit, live-versus-fixture coverage, hardware requirements, and the next incident-sourcing wave.
 - [2026-08-11 maintainer incident sourcing wave 2](results/2026-08-11-incident-sourcing-wave-2.md): verified oneMath installed-header coverage and evidence-based oneDPL toolchain deferral.
+- [2026-08-11 oneMath compatibility-header calibration](results/2026-08-11-onemath-header-skill-calibration.md): ceiling classification with verified-success token and cost measurements.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
