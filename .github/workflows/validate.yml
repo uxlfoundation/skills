@@ -65,6 +65,7 @@ jobs:
             --include-task-name onetbb-nested-thread-pool-arena \
             --include-task-name onetbb-stable-compaction-scan \
             --include-task-name performance-benchmark-report-repair \
+            --include-task-name performance-cgroup-concurrency-quota \
             --include-task-name performance-floating-reduction-tolerance \
             --include-task-name performance-tiny-async-gpu-claim \
             --include-task-name sycl-cmake-compiler-cache \
@@ -78,7 +79,7 @@ jobs:
         run: >-
           python scripts/check_harbor_job.py
           harbor-jobs/uxl-oracle-smoke/result.json
-          --expected-trials 21
+          --expected-trials 22
           --reward-floor 1.0
       - uses: actions/upload-artifact@v4
         if: always()

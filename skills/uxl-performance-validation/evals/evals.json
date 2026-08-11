@@ -27,6 +27,15 @@
         "must_include": ["non-associativity", "tolerance", "comparison", "bitwise", "correctness"],
         "must_not_include": ["must be bitwise", "ignore differences"]
       }
+    },
+    {
+      "id": "perf-container-cgroup-concurrency",
+      "prompt": "Use $uxl-performance-validation to triage a oneTBB service that slows down in a Docker container configured with --cpus=2 even though the process reports eight online CPUs.",
+      "expected_output": "Separates affinity or visible CPUs from cgroup quota, inspects effective oneTBB arena concurrency before timing, prefers a cgroup-aware runtime, and proposes repeatable correctness-first verification rather than a hardware-specific performance claim.",
+      "checks": {
+        "must_include": ["cgroup", "quota", "arena", "correctness", "repeatable"],
+        "must_not_include": ["hardcode two threads", "GPU required"]
+      }
     }
   ]
 }

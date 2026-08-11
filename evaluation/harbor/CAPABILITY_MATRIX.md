@@ -29,7 +29,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-onedpl` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
 | `uxl-oneccl` | 6 | 3 | 1 | 2 | 2 | 0 | 3 |
 | `uxl-sycl-build-debug` | 6 | 4 | 2 | 2 | 2 | 0 | 2 |
-| `uxl-performance-validation` | 6 | 3 | 2 | 1 | 2 | 0 | 3 |
+| `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
 
 ## uxl-onednn (oneDNN)
 
@@ -197,5 +197,5 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `performance-benchmark-report-repair` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
 | `performance-floating-reduction-tolerance` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `correctness-gated-measurement`, `invalid-claim-triage` |
 | `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
-| `performance-variance-and-outliers` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `invalid-claim-triage`, `repeatable-performance-evidence` |
+| `performance-cgroup-concurrency-quota` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |
 | `performance-profile-after-regression` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |

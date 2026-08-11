@@ -14,7 +14,7 @@ $env:HARBOR_TELEMETRY = "off"
 
 The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
-Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md) and [wave 2](results/2026-08-11-incident-sourcing-wave-2.md).
+Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md), [wave 2](results/2026-08-11-incident-sourcing-wave-2.md), and [wave 3](results/2026-08-11-incident-sourcing-wave-3.md).
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
@@ -49,6 +49,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
 - `onemath-deprecated-header-include`: hosted-CPU preprocessing task sourced from a public compatibility-header incident.
 - `performance-benchmark-report-repair`: hosted-CPU executable reporting task.
+- `performance-cgroup-concurrency-quota`: hosted-CPU oneTBB resource-constraint task sourced from a public cgroup quota incident.
 - `performance-floating-reduction-tolerance`: hosted-CPU executable numerical-validation task.
 - `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
 - `sycl-cmake-compiler-cache`: hosted structured toolchain-diagnosis task.
@@ -80,6 +81,7 @@ harbor run `
   --include-task-name onetbb-nested-thread-pool-arena `
   --include-task-name onetbb-stable-compaction-scan `
   --include-task-name performance-benchmark-report-repair `
+  --include-task-name performance-cgroup-concurrency-quota `
   --include-task-name performance-floating-reduction-tolerance `
   --include-task-name performance-tiny-async-gpu-claim `
   --include-task-name sycl-cmake-compiler-cache `
@@ -92,7 +94,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 21 `
+  --expected-trials 22 `
   --reward-floor 1.0
 ```
 
@@ -184,6 +186,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-10 oneTBB grainsize/affinity skill iteration](results/2026-08-10-onetbb-grainsize-affinity-skill.md): evidence-driven task, implementation-neutral rubric audit, and three-attempt skill calibration.
 - [2026-08-10 evaluator reproducibility audit](results/2026-08-10-reproducibility-audit.md): schema v2 task audit, live-versus-fixture coverage, hardware requirements, and the next incident-sourcing wave.
 - [2026-08-11 maintainer incident sourcing wave 2](results/2026-08-11-incident-sourcing-wave-2.md): verified oneMath installed-header coverage and evidence-based oneDPL toolchain deferral.
+- [2026-08-11 maintainer incident sourcing wave 3](results/2026-08-11-incident-sourcing-wave-3.md): verified deterministic oneTBB cgroup-quota triage on a generic hosted CPU.
 - [2026-08-11 oneMath compatibility-header calibration](results/2026-08-11-onemath-header-skill-calibration.md): ceiling classification with verified-success token and cost measurements.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
