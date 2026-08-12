@@ -10,6 +10,7 @@ skills:
     skill_card: "skill-cards/uxl-onednn.md"
     source_of_truth_target: "project-repo-after-maintainer-review"
     maintainer_review: "needed"
+    last_source_verification: "2026-08-12"
   - name: "uxl-onemath"
     status: "pilot"
     owner_project: "oneMath"

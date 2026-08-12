@@ -9,12 +9,13 @@
 
 ## Purpose
 
-Guide agents through oneDNN primitive selection, memory descriptors, graph/fusion choices, post-ops, backend assumptions, numerical parity, and `benchdnn` validation.
+Guide agents through oneDNN primitive selection, memory descriptors, graph/fusion choices, post-ops, backend assumptions, numerical parity, verbose implementation evidence, and `benchdnn` validation.
 
 ## Supported Tasks
 
 - Plan or review oneDNN primitive integrations.
 - Triage layout and reorder-related performance regressions.
+- Classify `benchdnn` failures by mode and by create, fill, execute, compare, or report phase.
 - Separate correctness validation from performance claims.
 - Point agents to official docs and `benchdnn` references.
 
@@ -28,4 +29,5 @@ Guide agents through oneDNN primitive selection, memory descriptors, graph/fusio
 
 - Source ledger: `skills/uxl-onednn/references/official-sources.md`
 - Evals: `skills/uxl-onednn/evals/evals.json`
-- Validation: catalog validator and skill quick validation pass locally.
+- Live evaluator: `onednn-benchdnn-no-ref-memory`, sourced from oneDNN issue #5732.
+- Validation: catalog validator, Harbor task validation, and skill quick validation pass locally.
