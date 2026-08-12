@@ -36,6 +36,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `oneccl-datatype-count-mismatch`: hosted structured collective-contract task.
 - `oneccl-async-allreduce-wait`: hosted-CPU executable async-completion and buffer-lifetime task.
 - `oneccl-divergent-collective-sequence`: hosted structured collective-hang task.
+- `onedal-batch-online-distributed-choice`: hosted structured computation-mode decision task.
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
@@ -69,6 +70,7 @@ harbor run `
   --include-task-name oneccl-async-allreduce-wait `
   --include-task-name oneccl-datatype-count-mismatch `
   --include-task-name oneccl-divergent-collective-sequence `
+  --include-task-name onedal-batch-online-distributed-choice `
   --include-task-name onedal-sklearn-or-native-kmeans `
   --include-task-name onednn-framework-blocked-layout `
   --include-task-name onednn-benchdnn-no-ref-memory `
@@ -96,7 +98,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 23 `
+  --expected-trials 24 `
   --reward-floor 1.0
 ```
 
@@ -192,6 +194,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-11 oneMath compatibility-header calibration](results/2026-08-11-onemath-header-skill-calibration.md): ceiling classification with verified-success token and cost measurements.
 - [2026-08-11 performance cgroup-concurrency calibration](results/2026-08-11-performance-cgroup-skill-calibration.md): ceiling classification after the candidate increased token burn at unchanged quality.
 - [2026-08-12 oneDNN benchdnn incident](results/2026-08-12-onednn-benchdnn-incident.md): portable AVX2 reproduction of a maintainer-reported no-reference-memory crash, hardened with a hidden fused-convolution shape.
+- [2026-08-12 oneDAL mode selection](results/2026-08-12-onedal-mode-selection.md): hardware-agnostic batch/online/distributed decision coverage with deterministic shortcut rejection.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

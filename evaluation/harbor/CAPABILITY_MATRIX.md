@@ -24,7 +24,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 6 | 2 | 1 | 1 | 1 | 1 | 4 |
 | `uxl-onemath` | 6 | 2 | 1 | 1 | 2 | 1 | 4 |
-| `uxl-onedal` | 6 | 1 | 0 | 1 | 1 | 0 | 5 |
+| `uxl-onedal` | 6 | 2 | 0 | 2 | 1 | 0 | 4 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
 | `uxl-oneccl` | 6 | 3 | 1 | 2 | 2 | 0 | 3 |
@@ -89,7 +89,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onedal-sklearn-or-native-kmeans` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-table-orientation-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
-| `onedal-batch-online-distributed-choice` | planned | discriminating | uncalibrated | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
+| `onedal-batch-online-distributed-choice` | implemented | discriminating | uncalibrated | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | executable | target-gpu | live | unassigned | reproduce -> investigate -> repair -> verify | target-gpu | `interface-and-mode`, `quality-regression-triage` |
 | `onedal-conversion-cost-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
 | `onedal-train-infer-metric-parity` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `conversion-aware-benchmarking` |
