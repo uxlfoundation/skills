@@ -351,20 +351,23 @@ def assess_efficiency(
         return "UNAVAILABLE: candidate produced no verified success"
     if previous_successes == 0:
         return "IMPROVEMENT: candidate produced a verified success and previous did not"
-    previous_cost = previous.cost_per_verified_success(verified_reward_floor)
-    candidate_cost = candidate.cost_per_verified_success(verified_reward_floor)
-    if previous_cost is not None and candidate_cost is not None:
-        return (
-            f"candidate cost per verified success changed by "
-            f"{_format_percent(candidate_cost, previous_cost)}"
-        )
+    assessments: list[str] = []
     previous_tokens = previous.tokens_per_verified_success(verified_reward_floor)
     candidate_tokens = candidate.tokens_per_verified_success(verified_reward_floor)
     if previous_tokens is not None and candidate_tokens is not None:
-        return (
+        assessments.append(
             "candidate tokens per verified success changed by "
             f"{_format_percent(candidate_tokens, previous_tokens)}"
         )
+    previous_cost = previous.cost_per_verified_success(verified_reward_floor)
+    candidate_cost = candidate.cost_per_verified_success(verified_reward_floor)
+    if previous_cost is not None and candidate_cost is not None:
+        assessments.append(
+            f"candidate cost per verified success changed by "
+            f"{_format_percent(candidate_cost, previous_cost)}"
+        )
+    if assessments:
+        return "; ".join(assessments)
     return "UNAVAILABLE: cost and comparable token usage were not reported"
 
 

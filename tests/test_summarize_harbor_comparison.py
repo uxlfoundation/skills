@@ -169,6 +169,22 @@ class HarborComparisonTests(unittest.TestCase):
             summary.assess_efficiency(previous, candidate, 1.0),
         )
 
+    def test_efficiency_leads_with_tokens_when_cost_is_available(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            previous = summary.load_job(
+                self.write_job(root, "previous", result_data(0.8)), "Previous"
+            )
+            candidate = summary.load_job(
+                self.write_job(root, "candidate", result_data(1.0)), "Candidate"
+            )
+
+        assessment = summary.assess_efficiency(previous, candidate, 0.8)
+        self.assertTrue(
+            assessment.startswith("candidate tokens per verified success")
+        )
+        self.assertIn("candidate cost per verified success", assessment)
+
     def test_regression_and_incomplete_candidate_fail_policy(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

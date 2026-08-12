@@ -27,4 +27,4 @@ The verifier also checks key ordering, exact input permutation, and monotonic ar
 
 ## Interpretation and limit
 
-The task provides live oneDPL host-policy correctness coverage on free runners. It does not test a historical project regression, device policies, or performance. Three-arm model calibration is still required before calling it discriminating.
+The task provides live oneDPL host-policy correctness coverage on free runners. It does not test a historical project regression, device policies, or performance. A matched [three-arm calibration](2026-08-12-onedpl-stable-calibration.md) found that every arm passed, so this is retained as a smoke test rather than evidence of skill discrimination.

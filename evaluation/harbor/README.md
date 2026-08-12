@@ -202,6 +202,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDAL table orientation](results/2026-08-12-onedal-table-orientation.md): real oneDAL CPU execution with a square-fixture trap and held-out rectangular parity cases.
 - [2026-08-12 oneDAL table calibration](results/2026-08-12-onedal-table-calibration.md): one-attempt three-arm ceiling; candidate token burn increased 17.8% at unchanged quality.
 - [2026-08-12 oneDPL stable ordering](results/2026-08-12-onedpl-stable-ordering.md): real oneDPL host-policy execution with equal-key stability and permutation checks.
+- [2026-08-12 oneDPL stable-ordering calibration](results/2026-08-12-onedpl-stable-calibration.md): one-attempt three-arm ceiling; the candidate used 9.9% more tokens than the previous skill at unchanged quality.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
