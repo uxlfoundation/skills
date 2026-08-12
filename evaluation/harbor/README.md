@@ -198,6 +198,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDNN benchdnn incident](results/2026-08-12-onednn-benchdnn-incident.md): portable AVX2 reproduction of a maintainer-reported no-reference-memory crash, hardened with a hidden fused-convolution shape.
 - [2026-08-12 oneDAL mode selection](results/2026-08-12-onedal-mode-selection.md): hardware-agnostic batch/online/distributed decision coverage with deterministic shortcut rejection.
 - [2026-08-12 oneDAL table orientation](results/2026-08-12-onedal-table-orientation.md): real oneDAL CPU execution with a square-fixture trap and held-out rectangular parity cases.
+- [2026-08-12 oneDAL table calibration](results/2026-08-12-onedal-table-calibration.md): one-attempt three-arm ceiling; candidate token burn increased 17.8% at unchanged quality.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

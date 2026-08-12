@@ -27,7 +27,7 @@ Help an agent choose the right oneDAL path, preserve analytics semantics, and va
 ## Implementation Workflow
 
 1. Define the analytics contract: preprocessing, train/test split, algorithm parameters, model outputs, metrics, random seeds, and expected tolerances.
-2. Map input data into the right oneDAL table representation. At every ingestion boundary, name the producer's orientation and assert that table rows are observations and columns are features before training.
+2. Map input data into the right oneDAL table representation. Treat row/column orientation and dense/sparse layout as observable behavior.
 3. Choose batch, online, or distributed computation from the workload, not from assumed performance.
 4. Add a small batch reference and compare representative outputs. For online work, verify chunk coverage and finalization; for distributed work, verify partitions, rank participation, and the merged result.
 5. Benchmark only after correctness is stable. Include data size, mode, device, thread settings, conversion costs, communication, and synchronization.
@@ -35,7 +35,6 @@ Help an agent choose the right oneDAL path, preserve analytics semantics, and va
 ## Gotchas
 
 - Acceleration can disappear if table conversion or Python boundary costs dominate.
-- Square fixtures can hide a row/column swap because both orientations have the same shape; include a rectangular case and held-out metric check.
 - scikit-learn parity requires matching preprocessing, defaults, seeds, and metric definitions.
 - Online and distributed algorithms can have different numerical behavior from batch.
 - Do not assume every oneDAL algorithm has an optimized GPU path.

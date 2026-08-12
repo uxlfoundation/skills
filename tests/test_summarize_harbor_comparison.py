@@ -78,6 +78,45 @@ class HarborComparisonTests(unittest.TestCase):
         self.assertAlmostEqual(job.tokens_per_verified_success(0.9), 1100 / 3)
         self.assertAlmostEqual(job.cost_per_verified_success(0.9), 0.3)
         self.assertTrue(job.reliable)
+        self.assertTrue(job.token_usage_available)
+        self.assertEqual(job.token_usage_source, "harbor-result")
+
+    def test_recovers_tokens_from_raw_codex_events(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = result_data(1.0, trials=1)
+            stats = data["stats"]
+            assert isinstance(stats, dict)
+            stats["n_input_tokens"] = None
+            stats["n_cache_tokens"] = None
+            stats["n_output_tokens"] = None
+            stats["cost_usd"] = None
+            path = self.write_job(root, "candidate", data)
+            log = root / "candidate" / "trial-1" / "agent" / "codex.txt"
+            log.parent.mkdir(parents=True)
+            log.write_bytes(
+                b"non-json setup output\n"
+                + json.dumps(
+                    {
+                        "type": "turn.completed",
+                        "usage": {
+                            "input_tokens": 1200,
+                            "cached_input_tokens": 900,
+                            "output_tokens": 80,
+                        },
+                    }
+                ).encode("utf-8")
+                + b"\ninvalid utf-8: \x9d\n"
+            )
+            job = summary.load_job(path, "Candidate")
+
+        self.assertEqual(job.uncached_input_tokens, 300)
+        self.assertEqual(job.cached_input_tokens, 900)
+        self.assertEqual(job.output_tokens, 80)
+        self.assertEqual(job.total_tokens, 1280)
+        self.assertTrue(job.token_usage_available)
+        self.assertEqual(job.token_usage_source, "codex-event-fallback")
+        self.assertIsNone(job.cost_usd)
 
     def test_mean_metric_is_normalized_to_reward_and_ceiling_is_flagged(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

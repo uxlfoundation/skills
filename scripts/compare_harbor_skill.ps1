@@ -43,6 +43,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $temporaryRoot = $null
 $previousTelemetry = [Environment]::GetEnvironmentVariable('HARBOR_TELEMETRY', 'Process')
+$previousPythonUtf8 = [Environment]::GetEnvironmentVariable('PYTHONUTF8', 'Process')
 
 function Invoke-CheckedGit {
     param([string[]]$Arguments)
@@ -102,6 +103,9 @@ function Get-DirectoryDigest {
 
 try {
     [Environment]::SetEnvironmentVariable('HARBOR_TELEMETRY', 'off', 'Process')
+    # Harbor 0.20 reads Codex JSONL with Python's default text encoding. Force
+    # UTF-8 so native Windows runs retain trajectories and token accounting.
+    [Environment]::SetEnvironmentVariable('PYTHONUTF8', '1', 'Process')
 
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         throw 'git is required but was not found on PATH.'
@@ -168,11 +172,22 @@ try {
     }
 
     $directHarbor = Get-Command harbor -ErrorAction SilentlyContinue
+    $uvToolHarbor = $null
+    if (-not $directHarbor -and
+        [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT -and
+        $env:APPDATA) {
+        $uvToolHarbor = Join-Path $env:APPDATA 'uv\tools\harbor\Scripts\harbor.exe'
+        if (-not (Test-Path -LiteralPath $uvToolHarbor -PathType Leaf)) {
+            $uvToolHarbor = $null
+        }
+    }
     $useWsl = $false
     $harborExecutable = $null
     $repoForHarbor = $repoRoot
     if ($directHarbor) {
         $harborExecutable = $directHarbor.Source
+    } elseif ($uvToolHarbor) {
+        $harborExecutable = $uvToolHarbor
     } elseif (-not $NoWsl -and (Get-Command wsl.exe -ErrorAction SilentlyContinue)) {
         $useWsl = $true
         $harborExecutable = (& wsl.exe -d $WslDistribution -- bash -lc 'command -v harbor').Trim()
@@ -388,6 +403,7 @@ try {
     Write-Host "View jobs: $DashboardBaseUrl"
 } finally {
     [Environment]::SetEnvironmentVariable('HARBOR_TELEMETRY', $previousTelemetry, 'Process')
+    [Environment]::SetEnvironmentVariable('PYTHONUTF8', $previousPythonUtf8, 'Process')
     if ($temporaryRoot) {
         $temporaryBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
         $resolvedTemporaryRoot = [IO.Path]::GetFullPath($temporaryRoot)

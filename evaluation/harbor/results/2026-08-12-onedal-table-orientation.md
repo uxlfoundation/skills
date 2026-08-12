@@ -28,4 +28,6 @@ The verifier preserves the real oneDAL estimator, prevents modification of the p
 
 ## Interpretation and limit
 
-The task proves useful hosted-CPU coverage of table semantics and analytics parity. It does not test a project release regression, GPU behavior, or performance. Model-arm calibration is still needed to determine whether it discriminates between no-skill, previous-skill, and candidate-skill treatments.
+The task proves useful hosted-CPU coverage of table semantics and analytics parity. It does not test a project release regression, GPU behavior, or performance.
+
+The subsequent [three-arm calibration](2026-08-12-onedal-table-calibration.md) found a one-attempt ceiling: every arm earned `1.0`. The candidate used 111,033 tokens, 17.8% more than the previous skill and 48.5% more than no skill. The task is therefore retained as live smoke coverage, not as evidence of skill benefit, and its task-specific skill wording was not retained.
