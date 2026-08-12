@@ -12,7 +12,7 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 - Full triage workflow: `reproduce` -> `investigate` -> `repair` -> `verify`
 - Accepted real-world origins: `maintainer-incident`, `upstream-regression`
 - Efficiency quality gate: `verified-success` at reward 1.00
-- Primary efficiency metric: `cost-per-verified-success`
+- Primary efficiency metric: `total-tokens-per-verified-success`
 - Infrastructure failures: `exclude-and-rerun`
 - Promotion guardrails: maximum task mean regression 0.10; maximum suite mean regression 0.03
 

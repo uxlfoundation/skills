@@ -203,9 +203,10 @@ def validate_manifest(
             errors.append(
                 "policy.efficiency.verified_reward_floor must be between 0 and 1"
             )
-        if efficiency.get("primary_metric") != "cost-per-verified-success":
+        if efficiency.get("primary_metric") != "total-tokens-per-verified-success":
             errors.append(
-                "policy.efficiency.primary_metric must be 'cost-per-verified-success'"
+                "policy.efficiency.primary_metric must be "
+                "'total-tokens-per-verified-success'"
             )
         required_metrics = efficiency.get("required_metrics")
         if not isinstance(required_metrics, list) or not REQUIRED_EFFICIENCY_METRICS.issubset(

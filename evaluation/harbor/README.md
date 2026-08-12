@@ -157,6 +157,8 @@ Use `-DryRun` to inspect the commands without starting jobs. Use `-FailOnRegress
 
 Use `-VerifiedRewardFloor` when a task's deterministic success threshold differs from the portfolio default. Quality remains the gate: lower cost cannot compensate for fewer verified successes.
 
+Total token burn per verified success is the primary efficiency measure. Cost per verified success and runtime remain useful secondary measures because pricing and hardware can change independently of the skill.
+
 ## Inspect prompts and criteria
 
 The job viewer and task-definition viewer answer different questions. Run them on separate ports:

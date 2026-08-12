@@ -46,7 +46,7 @@ The portfolio targets representative failures, not every task on every device. A
 
 Promotion evidence uses matched `no-skill`, `previous-skill`, and `candidate-skill` arms with the same task revision, agent, model, attempts, timeouts, and execution environment.
 
-Quality is the gate. The primary efficiency metric is cost per verified success at the reward floor declared in `suites.json`. Every comparison records:
+Quality is the gate. The primary efficiency metric is total token burn per verified success at the reward floor declared in `suites.json`. Cost per verified success and runtime are secondary operational metrics. Every comparison records:
 
 - Uncached input tokens.
 - Cached input tokens.

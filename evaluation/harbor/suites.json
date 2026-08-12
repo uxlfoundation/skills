@@ -36,7 +36,7 @@
     "efficiency": {
       "quality_gate": "verified-success",
       "verified_reward_floor": 1.0,
-      "primary_metric": "cost-per-verified-success",
+      "primary_metric": "total-tokens-per-verified-success",
       "required_metrics": [
         "uncached-input-tokens",
         "cached-input-tokens",
