@@ -26,11 +26,12 @@ Help an agent apply oneDPL algorithms with the right execution policy, data loca
 ## Implementation Workflow
 
 1. Preserve the serial or standard-library contract first, including stability, ordering, and exception expectations.
-2. Make data location and lifetime explicit: host memory, USM, buffers, or project wrapper types.
-3. Select includes and namespaces from the current oneDPL docs.
-4. Add a small correctness test that compares against serial `std` behavior.
-5. Add device-specific tests only when a suitable SYCL device exists in CI or the user's environment.
-6. Benchmark after correctness, with data transfer and queue synchronization costs stated.
+2. Select the algorithm from that contract: parallel execution does not make an unstable algorithm stable. Use a stable algorithm when equal-key order is observable.
+3. Make data location and lifetime explicit: host memory, USM, buffers, or project wrapper types.
+4. Select includes and namespaces from the current oneDPL docs.
+5. Add a small correctness test that compares against serial `std` behavior, including duplicate keys when stability matters.
+6. Add device-specific tests only when a suitable SYCL device exists in CI or the user's environment.
+7. Benchmark after correctness, with data transfer and queue synchronization costs stated.
 
 ## Gotchas
 

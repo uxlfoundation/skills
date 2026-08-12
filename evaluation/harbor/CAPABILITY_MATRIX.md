@@ -26,7 +26,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-onemath` | 6 | 2 | 1 | 1 | 2 | 1 | 4 |
 | `uxl-onedal` | 6 | 3 | 1 | 2 | 1 | 0 | 3 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
-| `uxl-onedpl` | 6 | 1 | 0 | 1 | 2 | 0 | 5 |
+| `uxl-onedpl` | 6 | 2 | 1 | 1 | 2 | 0 | 4 |
 | `uxl-oneccl` | 6 | 3 | 1 | 2 | 2 | 0 | 3 |
 | `uxl-sycl-build-debug` | 6 | 4 | 2 | 2 | 2 | 0 | 2 |
 | `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
@@ -133,7 +133,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `onedpl-host-or-device-sort` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `algorithm-contracts`, `execution-policy-choice` |
 | `onedpl-missing-device-synchronization` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
 | `onedpl-iterator-category-failure` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `queue-data-and-iterators`, `device-result-triage` |
-| `onedpl-stable-ordering-contract` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice` |
+| `onedpl-stable-ordering-contract` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice` |
 | `onedpl-host-backend-configuration` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `execution-policy-choice`, `queue-data-and-iterators` |
 | `onedpl-transfer-inclusive-benchmark` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `algorithm-contracts`, `transfer-aware-benchmarking` |
 

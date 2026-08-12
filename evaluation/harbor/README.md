@@ -42,6 +42,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
+- `onedpl-stable-ordering-contract`: hosted-CPU executable oneDPL stable-order contract task.
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
 - `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
@@ -77,6 +78,7 @@ harbor run `
   --include-task-name onednn-framework-blocked-layout `
   --include-task-name onednn-benchdnn-no-ref-memory `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onedpl-stable-ordering-contract `
   --include-task-name onemath-deprecated-header-include `
   --include-task-name onemath-runtime-library-missing `
   --include-task-name onetbb-bounded-image-flow-graph `
@@ -100,7 +102,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 25 `
+  --expected-trials 26 `
   --reward-floor 1.0
 ```
 
@@ -199,6 +201,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDAL mode selection](results/2026-08-12-onedal-mode-selection.md): hardware-agnostic batch/online/distributed decision coverage with deterministic shortcut rejection.
 - [2026-08-12 oneDAL table orientation](results/2026-08-12-onedal-table-orientation.md): real oneDAL CPU execution with a square-fixture trap and held-out rectangular parity cases.
 - [2026-08-12 oneDAL table calibration](results/2026-08-12-onedal-table-calibration.md): one-attempt three-arm ceiling; candidate token burn increased 17.8% at unchanged quality.
+- [2026-08-12 oneDPL stable ordering](results/2026-08-12-onedpl-stable-ordering.md): real oneDPL host-policy execution with equal-key stability and permutation checks.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

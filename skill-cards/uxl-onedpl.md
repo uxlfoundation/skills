@@ -16,6 +16,7 @@ Guide agents through oneDPL algorithm migration, host versus device execution po
 - Choose host policy versus SYCL device policy.
 - Debug missing device synchronization or data lifetime issues.
 - Port standard algorithms to oneDPL with serial reference checks.
+- Preserve stable equal-key ordering by selecting a stable algorithm and testing duplicate-key fixtures.
 - State device/backend assumptions explicitly.
 
 ## Limitations

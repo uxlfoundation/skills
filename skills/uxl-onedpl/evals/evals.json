@@ -27,6 +27,15 @@
         "must_include": ["serial", "iterator", "lambda", "queue", "validation"],
         "must_not_include": ["no reference", "ignore constraints"]
       }
+    },
+    {
+      "id": "onedpl-stable-ordering",
+      "prompt": "Use $uxl-onedpl to review a host-parallel key sort when equal-key records must retain arrival order.",
+      "expected_output": "Identifies stability as an observable algorithm contract, selects a stable algorithm instead of assuming a parallel policy provides stability, and tests duplicate keys against a serial reference.",
+      "checks": {
+        "must_include": ["stability", "stable algorithm", "parallel", "duplicate", "serial"],
+        "must_not_include": ["parallel implies stable", "equal-key order does not matter"]
+      }
     }
   ]
 }
