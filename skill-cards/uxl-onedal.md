@@ -17,6 +17,7 @@ Guide agents through oneDAL native C++ versus scikit-learn acceleration choices,
 - Review distributed-mode proposals.
 - Select batch, online, or distributed computation from data arrival, memory, and launch topology.
 - Debug model quality changes after table conversion.
+- Detect orientation bugs hidden by square fixtures with rectangular-shape and metric-parity checks.
 - Require metric and preprocessing parity before performance tuning.
 
 ## Limitations
