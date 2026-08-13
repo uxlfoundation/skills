@@ -157,6 +157,8 @@ The generated report is written to `harbor-jobs/<job-prefix>-comparison.md`. It 
 
 Use `-DryRun` to inspect the commands without starting jobs. Use `-FailOnRegression` when an incomplete, errored, or lower-reward candidate should produce a failing exit code. Pass `-JobPrefix` for stable job names and `-ReportPath` when a report should be recorded outside the ignored `harbor-jobs` directory.
 
+On Windows/WSL runners, add `-GuardWslCrashDumps` for tasks that intentionally crash a Linux process while reproducing a historical failure. The opt-in guard truncates only new `%TEMP%\wsl-crashes\wsl-crash-*.dmp` files while the comparison is active; task output, exit status, Harbor artifacts, and verifier behavior remain unchanged. This prevents repeated expected crashes from exhausting the Windows host disk. Prefer updating WSL and setting `maxCrashDumpCount=0` when the runner permits an administrator-approved WSL update.
+
 Use `-VerifiedRewardFloor` when a task's deterministic success threshold differs from the portfolio default. Quality remains the gate: lower cost cannot compensate for fewer verified successes.
 
 Total token burn per verified success is the primary efficiency measure. Cost per verified success and runtime remain useful secondary measures because pricing and hardware can change independently of the skill.
