@@ -40,6 +40,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
 - `onedal-table-orientation-regression`: hosted-CPU executable oneDAL table-contract and metric-parity task.
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
+- `onednn-convolution-fusion-parity`: hosted-CPU executable post-op order and residual-destination task.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
 - `onedpl-stable-ordering-contract`: hosted-CPU executable oneDPL stable-order contract task.
@@ -76,6 +77,7 @@ harbor run `
   --include-task-name onedal-sklearn-or-native-kmeans `
   --include-task-name onedal-table-orientation-regression `
   --include-task-name onednn-framework-blocked-layout `
+  --include-task-name onednn-convolution-fusion-parity `
   --include-task-name onednn-benchdnn-no-ref-memory `
   --include-task-name onedpl-missing-device-synchronization `
   --include-task-name onedpl-stable-ordering-contract `
@@ -102,7 +104,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 26 `
+  --expected-trials 27 `
   --reward-floor 1.0
 ```
 
@@ -205,6 +207,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDAL table calibration](results/2026-08-12-onedal-table-calibration.md): one-attempt three-arm ceiling; candidate token burn increased 17.8% at unchanged quality.
 - [2026-08-12 oneDPL stable ordering](results/2026-08-12-onedpl-stable-ordering.md): real oneDPL host-policy execution with equal-key stability and permutation checks.
 - [2026-08-12 oneDPL stable-ordering calibration](results/2026-08-12-onedpl-stable-calibration.md): one-attempt three-arm ceiling; the candidate used 9.9% more tokens than the previous skill at unchanged quality.
+- [2026-08-12 oneDNN convolution fusion parity](results/2026-08-12-onednn-convolution-fusion-parity.md): real oneDNN CPU execution with fused post-op order, residual initialization, and hidden shape checks.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

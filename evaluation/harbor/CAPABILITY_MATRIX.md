@@ -22,7 +22,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 
 | Skill | Target | Implemented | Live implemented | Fixture/review implemented | Target hardware | Real end-to-end | Planned |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 6 | 2 | 1 | 1 | 1 | 1 | 4 |
+| `uxl-onednn` | 6 | 3 | 2 | 1 | 1 | 1 | 3 |
 | `uxl-onemath` | 6 | 2 | 1 | 1 | 2 | 1 | 4 |
 | `uxl-onedal` | 6 | 3 | 1 | 2 | 1 | 0 | 3 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
@@ -46,7 +46,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
-| `onednn-convolution-fusion-parity` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
+| `onednn-convolution-fusion-parity` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-extra-reorder-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
 | `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
 | `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `primitive-or-graph`, `backend-and-parity-triage` |

@@ -9,6 +9,8 @@ Use these first when answering oneDNN questions.
 - `benchdnn` common knobs: https://github.com/uxlfoundation/oneDNN/blob/main/tests/benchdnn/doc/knobs_common.md
 - `benchdnn` performance report knobs: https://github.com/uxlfoundation/oneDNN/blob/main/tests/benchdnn/doc/knobs_perf_report.md
 - oneDNN verbose mode: https://uxlfoundation.github.io/oneDNN/dev_guide_verbose.html
+- Post-ops and ordering: https://uxlfoundation.github.io/oneDNN/dev_guide_attributes_post_ops.html
+- Convolution primitive example: https://uxlfoundation.github.io/oneDNN/page_convolution_example_cpp.html
 
 ## Maintainer Incident Sources
 
