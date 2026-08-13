@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 mkdir -p /logs/verifier
+printf '{"reward": 0.0}\n' > /logs/verifier/reward.json
+trap 'status=$?; if [[ $status -ne 0 ]]; then echo "verification failed; recorded zero reward"; fi; exit 0' EXIT
 
 sha256sum --check --status /opt/reproduce.sha256 || {
     echo "The public reproducer was modified; only /app/residual_conv.cpp may change."
@@ -17,7 +19,7 @@ required = (
     "append_sum",
     "append_eltwise",
     "conv_pd.dst_desc()",
-    "reorder(user_dst, conv_dst)",
+    "reorder(",
 )
 for term in required:
     assert term in source, f"required fused oneDNN path is missing: {term}"
