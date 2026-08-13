@@ -39,6 +39,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onedal-batch-online-distributed-choice`: hosted structured computation-mode decision task.
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
 - `onedal-table-orientation-regression`: hosted-CPU executable oneDAL table-contract and metric-parity task.
+- `onedal-extra-trees-random-split`: hosted-CPU source-level task sourced from oneDAL issue #3648, with public and hidden weighted quality-regression cases.
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
 - `onednn-convolution-fusion-parity`: hosted-CPU executable post-op order and residual-destination task.
 - `onednn-extra-reorder-regression`: hosted-CPU executable constant-weight layout-cache task using oneDNN verbose evidence.
@@ -77,6 +78,7 @@ harbor run `
   --include-task-name onedal-batch-online-distributed-choice `
   --include-task-name onedal-sklearn-or-native-kmeans `
   --include-task-name onedal-table-orientation-regression `
+  --include-task-name onedal-extra-trees-random-split `
   --include-task-name onednn-framework-blocked-layout `
   --include-task-name onednn-convolution-fusion-parity `
   --include-task-name onednn-extra-reorder-regression `
