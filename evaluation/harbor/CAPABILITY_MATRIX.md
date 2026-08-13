@@ -50,7 +50,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `onednn-extra-reorder-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
 | `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
 | `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `primitive-or-graph`, `backend-and-parity-triage` |
-| `onednn-benchdnn-no-ref-memory` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-and-parity-triage`, `benchdnn-and-reorders` |
+| `onednn-benchdnn-no-ref-memory` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-and-parity-triage`, `benchdnn-and-reorders` |
 
 ## uxl-onemath (oneMath)
 
