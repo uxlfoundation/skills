@@ -45,7 +45,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onemath` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
-| `uxl-onedal` | 4 | 3 | 1 | 2 | 0 | 0 | 1 |
+| `uxl-onedal` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
 | `uxl-onedpl` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
 | `uxl-oneccl` | 3 | 3 | 1 | 1 | 1 | 0 | 0 |
@@ -113,7 +113,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `onedal-batch-online-distributed-choice` | implemented | smoke | ceiling | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | executable | target-gpu | live | unassigned | reproduce -> investigate -> repair -> verify | target-gpu | `interface-and-mode`, `quality-regression-triage` |
 | `onedal-conversion-cost-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
-| `onedal-extra-trees-random-split` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `quality-regression-triage` |
+| `onedal-extra-trees-random-split` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `quality-regression-triage` |
 
 ## uxl-onetbb (oneTBB)
 

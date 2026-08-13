@@ -33,6 +33,6 @@ The oracle installs the exact PR #3649 source repair. The independent verifier p
 
 The packaged oracle received reward `1.0`. A Harbor 0.20.0 native run completed one trial with zero exceptions and reward `1.000` in 7 minutes 18 seconds (`onedal-extra-trees-oracle-20260813-r6`). The matching unchanged baseline completed with zero exceptions and reward `0.000` (`onedal-extra-trees-baseline-20260813-r1`), confirming that the task discriminates the broken implementation from the upstream repair. The small unique-value collisions in two cases result from the diagnostic's six-decimal quantization; exact MSE is the primary correctness gate and the verifier permits at most 1% quantized collisions.
 
-## Portfolio decision
+## Initial portfolio decision
 
-The task is implemented as a `discriminating` candidate with calibration state `uncalibrated`. It is oneDAL's first task that meets the full real end-to-end standard: live reproduction, reproduce/investigate/repair/verify workflow, and maintainer-incident origin. Matched no-skill, previous-skill, and candidate-skill arms are the next gate; quality will be evaluated before token burn per verified success.
+The task entered the portfolio as a `discriminating` candidate with calibration state `uncalibrated`. It is oneDAL's first task that meets the full real end-to-end standard: live reproduction, reproduce/investigate/repair/verify workflow, and maintainer-incident origin. The subsequent matched screen is recorded in [oneDAL ExtraTrees calibration](2026-08-13-onedal-extra-trees-calibration.md); because all three arms solved it, the final classification is `smoke` / `ceiling`.
