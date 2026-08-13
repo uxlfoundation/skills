@@ -31,6 +31,27 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-sycl-build-debug` | 6 | 4 | 2 | 2 | 2 | 0 | 2 |
 | `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
 
+## Evaluator health
+
+Calibration states describe what the evaluator currently demonstrates about skill value; they do not describe project or library health. See `EVALUATOR_POLICY.md` for the evidence rules.
+
+- `headroom`: repeated matched trials show a durable skill quality advantage.
+- `ceiling`: audited arms meet the full quality bar, so this task cannot measure quality lift.
+- `no-lift`: matched evidence has quality room but shows no durable skill advantage.
+- `manual`: the task requires a manually supplied target environment or hardware.
+- `uncalibrated`: no valid matched model screen has been recorded.
+
+| Skill | Implemented | Classified | Headroom | Ceiling | No lift | Manual | Uncalibrated |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `uxl-onednn` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
+| `uxl-onemath` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
+| `uxl-onedal` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
+| `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
+| `uxl-onedpl` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
+| `uxl-oneccl` | 3 | 3 | 1 | 1 | 1 | 0 | 0 |
+| `uxl-sycl-build-debug` | 4 | 4 | 1 | 1 | 1 | 1 | 0 |
+| `uxl-performance-validation` | 4 | 4 | 0 | 3 | 1 | 0 | 0 |
+
 ## uxl-onednn (oneDNN)
 
 ### Capabilities

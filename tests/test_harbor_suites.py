@@ -106,6 +106,15 @@ class HarborSuiteManifestTests(unittest.TestCase):
         output = ROOT / "evaluation" / "harbor" / "CAPABILITY_MATRIX.md"
         self.assertEqual(output.read_text(encoding="utf-8"), RENDERER.render(self.manifest))
 
+    def test_generated_matrix_summarizes_calibration_health(self) -> None:
+        rendered = RENDERER.render(self.manifest)
+
+        self.assertIn("## Evaluator health", rendered)
+        self.assertIn(
+            "| `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |",
+            rendered,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
