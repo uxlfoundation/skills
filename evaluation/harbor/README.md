@@ -170,6 +170,12 @@ Total token burn per verified success is the primary efficiency measure. Cost pe
 The job viewer and task-definition viewer answer different questions. Run them on separate ports:
 
 ```powershell
+.\scripts\start_harbor_dashboards.ps1 -OpenBrowser
+```
+
+The launcher uses native Harbor when `-NoWsl` is supplied and otherwise uses the configured Ubuntu WSL distribution. It is safe to run again when either dashboard is already active. The equivalent direct commands are:
+
+```powershell
 harbor view harbor-jobs --jobs --port 8080
 harbor view evaluation/harbor/tasks --tasks --port 8081
 ```
