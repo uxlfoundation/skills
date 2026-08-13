@@ -173,6 +173,36 @@ class StructuredAnswerTests(unittest.TestCase):
         self.assertTrue(details["criteria"]["validation"]["reference_parity"], details)
         self.assertTrue(details["criteria"]["measurement"]["fair_benchmark"], details)
 
+    def test_oneccl_rubric_accepts_equivalent_contract_validation_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "oneccl-datatype-count-mismatch"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Every rank enters the same allreduce sequence with an identical count and
+        datatype. Count is typed elements, not a byte length. BF16 storage labeled
+        FP32 can be misinterpreted and accessed out-of-bounds. Record the oneCCL
+        compile-time and loaded runtime versions plus the selected plugin and confirm
+        the combination is supported. A deterministic four-rank vector uses fixed
+        values and waits for completion; verify every logical output element is
+        exactly the expected sum. This deliberately omits the complete performance
+        experiment matrix.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["diagnosis"]["storage_type_mismatch"], details)
+        self.assertTrue(details["criteria"]["repair_and_evidence"]["support_evidence"], details)
+        self.assertTrue(details["criteria"]["validation"]["minimal_expected_result"], details)
+        self.assertTrue(details["criteria"]["validation"]["rank_wide_parity"], details)
+        self.assertFalse(details["criteria"]["validation"]["bounded_benchmark"], details)
+
 
 if __name__ == "__main__":
     unittest.main()

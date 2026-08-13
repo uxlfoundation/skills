@@ -18,7 +18,7 @@
         ["\\bBF16\\b|\\bbfloat16\\b"],
         ["\\bfloat32\\b|\\bFP32\\b"],
         ["\\b(?:storage|datatype|type)\\b"],
-        ["\\b(?:corrupt|overrun|extent|interpret)\\w*\\b"]
+        ["\\b(?:corrupt|overrun|extent|interpret|misinterpret)\\w*\\b|\\bout[- ]of[- ]bounds?\\b"]
       ],
       "tuning_secondary": [
         ["\\b(?:affinity|workers?|transport|plugin)\\b"],
@@ -45,7 +45,7 @@
         ["\\b(?:communicator|sequence\\s+ID)\\b"]
       ],
       "support_evidence": [
-        ["\\boneCCL\\s+(?:version|build)\\b"],
+        ["\\boneCCL\\b.{0,100}\\b(?:versions?|build|commit|package|loaded\\s+(?:runtime|shared\\s+library))\\b|\\b(?:versions?|build|commit|package)\\b.{0,100}\\boneCCL\\b"],
         ["\\b(?:backend|plugin|transport)\\b"],
         ["\\b(?:support|documented|installed)\\w*\\b"]
       ],
@@ -57,8 +57,8 @@
     },
     "validation": {
       "minimal_expected_result": [
-        ["\\btwo\\s+ranks?\\b|\\b2\\s+ranks?\\b"],
-        ["\\bfixed\\b"],
+        ["\\b(?:two|four|2|4)[- ]ranks?\\b"],
+        ["\\b(?:fixed|deterministic|common|non[- ]round)\\b"],
         ["\\b(?:vector|tensor|values?)\\b"],
         ["\\b(?:expected|host\\s+reference|receive)\\w*\\b"]
       ],
@@ -68,9 +68,9 @@
         ["\\b(?:tolerance|exact)\\w*\\b"]
       ],
       "rank_wide_parity": [
-        ["\\b(?:every|all)\\s+ranks?\\b"],
-        ["\\b(?:compare|match|parity)\\w*\\b"],
-        ["\\b(?:reference|expected)\\b"]
+        ["\\b(?:every|all)\\b.{0,30}\\b(?:ranks?|outputs?|elements?)\\b"],
+        ["\\b(?:compare|match|parity|verify)\\w*\\b"],
+        ["\\b(?:reference|expected|exact(?:ly)?)\\b"]
       ],
       "bounded_benchmark": [
         ["\\brepresentative\\s+(?:tensor\\s+)?sizes?\\b"],

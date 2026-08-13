@@ -213,6 +213,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDNN convolution-fusion calibration](results/2026-08-12-onednn-convolution-fusion-calibration.md): one-attempt three-arm ceiling; current skill used 21.5% fewer tokens than the original skill but 6.5% more than no skill.
 - [2026-08-13 oneDNN benchdnn incident calibration](results/2026-08-13-onednn-benchdnn-calibration.md): three-attempt quality ceiling with 11.6% fewer tokens per verified success than no skill and 68.1% fewer than the original skill.
 - [2026-08-13 oneDAL mode-selection calibration](results/2026-08-13-onedal-mode-calibration.md): audited one-attempt quality ceiling; current skill used 44.2% fewer tokens than the original skill but 4.6% more than no skill.
+- [2026-08-13 calibration-state audit](results/2026-08-13-calibration-state-audit.md): introduces `no-lift`, hardens the oneCCL datatype rubric, and corrects four previously ambiguous task states.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

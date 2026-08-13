@@ -57,6 +57,20 @@ Quality is the gate. The primary efficiency metric is total token burn per verif
 
 Token or cost reductions do not compensate for lower verified success. Results should be compared within the same model and environment because tokenization, pricing, caching, and hardware can differ.
 
+## Calibration states
+
+The portfolio distinguishes tasks that have not been evaluated from tasks that were evaluated but did not demonstrate skill value:
+
+| State | Meaning |
+| --- | --- |
+| `uncalibrated` | No valid matched model screen has been recorded. |
+| `headroom` | Repeated matched trials show a durable quality advantage from the skill. |
+| `ceiling` | Audited arms meet the full quality bar, leaving no quality lift for this task to measure. |
+| `no-lift` | A valid matched screen or calibration has residual quality headroom but shows no durable skill advantage. |
+| `manual` | Evaluation requires a manually supplied target environment or hardware. |
+
+`no-lift` tasks remain useful as smoke coverage and negative controls. They must not be presented as evidence that a skill helps, and additional attempts should be spent only after the task or skill changes materially.
+
 ## Infrastructure failures
 
 Runner, network, provisioning, and service failures are not task failures. Exclude and rerun them unchanged, preserve their logs, and report them separately. Do not rescore infrastructure errors as zero-reward skill attempts.

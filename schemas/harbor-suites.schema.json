@@ -154,7 +154,7 @@
         "name": { "$ref": "#/$defs/name" },
         "status": { "enum": ["implemented", "planned"] },
         "role": { "enum": ["smoke", "discriminating", "hardware"] },
-        "calibration": { "enum": ["uncalibrated", "headroom", "ceiling", "manual"] },
+        "calibration": { "enum": ["uncalibrated", "headroom", "ceiling", "no-lift", "manual"] },
         "track": { "enum": ["executable", "answer-quality", "hardware"] },
         "environment": {
           "enum": [

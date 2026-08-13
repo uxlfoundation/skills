@@ -153,7 +153,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `oneccl-async-allreduce-wait` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `collective-contracts`, `api-and-collective-choice` |
 | `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
-| `oneccl-datatype-count-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
+| `oneccl-datatype-count-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-cpp-or-nccl-like-api` | planned | smoke | uncalibrated | answer-quality | hosted-container | review | not-applicable | investigate | none | `api-and-collective-choice`, `launcher-plugin-framework` |
 | `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `distributed-hang-triage` |
 | `oneccl-worker-affinity-regression` | planned | smoke | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `topology-worker-benchmarking` |
@@ -175,7 +175,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | live | not-applicable | reproduce -> verify | target-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
-| `sycl-loader-plugin-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-loader-plugin-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | hardware | target-device | live | not-applicable | reproduce -> verify | target-device | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |
 
@@ -193,8 +193,8 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 
 | Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `performance-tiny-async-gpu-claim` | implemented | smoke | uncalibrated | answer-quality | hosted-container | fixture | constructed | investigate | none | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
-| `performance-benchmark-report-repair` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
+| `performance-tiny-async-gpu-claim` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
+| `performance-benchmark-report-repair` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
 | `performance-floating-reduction-tolerance` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `correctness-gated-measurement`, `invalid-claim-triage` |
 | `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
 | `performance-cgroup-concurrency-quota` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |
