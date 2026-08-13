@@ -43,7 +43,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 
 | Skill | Implemented | Classified | Headroom | Ceiling | No lift | Manual | Uncalibrated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 4 | 3 | 1 | 2 | 0 | 0 | 1 |
+| `uxl-onednn` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onemath` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
 | `uxl-onedal` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
@@ -68,7 +68,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
 | `onednn-convolution-fusion-parity` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
-| `onednn-extra-reorder-regression` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
+| `onednn-extra-reorder-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
 | `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
 | `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-benchdnn-no-ref-memory` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-and-parity-triage`, `benchdnn-and-reorders` |

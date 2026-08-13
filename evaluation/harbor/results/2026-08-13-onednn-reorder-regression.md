@@ -25,9 +25,9 @@ The hidden verifier runs channel counts 16, 32, and 64 with varied rectangular s
 
 This is a `constructed` live task, not a maintainer incident. It proves that an agent can repair and verify redundant oneDNN work on a generic hosted CPU. It does not claim a speedup, a current-version performance characteristic, or behavior on every backend or device. The measured fact is the removed primitive execution at unchanged correctness.
 
-## Next gate
+## Calibration
 
-The task remains `uncalibrated`. Run matched no-skill, previous-skill, and current-skill arms with token, cost, and runtime accounting. Advance to three attempts only if the audited one-attempt screen shows quality headroom; otherwise retain it as smoke/ceiling coverage.
+The matched [oneDNN reorder calibration](2026-08-13-onednn-reorder-calibration.md) reached full reward in all three arms. The task is therefore classified as `ceiling` and retained as smoke coverage rather than evidence that the current skill improves quality or token efficiency.
 
 ## Reproduction
 
