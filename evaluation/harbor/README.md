@@ -208,6 +208,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-12 oneDPL stable ordering](results/2026-08-12-onedpl-stable-ordering.md): real oneDPL host-policy execution with equal-key stability and permutation checks.
 - [2026-08-12 oneDPL stable-ordering calibration](results/2026-08-12-onedpl-stable-calibration.md): one-attempt three-arm ceiling; the candidate used 9.9% more tokens than the previous skill at unchanged quality.
 - [2026-08-12 oneDNN convolution fusion parity](results/2026-08-12-onednn-convolution-fusion-parity.md): real oneDNN CPU execution with fused post-op order, residual initialization, and hidden shape checks.
+- [2026-08-12 oneDNN convolution-fusion calibration](results/2026-08-12-onednn-convolution-fusion-calibration.md): one-attempt three-arm ceiling; current skill used 21.5% fewer tokens than the original skill but 6.5% more than no skill.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

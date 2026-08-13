@@ -46,7 +46,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
-| `onednn-convolution-fusion-parity` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
+| `onednn-convolution-fusion-parity` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-extra-reorder-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
 | `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
 | `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `primitive-or-graph`, `backend-and-parity-triage` |

@@ -27,4 +27,4 @@ This is a constructed regression, not a maintainer incident.
 
 ## Interpretation and limit
 
-The task exercises reproduce, investigate, repair, and verify with real oneDNN on a free hosted CPU. It does not establish current-version behavior, a historical project regression, device support, or performance. A matched model calibration is still required to determine whether it has skill-discrimination headroom.
+The task exercises reproduce, investigate, repair, and verify with real oneDNN on a free hosted CPU. It does not establish current-version behavior, a historical project regression, device support, or performance. A matched [three-arm calibration](2026-08-12-onednn-convolution-fusion-calibration.md) found a one-attempt quality ceiling, so the task is retained as smoke coverage rather than evidence of skill discrimination.
