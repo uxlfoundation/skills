@@ -138,6 +138,41 @@ class StructuredAnswerTests(unittest.TestCase):
             details,
         )
 
+    def test_onedal_mode_rubric_accepts_equivalent_parity_and_benchmark_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onedal-batch-online-distributed-choice"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Retain batch for the complete dense table on one process and one host.
+        Online is justified for streamed chunks with partial computation and one
+        finalization; distributed execution requires row partitions, ranks, a
+        communicator, collectives, and a supported CPU or GPU interface and version.
+        Record rows, features, dtype, layout, memory size, launcher, and network
+        topology. Freeze preprocessing, feature order, dtype, covariance definition,
+        and requested outputs. Compare online and merged distributed covariance
+        results with an independently checked reference and full-data batch result
+        using numerical tolerances. Prove chunk boundaries and sizes cover every row
+        without missing or duplicate rows, and validate partial state plus the final
+        result. Prove partitions are disjoint, handle rank failure, and verify the
+        collective reduction. Benchmark representative immutable inputs and the same
+        allocated resources. Use randomized repetitions and report median, tail, and
+        variance. Measure end-to-end table construction and conversion, communication,
+        network collectives, synchronization, merge, and finalize costs. Keep batch
+        unless measured evidence shows a correctness-preserving constraint or win.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["validation"]["reference_parity"], details)
+        self.assertTrue(details["criteria"]["measurement"]["fair_benchmark"], details)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -44,8 +44,8 @@
     },
     "validation": {
       "reference_parity": [
-        ["\\b(?:batch\\s+reference|reference\\s+batch|baseline)\\b"],
-        ["\\b(?:same|identical)\\s+(?:input|data|preprocess|parameters?)\\b"],
+        ["\\b(?:batch.{0,60}\\breference|reference.{0,60}\\bbatch|(?:independent(?:ly)?|trusted).{0,60}\\breference|baseline)\\b"],
+        ["\\b(?:same|identical|immutable|fixed|freeze(?:s|d)?|preserve(?:s|d)?|match(?:es|ed)?)\\b.{0,120}\\b(?:inputs?|data(?:\\s*set)?s?|preprocess\\w*|parameters?|dtype|data\\s+type|feature\\s+order|covariance\\s+definition|requested\\s+outputs?)\\b"],
         ["\\b(?:covariance|result|output)\\b"],
         ["\\b(?:tolerance|metric|numerical)\\b"]
       ],
@@ -67,15 +67,15 @@
     "measurement": {
       "fair_benchmark": [
         ["\\brepresentative\\b"],
-        ["\\b(?:same|fixed)\\s+(?:data|input|hardware|thread|device)\\b"],
-        ["\\b(?:warm[- ]?up|iterations?|dispersion)\\b"],
+        ["\\b(?:same|fixed|immutable|identical)\\b.{0,80}\\b(?:data(?:\\s*set)?s?|inputs?|hardware|resources?|threads?|devices?)\\b"],
+        ["\\b(?:warm[- ]?ups?|iterations?|repetitions?|trials?|dispersion|variance|tail)\\b"],
         ["\\bend[- ]to[- ]end\\b"],
         ["\\b(?:conversion|table\\s+construction)\\b"],
         ["\\b(?:communication|network|collective)\\b"],
-        ["\\b(?:synchronization|merge|finalize)\\b"]
+        ["\\b(?:synchronization|merge|finalize|finalization)\\b"]
       ],
       "bounded_recommendation": [
-        ["\\b(?:keep|retain|start\\s+with)\\s+(?:the\\s+)?batch\\b"],
+        ["\\b(?:keep|retain|start\\s+with)\\s+(?:(?:the|dense|current|production)\\s+){0,2}batch\\b"],
         ["\\b(?:only\\s+if|unless|until)\\b"],
         ["\\b(?:evidence|measured|benchmark|constraint)\\b"],
         ["\\b(?:correctness|parity|tolerance)\\b"]
