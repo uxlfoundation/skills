@@ -89,7 +89,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onedal-sklearn-or-native-kmeans` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-table-orientation-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
-| `onedal-batch-online-distributed-choice` | implemented | discriminating | ceiling | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
+| `onedal-batch-online-distributed-choice` | implemented | smoke | ceiling | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | executable | target-gpu | live | unassigned | reproduce -> investigate -> repair -> verify | target-gpu | `interface-and-mode`, `quality-regression-triage` |
 | `onedal-conversion-cost-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
 | `onedal-train-infer-metric-parity` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `conversion-aware-benchmarking` |
@@ -114,7 +114,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `onetbb-nested-thread-pool-arena` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
 | `onetbb-cancellation-exception-propagation` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `runtime-composition` |
 | `onetbb-grainsize-affinity-regression` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `scheduler-triage`, `grain-affinity-benchmarking` |
-| `onetbb-join-node-ordering` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection`, `scheduler-triage` |
+| `onetbb-join-node-ordering` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection`, `scheduler-triage` |
 
 ## uxl-onedpl (oneDPL)
 

@@ -30,7 +30,7 @@ The task-local rubric now accepts these equivalent formulations while retaining 
 
 ## Classification and next gate
 
-Classify the task as `ceiling`. Retain it as hardware-agnostic review coverage for choosing batch, online, or distributed computation and demanding parity and end-to-end measurement evidence. Do not use it as evidence that the current skill is better than no skill.
+Classify the task as `ceiling` and reclassify its portfolio role from `discriminating` to `smoke`. Retain it as hardware-agnostic review coverage for choosing batch, online, or distributed computation and demanding parity and end-to-end measurement evidence. Do not use it as evidence that the current skill is better than no skill.
 
 The next useful oneDAL investment is a harder task with independently phrased evidence or a live workflow where the model has room to fail. A future promotion claim should combine quality and token efficiency across multiple tasks rather than extrapolate from this ceiling screen.
 
