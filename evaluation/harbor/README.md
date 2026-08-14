@@ -244,6 +244,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-14 oneDAL conversion-cost calibration](results/2026-08-14-onedal-conversion-calibration.md): one-attempt three-arm quality ceiling; the current skill used 43.3% more tokens than no skill.
 - [2026-08-14 hosted-toolchain tier audit](results/2026-08-14-toolchain-tier-audit.md): separates the two remaining SYCL/compiler-dependent jobs from lightweight free-runner and target-hardware tiers.
 - [2026-08-14 hosted-toolchain image selection](results/2026-08-14-toolchain-image-selection.md): selects a pinned compiler-only Native CPU bootstrap and records the validation gate without pulling a multi-gigabyte toolkit locally.
+- [2026-08-14 SYCL compile/link task design](results/2026-08-14-sycl-toolchain-task-design.md): specifies the first executable toolchain-tier failure, protected verification contract, and promotion sequence.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
