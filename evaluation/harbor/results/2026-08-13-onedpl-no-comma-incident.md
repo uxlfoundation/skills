@@ -20,9 +20,9 @@ The public reproducer exercises `oneapi::dpl::transform` with the host `par` pol
 
 ## Portfolio effect and next gate
 
-The portfolio now has 34 of 49 tasks implemented, and oneDPL has four of six. This task counts as real maintainer-incident reproduce/investigate/repair/verify coverage and enters the matched model screen as `discriminating` / `uncalibrated`.
+The portfolio now has 34 of 49 tasks implemented, and oneDPL has four of six. This task counts as real maintainer-incident reproduce/investigate/repair/verify coverage.
 
-Run no-skill, original-skill, and current-skill attempts next. If every arm reaches reward `1.0`, reclassify it as `smoke` / `ceiling`; otherwise use three-attempt confirmation before retaining a quality-lift claim.
+The [matched calibration](2026-08-14-onedpl-no-comma-calibration.md) found a three-arm quality ceiling, so the task is classified `smoke` / `ceiling` and retained as durable regression coverage.
 
 Harbor jobs:
 
