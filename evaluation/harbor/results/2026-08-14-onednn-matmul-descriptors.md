@@ -22,7 +22,7 @@ The public case uses asymmetric dimensions and compares every result element wit
 
 The portfolio now has 35 of 49 tasks implemented, and oneDNN has five of six. All generic-CPU oneDNN tasks are implemented; the sole remaining oneDNN slot intentionally requires a target device for an unsupported-backend workflow.
 
-This task enters calibration as `smoke` / `uncalibrated`. Run the one-attempt no-skill, original-skill, and current-skill screen next. Retain it as regression coverage even if every arm reaches the quality ceiling; use harder answer-quality or real-incident tasks for skill-lift claims.
+The [matched calibration](2026-08-14-onednn-matmul-calibration.md) found a three-arm quality ceiling, so the task is classified `smoke` / `ceiling` and retained strictly as regression coverage. Harder answer-quality or real-incident tasks remain the basis for skill-lift claims.
 
 Harbor jobs:
 

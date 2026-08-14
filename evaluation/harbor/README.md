@@ -240,6 +240,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
 - [2026-08-14 oneDNN matmul descriptor task](results/2026-08-14-onednn-matmul-descriptors.md): live generic-CPU parity task for framework-packed batched weights and explicit logical strides.
+- [2026-08-14 oneDNN matmul descriptor calibration](results/2026-08-14-onednn-matmul-calibration.md): one-attempt three-arm quality ceiling; the current skill used 50.7% more tokens than no skill.
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 - [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneDPL overloaded-comma iterator incident](results/2026-08-13-onedpl-no-comma-incident.md): live hosted-CPU reproduction and accepted upstream repair for oneDPL issue #2342.
