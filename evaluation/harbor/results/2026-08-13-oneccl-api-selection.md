@@ -33,4 +33,6 @@ The oracle received full credit in decision, support-evidence, correctness/rollo
 
 ## Scope and initial decision
 
-This is hardware-independent fixture/review evidence. It evaluates API selection, release verification, interoperability boundaries, and validation planning; it does not execute oneCCL collectives and does not count as real end-to-end maintainer-incident triage. The task enters calibration as `discriminating` / `uncalibrated` so the matched model screen can determine whether the current skill improves answer quality or efficiency.
+This is hardware-independent fixture/review evidence. It evaluates API selection, release verification, interoperability boundaries, and validation planning; it does not execute oneCCL collectives and does not count as real end-to-end maintainer-incident triage.
+
+The [matched calibration](2026-08-13-oneccl-api-calibration.md) confirmed residual quality headroom and a repeatable current-skill advantage, so the task is classified `discriminating` / `headroom`.
