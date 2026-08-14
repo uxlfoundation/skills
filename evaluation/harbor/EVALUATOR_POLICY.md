@@ -25,7 +25,7 @@ Every task declares its `reproduction`, `origin`, `workflow`, `hardware`, and `e
 | `origin` | `maintainer-incident`, `upstream-regression`, `constructed`, `unassigned`, `not-applicable` | Where the task scenario came from. |
 | `workflow` | `reproduce`, `investigate`, `repair`, `verify` | Which stages the task actually exercises. |
 | `hardware` | `none`, `generic-cpu`, `target-cpu`, `target-gpu`, `target-device`, `target-distributed` | The minimum hardware class needed for a valid run. |
-| `environment` | Hosted, manual, or target environment | Where Harbor must dispatch the task. |
+| `environment` | Hosted, hosted-toolchain, manual, or target environment | Where Harbor must dispatch the task. `hosted-toolchain` uses generic hosted CPU hardware but requires an opt-in heavyweight compiler/backend image. |
 
 A task receives real end-to-end triage credit only when it:
 
@@ -39,6 +39,8 @@ Fixture and review tasks remain useful for reasoning, API selection, negative co
 ## Hardware policy
 
 Use free hosted runners when they can reproduce the failure faithfully. Use target hardware when the failure depends on a device, backend, topology, driver, instruction set, or other property that the hosted runner does not provide.
+
+`hosted-toolchain` is an operational tier, not a hardware claim. It is for tasks that can run on generic hosted CPU hardware but require a pinned compiler, runtime, or backend stack that is too large or slow for the lightweight default suite. These tasks should run in opt-in or scheduled CI and remain separate from target-device evidence.
 
 The portfolio targets representative failures, not every task on every device. A hardware-specific task must identify the required hardware before implementation and must record the actual environment in its Harbor results. Skills do not need separate target-specific variants unless a future maintainer requirement demonstrates that the guidance itself must differ.
 

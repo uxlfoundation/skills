@@ -161,6 +161,7 @@
             "hosted-cpu",
             "hosted-container",
             "hosted-distributed",
+            "hosted-toolchain",
             "manual-gpu",
             "target-cpu",
             "target-gpu",

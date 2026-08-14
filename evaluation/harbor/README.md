@@ -18,6 +18,8 @@ Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before convert
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
+The `hosted-toolchain` environment identifies tasks that use generic hosted CPU hardware but require an opt-in heavyweight compiler/runtime/backend image. It prevents SYCL provisioning cost from being confused with target-hardware dependence or included in the lightweight default smoke suite.
+
 Answer-quality fixtures test interpretation and reasoning but do not receive live-triage credit. A debugging capability must have planned coverage from a task that reproduces live and exercises reproduce, investigate, repair, and verify. Implemented real end-to-end credit additionally requires a maintainer incident or upstream regression as the task origin.
 
 Validate and regenerate the portfolio with:
@@ -240,6 +242,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDAL ExtraTrees calibration](results/2026-08-13-onedal-extra-trees-calibration.md): one-attempt three-arm quality ceiling; the current skill used 7.0% fewer tokens than no skill and 9.9% fewer than the original skill.
 - [2026-08-14 oneDAL conversion-cost benchmark](results/2026-08-14-onedal-conversion-cost.md): live oneDAL fit/predict task with deterministic conversion, compute, and end-to-end timing boundaries.
 - [2026-08-14 oneDAL conversion-cost calibration](results/2026-08-14-onedal-conversion-calibration.md): one-attempt three-arm quality ceiling; the current skill used 43.3% more tokens than no skill.
+- [2026-08-14 hosted-toolchain tier audit](results/2026-08-14-toolchain-tier-audit.md): separates the two remaining SYCL/compiler-dependent jobs from lightweight free-runner and target-hardware tiers.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.

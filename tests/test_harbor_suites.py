@@ -102,6 +102,19 @@ class HarborSuiteManifestTests(unittest.TestCase):
             any("requires hardware 'target-device'" in error for error in errors)
         )
 
+    def test_hosted_toolchain_uses_generic_cpu_hardware(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        task = manifest["suites"][1]["tasks"][5]
+        self.assertEqual(task["environment"], "hosted-toolchain")
+        self.assertEqual(task["hardware"], "generic-cpu")
+        self.assertEqual(VALIDATOR.validate_manifest(manifest), [])
+
+        task["hardware"] = "target-device"
+        errors = VALIDATOR.validate_manifest(manifest)
+        self.assertTrue(
+            any("requires hardware 'generic-cpu'" in error for error in errors)
+        )
+
     def test_generated_matrix_matches_manifest(self) -> None:
         output = ROOT / "evaluation" / "harbor" / "CAPABILITY_MATRIX.md"
         self.assertEqual(output.read_text(encoding="utf-8"), RENDERER.render(self.manifest))

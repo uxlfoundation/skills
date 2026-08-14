@@ -92,7 +92,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `onemath-deprecated-header-include` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-build-and-link` |
 | `onemath-rng-device-event-chain` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `math-contracts`, `domain-and-dispatch`, `runtime-backend-triage` |
 | `onemath-third-party-backend-wrapper` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `backend-build-and-link`, `runtime-backend-triage` |
-| `onemath-dispatch-overhead-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |
+| `onemath-dispatch-overhead-benchmark` | planned | smoke | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |
 
 ## uxl-onedal (oneDAL)
 
@@ -195,7 +195,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | live | not-applicable | reproduce -> verify | target-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
+| `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
 | `sycl-loader-plugin-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | hardware | target-device | live | not-applicable | reproduce -> verify | target-device | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |
