@@ -34,4 +34,4 @@ Harbor 0.20.0 completed both evaluator-control trials with zero exceptions:
 | Exact upstream repair | `onedpl-move-only-oracle-20260813-r1` | 1.000 | 40 s |
 | Unchanged pre-fix source | `onedpl-move-only-baseline-20260813-r1` | 0.000 | 23 s |
 
-This establishes live reproduce/investigate/repair/verify coverage for a real maintainer incident on hardware available to ordinary hosted runners. The task enters calibration as `discriminating` / `uncalibrated`; a matched no-skill, previous-skill, and candidate-skill comparison will determine its final role and measure total token burn per verified success.
+This establishes live reproduce/investigate/repair/verify coverage for a real maintainer incident on hardware available to ordinary hosted runners. The subsequent [matched calibration](2026-08-13-onedpl-move-only-calibration.md) found a quality ceiling, so the task's final classification is `smoke` / `ceiling`.

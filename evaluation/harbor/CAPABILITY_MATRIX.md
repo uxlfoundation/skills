@@ -47,7 +47,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `uxl-onemath` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
 | `uxl-onedal` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
-| `uxl-onedpl` | 3 | 2 | 1 | 1 | 0 | 0 | 1 |
+| `uxl-onedpl` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
 | `uxl-oneccl` | 3 | 3 | 1 | 1 | 1 | 0 | 0 |
 | `uxl-sycl-build-debug` | 4 | 4 | 1 | 1 | 1 | 1 | 0 |
 | `uxl-performance-validation` | 4 | 4 | 0 | 3 | 1 | 0 | 0 |
@@ -155,7 +155,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `onedpl-missing-device-synchronization` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
 | `onedpl-iterator-category-failure` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `queue-data-and-iterators`, `device-result-triage` |
 | `onedpl-stable-ordering-contract` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice` |
-| `onedpl-move-only-numeric-accumulator` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice`, `queue-data-and-iterators` |
+| `onedpl-move-only-numeric-accumulator` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice`, `queue-data-and-iterators` |
 | `onedpl-transfer-inclusive-benchmark` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `algorithm-contracts`, `transfer-aware-benchmarking` |
 
 ## uxl-oneccl (oneCCL)

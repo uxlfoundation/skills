@@ -232,6 +232,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
+- [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
