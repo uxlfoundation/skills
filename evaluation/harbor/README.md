@@ -36,6 +36,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `oneccl-datatype-count-mismatch`: hosted structured collective-contract task.
 - `oneccl-async-allreduce-wait`: hosted-CPU executable async-completion and buffer-lifetime task.
 - `oneccl-divergent-collective-sequence`: hosted structured collective-hang task.
+- `oneccl-cpp-or-nccl-like-api`: hosted structured, version-aware C++ versus NCCL-like C API selection and interoperability task.
 - `onedal-batch-online-distributed-choice`: hosted structured computation-mode decision task.
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
 - `onedal-table-orientation-regression`: hosted-CPU executable oneDAL table-contract and metric-parity task.
@@ -75,6 +76,7 @@ harbor run `
   --path evaluation/harbor/tasks `
   --agent oracle `
   --include-task-name oneccl-async-allreduce-wait `
+  --include-task-name oneccl-cpp-or-nccl-like-api `
   --include-task-name oneccl-datatype-count-mismatch `
   --include-task-name oneccl-divergent-collective-sequence `
   --include-task-name onedal-batch-online-distributed-choice `
@@ -112,7 +114,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 31 `
+  --expected-trials 32 `
   --reward-floor 1.0
 ```
 
@@ -238,6 +240,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneMath packed/band storage incident](results/2026-08-13-onemath-packed-band-storage-incident.md): live source-fixture reproduction and accepted upstream repair for triangular packed and banded BLAS storage.
 - [2026-08-13 oneMath packed/band storage calibration](results/2026-08-13-onemath-packed-band-storage-calibration.md): one-attempt three-arm quality ceiling; the current skill used 131.4% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneCCL incident sourcing](results/2026-08-13-oneccl-incident-sourcing.md): reserves a verified Level Zero zero-count `alltoallv` incident for target-GPU execution and rejects candidates without accepted repair boundaries.
+- [2026-08-13 oneCCL API selection](results/2026-08-13-oneccl-api-selection.md): structured, version-aware C++ versus NCCL-like C API choice with explicit interoperability and lifecycle boundaries.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

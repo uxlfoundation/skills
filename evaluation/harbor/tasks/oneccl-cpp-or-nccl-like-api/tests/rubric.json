@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 700,
+  "groups": {
+    "decision": {
+      "retain_cpp_service": [
+        ["\\b(?:keep|retain|continue)\\b"],
+        ["\\bC\\+\\+\\s+API\\b"],
+        ["\\b(?:existing|current)\\s+(?:service|application|code)\\b"],
+        ["\\b(?:communicator|stream|event|KVS)\\b"]
+      ],
+      "bounded_c_adapter": [
+        ["\\b(?:C|NCCL[- ]like)\\s+API\\b"],
+        ["\\b(?:pure[- ]C|FFI|interoperability|plugin)\\b"],
+        ["\\b(?:adapter|boundary|wrapper)\\b"],
+        ["\\b(?:supported|documented|available|version[- ]gated)\\b"]
+      ],
+      "no_nccl_equivalence": [
+        ["\\bNCCL\\b"],
+        ["\\b(?:not|do not|cannot)\\b"],
+        ["\\b(?:source|binary|ABI|behavior)\\w*\\b"],
+        ["\\b(?:identical|compatible|equivalent|compatibility)\\b"]
+      ],
+      "single_lifecycle_owner": [
+        ["\\b(?:own|ownership|lifecycle)\\w*\\b"],
+        ["(?:C and C\\+\\+|C/C\\+\\+|two APIs?)"],
+        ["\\b(?:do not|not|avoid)\\b"],
+        ["\\b(?:mix|cast|share|double|independent)\\w*\\b"]
+      ]
+    },
+    "support_evidence": {
+      "installed_release_surface": [
+        ["\\b(?:installed|production|deployed)\\b"],
+        ["\\b(?:release|version|package|build)\\b"],
+        ["oneapi/ccl\\.hpp"],
+        ["oneapi/ccl\\.h"],
+        ["\\b(?:docs|documentation|examples?)\\b"]
+      ],
+      "symbol_and_loader_proof": [
+        ["\\b(?:nm|readelf|symbols?)\\b"],
+        ["\\b(?:ldd|loaded|loader|runtime library)\\b"],
+        ["\\b(?:include|library|link)\\s+(?:path|flags?)\\b|\\binclude directory\\b"],
+        ["\\b(?:libccl|oneCCL)\\b"]
+      ],
+      "failure_phase_classification": [
+        ["\\bmissing declarations?\\b|\\bcompile"],
+        ["\\bundefined (?:reference|symbol)\\b|\\blink"],
+        ["\\bloader|runtime library|ABI"],
+        ["\\bcollective|rank|communicator"],
+        ["\\b(?:classify|distinguish|separate|mismatch|problem)\\w*\\b"]
+      ],
+      "rank_runtime_record": [
+        ["\\b(?:per[- ]rank|rank[- ]prefixed)\\b"],
+        ["\\b(?:global|local)\\s+rank\\b|\\brank mapping\\b"],
+        ["\\b(?:plugin|transport|launcher)\\b"],
+        ["\\b(?:datatype|count|reduction|root)\\b"],
+        ["\\b(?:library|version|API)\\b"]
+      ]
+    },
+    "correctness_and_rollout": {
+      "collective_contract": [
+        ["\\b(?:every|all)\\s+ranks?\\b"],
+        ["\\bsame collective sequence\\b|\\bsame order\\b"],
+        ["\\bcount\\b"],
+        ["\\bdatatype\\b"],
+        ["\\b(?:reduction|root|buffers?)\\b"]
+      ],
+      "async_completion": [
+        ["\\b(?:event|request|asynchronous|async)\\b"],
+        ["\\b(?:wait|dependency|completion)\\w*\\b"],
+        ["\\b(?:read|reuse|free|consume)\\w*\\b"],
+        ["\\b(?:buffer|destination|result)\\b"]
+      ],
+      "two_api_smokes": [
+        ["\\btwo[- ]rank\\b|\\b2[- ]rank\\b"],
+        ["C\\+\\+"],
+        ["\\bpure[- ]C\\b|\\bC (?:test|program|path)\\b"],
+        ["\\b(?:fixed|deterministic)\\s+(?:vectors?|input)\\b"],
+        ["\\b(?:expected|receive|host reference)\\w*\\b"]
+      ],
+      "feature_gate_and_rollout": [
+        ["\\b(?:compile[- ]time|configure|feature)\\s+(?:test|check|gate)\\b"],
+        ["\\b(?:older|supported)\\s+(?:image|release|version)\\b"],
+        ["\\b(?:CI|feature flag|rollout)\\b"],
+        ["\\b(?:parity|reference)\\b"]
+      ],
+      "bounded_benchmark": [
+        ["\\bonly after\\s+correctness\\b|\\bafter correctness\\b"],
+        ["\\b(?:representative sizes?|rank counts?|topology)\\b"],
+        ["\\b(?:warmup|repeated|iterations?)\\b"],
+        ["\\b(?:per[- ]rank|minimum|maximum|latency)\\b"],
+        ["\\bbound\\w*\\b.{0,80}\\bclaim\\b|\\bclaim\\b.{0,80}\\btested\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\balways\\s+use\\s+(?:the\\s+)?C\\s+API\\b",
+    "\\bheaders?\\s+on\\s+(?:main|GitHub).{0,50}\\bprove\\w*\\s+(?:it\\s+is\\s+)?installed\\b",
+    "\\b(?:safe|fine)\\s+to\\s+(?:mix|cast|share).{0,40}\\b(?:C|C\\+\\+)\\b",
+    "\\bno\\s+(?:wait|completion)\\s+(?:is\\s+)?needed\\b",
+    "\\b(?:binary|ABI)\\s+compatible\\s+with\\s+NCCL\\b"
+  ]
+}
