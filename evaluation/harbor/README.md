@@ -236,6 +236,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 - [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneMath packed/band storage incident](results/2026-08-13-onemath-packed-band-storage-incident.md): live source-fixture reproduction and accepted upstream repair for triangular packed and banded BLAS storage.
+- [2026-08-13 oneMath packed/band storage calibration](results/2026-08-13-onemath-packed-band-storage-calibration.md): one-attempt three-arm quality ceiling; the current skill used 131.4% more tokens than no skill at unchanged quality.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

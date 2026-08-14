@@ -36,4 +36,4 @@ Harbor 0.20.0 reproduced that boundary with zero exceptions:
 
 ## Scope and initial decision
 
-This is live reproduce/investigate/repair/verify coverage for a real oneMath maintainer repair on a generic hosted CPU. It tests BLAS storage-contract and known-answer fixture reasoning; it does not execute a SYCL backend, qualify target hardware, or make a performance claim. The task enters the portfolio as `discriminating` / `uncalibrated` pending the matched skill comparison.
+This is live reproduce/investigate/repair/verify coverage for a real oneMath maintainer repair on a generic hosted CPU. It tests BLAS storage-contract and known-answer fixture reasoning; it does not execute a SYCL backend, qualify target hardware, or make a performance claim. The subsequent [matched calibration](2026-08-13-onemath-packed-band-storage-calibration.md) found a quality ceiling, so the task's final classification is `smoke` / `ceiling`.
