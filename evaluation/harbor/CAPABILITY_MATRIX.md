@@ -24,7 +24,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 6 | 5 | 4 | 1 | 1 | 1 | 1 |
 | `uxl-onemath` | 6 | 3 | 2 | 1 | 2 | 2 | 3 |
-| `uxl-onedal` | 6 | 4 | 2 | 2 | 1 | 1 | 2 |
+| `uxl-onedal` | 6 | 5 | 3 | 2 | 1 | 1 | 1 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 4 | 3 | 1 | 2 | 2 | 2 |
 | `uxl-oneccl` | 6 | 4 | 1 | 3 | 2 | 0 | 2 |
@@ -45,7 +45,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 5 | 5 | 1 | 4 | 0 | 0 | 0 |
 | `uxl-onemath` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
-| `uxl-onedal` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
+| `uxl-onedal` | 5 | 4 | 1 | 3 | 0 | 0 | 1 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
 | `uxl-onedpl` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-oneccl` | 4 | 4 | 2 | 1 | 1 | 0 | 0 |
@@ -112,7 +112,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `onedal-table-orientation-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
 | `onedal-batch-online-distributed-choice` | implemented | smoke | ceiling | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
 | `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | executable | target-gpu | live | unassigned | reproduce -> investigate -> repair -> verify | target-gpu | `interface-and-mode`, `quality-regression-triage` |
-| `onedal-conversion-cost-benchmark` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
+| `onedal-conversion-cost-benchmark` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
 | `onedal-extra-trees-random-split` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `quality-regression-triage` |
 
 ## uxl-onetbb (oneTBB)
