@@ -46,6 +46,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onednn-extra-reorder-regression`: hosted-CPU executable constant-weight layout-cache task using oneDNN verbose evidence.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
+- `onedpl-iterator-category-failure`: hosted-CPU source-repair task sourced from oneDPL issue #2342, covering valid iterators with overloaded comma operators across algorithm families.
 - `onedpl-move-only-numeric-accumulator`: hosted-CPU source-repair task sourced from oneDPL issue #1955, covering move-only accumulators across parallel numeric backends.
 - `onedpl-stable-ordering-contract`: hosted-CPU executable oneDPL stable-order contract task.
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
@@ -88,6 +89,7 @@ harbor run `
   --include-task-name onednn-extra-reorder-regression `
   --include-task-name onednn-benchdnn-no-ref-memory `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onedpl-iterator-category-failure `
   --include-task-name onedpl-move-only-numeric-accumulator `
   --include-task-name onedpl-stable-ordering-contract `
   --include-task-name onemath-deprecated-header-include `
@@ -114,7 +116,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 32 `
+  --expected-trials 33 `
   --reward-floor 1.0
 ```
 
@@ -237,6 +239,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 - [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
+- [2026-08-13 oneDPL overloaded-comma iterator incident](results/2026-08-13-onedpl-no-comma-incident.md): live hosted-CPU reproduction and accepted upstream repair for oneDPL issue #2342.
 - [2026-08-13 oneMath packed/band storage incident](results/2026-08-13-onemath-packed-band-storage-incident.md): live source-fixture reproduction and accepted upstream repair for triangular packed and banded BLAS storage.
 - [2026-08-13 oneMath packed/band storage calibration](results/2026-08-13-onemath-packed-band-storage-calibration.md): one-attempt three-arm quality ceiling; the current skill used 131.4% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneCCL incident sourcing](results/2026-08-13-oneccl-incident-sourcing.md): reserves a verified Level Zero zero-count `alltoallv` incident for target-GPU execution and rejects candidates without accepted repair boundaries.
