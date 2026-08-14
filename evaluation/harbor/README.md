@@ -45,6 +45,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onednn-extra-reorder-regression`: hosted-CPU executable constant-weight layout-cache task using oneDNN verbose evidence.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
+- `onedpl-move-only-numeric-accumulator`: hosted-CPU source-repair task sourced from oneDPL issue #1955, covering move-only accumulators across parallel numeric backends.
 - `onedpl-stable-ordering-contract`: hosted-CPU executable oneDPL stable-order contract task.
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
 - `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
@@ -84,6 +85,7 @@ harbor run `
   --include-task-name onednn-extra-reorder-regression `
   --include-task-name onednn-benchdnn-no-ref-memory `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onedpl-move-only-numeric-accumulator `
   --include-task-name onedpl-stable-ordering-contract `
   --include-task-name onemath-deprecated-header-include `
   --include-task-name onemath-runtime-library-missing `
@@ -108,7 +110,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 28 `
+  --expected-trials 30 `
   --reward-floor 1.0
 ```
 
@@ -229,6 +231,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
+- [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
