@@ -22,7 +22,7 @@ The public run uses the real monotonic clock and verifies oneDAL prediction pari
 
 The portfolio now has 36 of 49 tasks implemented, and oneDAL has five of six. All generic-CPU oneDAL tasks are implemented; its sole remaining slot intentionally requires a target GPU for an unavailable-device workflow.
 
-This task enters calibration as `smoke` / `uncalibrated`. Run the one-attempt no-skill, original-skill, and current-skill screen next. Quality remains the gate, while token and cost per verified success determine whether the skill improves efficiency.
+The [matched calibration](2026-08-14-onedal-conversion-calibration.md) found a three-arm quality ceiling with higher current-skill token burn, so the task is classified `smoke` / `ceiling` and retained as benchmark-regression coverage.
 
 Harbor jobs:
 

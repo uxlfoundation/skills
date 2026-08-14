@@ -239,6 +239,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDAL ExtraTrees incident](results/2026-08-13-onedal-extra-trees-incident.md): live source reproduction, upstream repair, and Harbor baseline/oracle discrimination for oneDAL issue #3648.
 - [2026-08-13 oneDAL ExtraTrees calibration](results/2026-08-13-onedal-extra-trees-calibration.md): one-attempt three-arm quality ceiling; the current skill used 7.0% fewer tokens than no skill and 9.9% fewer than the original skill.
 - [2026-08-14 oneDAL conversion-cost benchmark](results/2026-08-14-onedal-conversion-cost.md): live oneDAL fit/predict task with deterministic conversion, compute, and end-to-end timing boundaries.
+- [2026-08-14 oneDAL conversion-cost calibration](results/2026-08-14-onedal-conversion-calibration.md): one-attempt three-arm quality ceiling; the current skill used 43.3% more tokens than no skill.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
