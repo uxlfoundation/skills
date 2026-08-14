@@ -34,3 +34,9 @@ The hidden verifier will rebuild from a clean directory, add a second SYCL trans
 6. Promote only if the task is discriminating and the current skill does not create an unacceptable quality or efficiency regression.
 
 Until steps 1–3 pass, the suite entry remains planned and uncalibrated.
+
+## Development validation
+
+The complete task draft is staged under [`tasks/sycl-compile-time-backend-link`](../tasks/sycl-compile-time-backend-link/DRAFT.md), without an active `task.toml`. It was exercised against the workstation's pre-existing DPC++ 2023.2 toolchain and Intel OpenCL CPU device. The untouched build successfully produced the SYCL object and then failed at the `g++` final link with unresolved `sycl::_V1` symbols. The oracle used `icpx -fsycl` for the final link, resolved `libsycl.so.6`, executed the kernel on the explicitly selected CPU device, and matched the complete checksum for the public case plus four additional input cases.
+
+This validates the constructed failure and repair shape, but does not replace the required Harbor baseline/oracle run on the pinned 2026.1 Native CPU image.
