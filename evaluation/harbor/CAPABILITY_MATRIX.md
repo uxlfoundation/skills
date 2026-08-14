@@ -23,7 +23,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | Skill | Target | Implemented | Live implemented | Fixture/review implemented | Target hardware | Real end-to-end | Planned |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 6 | 4 | 3 | 1 | 1 | 1 | 2 |
-| `uxl-onemath` | 6 | 2 | 1 | 1 | 2 | 1 | 4 |
+| `uxl-onemath` | 6 | 3 | 2 | 1 | 2 | 2 | 3 |
 | `uxl-onedal` | 6 | 4 | 2 | 2 | 1 | 1 | 2 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 3 | 2 | 1 | 2 | 1 | 3 |
@@ -44,7 +44,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | Skill | Implemented | Classified | Headroom | Ceiling | No lift | Manual | Uncalibrated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `uxl-onednn` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
-| `uxl-onemath` | 2 | 2 | 1 | 1 | 0 | 0 | 0 |
+| `uxl-onemath` | 3 | 2 | 1 | 1 | 0 | 0 | 1 |
 | `uxl-onedal` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
 | `uxl-onedpl` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
@@ -88,7 +88,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `onemath-runtime-library-missing` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `domain-and-dispatch`, `backend-build-and-link`, `runtime-backend-triage`, `representative-math-validation` |
-| `onemath-blas-leading-dimension` | planned | discriminating | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `domain-and-dispatch` |
+| `onemath-packed-band-storage-fixtures` | implemented | discriminating | uncalibrated | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |
 | `onemath-deprecated-header-include` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-build-and-link` |
 | `onemath-rng-device-event-chain` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `math-contracts`, `domain-and-dispatch`, `runtime-backend-triage` |
 | `onemath-third-party-backend-wrapper` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `backend-build-and-link`, `runtime-backend-triage` |

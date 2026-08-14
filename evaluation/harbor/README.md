@@ -56,6 +56,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
 - `onemath-deprecated-header-include`: hosted-CPU preprocessing task sourced from a public compatibility-header incident.
+- `onemath-packed-band-storage-fixtures`: hosted-CPU source-repair task sourced from oneMath PR #85, covering triangular packed and banded BLAS storage contracts.
 - `performance-benchmark-report-repair`: hosted-CPU executable reporting task.
 - `performance-cgroup-concurrency-quota`: hosted-CPU oneTBB resource-constraint task sourced from a public cgroup quota incident.
 - `performance-floating-reduction-tolerance`: hosted-CPU executable numerical-validation task.
@@ -88,6 +89,7 @@ harbor run `
   --include-task-name onedpl-move-only-numeric-accumulator `
   --include-task-name onedpl-stable-ordering-contract `
   --include-task-name onemath-deprecated-header-include `
+  --include-task-name onemath-packed-band-storage-fixtures `
   --include-task-name onemath-runtime-library-missing `
   --include-task-name onetbb-bounded-image-flow-graph `
   --include-task-name onetbb-cancellation-exception-propagation `
@@ -110,7 +112,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 30 `
+  --expected-trials 31 `
   --reward-floor 1.0
 ```
 
@@ -233,6 +235,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 - [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
+- [2026-08-13 oneMath packed/band storage incident](results/2026-08-13-onemath-packed-band-storage-incident.md): live source-fixture reproduction and accepted upstream repair for triangular packed and banded BLAS storage.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 
