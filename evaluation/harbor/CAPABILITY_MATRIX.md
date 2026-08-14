@@ -22,7 +22,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 
 | Skill | Target | Implemented | Live implemented | Fixture/review implemented | Target hardware | Real end-to-end | Planned |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 6 | 4 | 3 | 1 | 1 | 1 | 2 |
+| `uxl-onednn` | 6 | 5 | 4 | 1 | 1 | 1 | 1 |
 | `uxl-onemath` | 6 | 3 | 2 | 1 | 2 | 2 | 3 |
 | `uxl-onedal` | 6 | 4 | 2 | 2 | 1 | 1 | 2 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
@@ -43,7 +43,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 
 | Skill | Implemented | Classified | Headroom | Ceiling | No lift | Manual | Uncalibrated |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
+| `uxl-onednn` | 5 | 4 | 1 | 3 | 0 | 0 | 1 |
 | `uxl-onemath` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
 | `uxl-onedal` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
@@ -66,7 +66,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 
 | Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
+| `onednn-matmul-memory-descriptors` | implemented | smoke | uncalibrated | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
 | `onednn-convolution-fusion-parity` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
 | `onednn-extra-reorder-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
 | `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |

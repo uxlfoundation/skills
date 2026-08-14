@@ -45,6 +45,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `onednn-convolution-fusion-parity`: hosted-CPU executable post-op order and residual-destination task.
 - `onednn-extra-reorder-regression`: hosted-CPU executable constant-weight layout-cache task using oneDNN verbose evidence.
 - `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
+- `onednn-matmul-memory-descriptors`: hosted-CPU executable batched-matmul task for logical strides over framework-owned transposed weights.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
 - `onedpl-iterator-category-failure`: hosted-CPU source-repair task sourced from oneDPL issue #2342, covering valid iterators with overloaded comma operators across algorithm families.
 - `onedpl-move-only-numeric-accumulator`: hosted-CPU source-repair task sourced from oneDPL issue #1955, covering move-only accumulators across parallel numeric backends.
@@ -88,6 +89,7 @@ harbor run `
   --include-task-name onednn-convolution-fusion-parity `
   --include-task-name onednn-extra-reorder-regression `
   --include-task-name onednn-benchdnn-no-ref-memory `
+  --include-task-name onednn-matmul-memory-descriptors `
   --include-task-name onedpl-missing-device-synchronization `
   --include-task-name onedpl-iterator-category-failure `
   --include-task-name onedpl-move-only-numeric-accumulator `
@@ -116,7 +118,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 33 `
+  --expected-trials 34 `
   --reward-floor 1.0
 ```
 
@@ -237,6 +239,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
+- [2026-08-14 oneDNN matmul descriptor task](results/2026-08-14-onednn-matmul-descriptors.md): live generic-CPU parity task for framework-packed batched weights and explicit logical strides.
 - [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
 - [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
 - [2026-08-13 oneDPL overloaded-comma iterator incident](results/2026-08-13-onedpl-no-comma-incident.md): live hosted-CPU reproduction and accepted upstream repair for oneDPL issue #2342.

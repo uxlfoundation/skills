@@ -39,14 +39,14 @@ class HarborSuiteManifestTests(unittest.TestCase):
 
     def test_implemented_task_requires_a_real_task_directory(self) -> None:
         manifest = copy.deepcopy(self.manifest)
-        task = manifest["suites"][0]["tasks"][0]
+        task = manifest["suites"][0]["tasks"][4]
         task["status"] = "implemented"
         task["calibration"] = "headroom"
 
         errors = VALIDATOR.validate_manifest(manifest)
 
         self.assertIn(
-            "onednn-matmul-memory-descriptors: implemented task directory is missing",
+            "onednn-backend-unimplemented-primitive: implemented task directory is missing",
             errors,
         )
 
