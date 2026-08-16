@@ -19,7 +19,7 @@ Harbor tasks must consume the recorded immutable digest, not the mutable local t
 The intended adoption order is:
 
 1. Verify the OpenCL CPU smoke test on each hosted runner class used by the evaluator.
-2. Source a real maintainer build/runtime incident for the remaining discriminating SYCL slot; both constructed link tasks are smoke coverage after all calibration arms passed.
+2. Apply the [wave 4 reproduction gate](../../results/2026-08-16-sycl-incident-sourcing-wave-4.md) to the source-screened oneDNN threading/runtime-composition incident; both constructed link tasks are smoke coverage after all calibration arms passed.
 3. Add only the oneMath CPU backend needed by `onemath-dispatch-overhead-benchmark`, preferably as a derived image.
 
 The skill and task remain hardware-agnostic. The image has currently been verified on an Intel CPU; CI must route it only to a runner class where the OpenCL CPU gate passes. It must not assume that an arbitrary public runner exposes a compatible CPU runtime.

@@ -252,6 +252,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-16 SYCL compile/link calibration](results/2026-08-16-sycl-compile-link-calibration.md): all arms pass; the task becomes smoke/ceiling, with 9.3% lower candidate token burn than no skill in the one-attempt screen.
 - [2026-08-16 SYCL transitive-link activation](results/2026-08-16-sycl-transitive-link-activation.md): records target-graph baseline/oracle discrimination and authentic CPU execution.
 - [2026-08-16 SYCL transitive-link calibration](results/2026-08-16-sycl-transitive-link-calibration-final.md): nine valid trials all pass; candidate skill uses 7.8% more tokens than no skill, so the task becomes smoke/ceiling.
+- [2026-08-16 SYCL incident sourcing wave 4](results/2026-08-16-sycl-incident-sourcing-wave-4.md): selects oneDNN #2959 for a strict generic-CPU reproduction gate and rejects premature target-hardware or synthetic substitutes.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.

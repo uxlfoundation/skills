@@ -199,7 +199,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `sycl-loader-plugin-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-transitive-target-link-contract` | implemented | smoke | ceiling | executable | hosted-toolchain | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-maintainer-build-runtime-incident` | planned | discriminating | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-onednn-threading-runtime-composition` | planned | discriminating | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 
 ## uxl-performance-validation (UXL cross-project)
 
