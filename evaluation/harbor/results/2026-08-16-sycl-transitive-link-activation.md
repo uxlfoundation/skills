@@ -17,4 +17,4 @@ The accepted repair propagates the interface target through the pipeline as a ta
 
 ## Scope and next gate
 
-The task evaluates build-system reasoning and authentic compiler/linker/runtime behavior, not device performance. It is hardware-agnostic at the skill level and inherits the hosted image's OpenCL CPU runner requirement. Matched no-skill versus skill calibration is the remaining gate before its portfolio role can be confirmed.
+The task evaluates build-system reasoning and authentic compiler/linker/runtime behavior, not device performance. It is hardware-agnostic at the skill level and inherits the hosted image's OpenCL CPU runner requirement. The subsequent [three-attempt calibration](2026-08-16-sycl-transitive-link-calibration-final.md) reached full reward in all arms and used more candidate tokens than no skill, so the task is classified as `smoke` / `ceiling`.

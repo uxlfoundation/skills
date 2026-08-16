@@ -16,7 +16,7 @@ The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-e
 
 Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md), [wave 2](results/2026-08-11-incident-sourcing-wave-2.md), and [wave 3](results/2026-08-11-incident-sourcing-wave-3.md).
 
-The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
+The v1 portfolio targets 50 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
 The `hosted-toolchain` environment identifies tasks that use hosted CPU hardware but require an opt-in heavyweight compiler/runtime/backend image and a declared runtime capability. It prevents SYCL provisioning cost from being confused with target-hardware performance coverage or included in the lightweight default smoke suite.
 
@@ -251,6 +251,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-16 SYCL compile/link activation](results/2026-08-16-sycl-compile-link-activation.md): records the final image gate, direct link failure, Harbor baseline/oracle discrimination, and runner constraint.
 - [2026-08-16 SYCL compile/link calibration](results/2026-08-16-sycl-compile-link-calibration.md): all arms pass; the task becomes smoke/ceiling, with 9.3% lower candidate token burn than no skill in the one-attempt screen.
 - [2026-08-16 SYCL transitive-link activation](results/2026-08-16-sycl-transitive-link-activation.md): records target-graph baseline/oracle discrimination and authentic CPU execution.
+- [2026-08-16 SYCL transitive-link calibration](results/2026-08-16-sycl-transitive-link-calibration-final.md): nine valid trials all pass; candidate skill uses 7.8% more tokens than no skill, so the task becomes smoke/ceiling.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
