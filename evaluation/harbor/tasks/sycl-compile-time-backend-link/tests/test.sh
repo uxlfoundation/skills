@@ -27,8 +27,10 @@ bash /app/reproduce.sh
 
 binary=/tmp/uxl-sycl-link-public/sycl_probe
 test -x "${binary}"
-nm -C "${binary}" | grep -q 'run_sycl_transform'
-ldd "${binary}" | grep -q 'libsycl'
+nm -C "${binary}" > /tmp/uxl-sycl-link-symbols.txt
+grep -q 'run_sycl_transform' /tmp/uxl-sycl-link-symbols.txt
+ldd "${binary}" > /tmp/uxl-sycl-link-libraries.txt
+grep -q 'libsycl' /tmp/uxl-sycl-link-libraries.txt
 
 python3 - <<'PY'
 import json
@@ -63,9 +65,14 @@ def run_case(count, seed):
 
 cases = ((1, 0), (257, 29), (8193, 61), (16384, 7))
 devices = [run_case(*case) for case in cases]
-reward = {'reward': 1.0, 'hidden_cases': len(cases), 'devices': sorted(set(devices))}
+unique_devices = sorted(set(devices))
+reward = {
+    'reward': 1.0,
+    'hidden_cases': len(cases),
+    'device_count': len(unique_devices),
+}
 Path('/logs/verifier/reward.json').write_text(
     json.dumps(reward, indent=2) + '\n', encoding='utf-8'
 )
-print(json.dumps(reward, indent=2))
+print(json.dumps({**reward, 'devices': unique_devices}, indent=2))
 PY

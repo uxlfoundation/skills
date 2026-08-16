@@ -1,4 +1,3 @@
-# Draft only: rename to task.toml after the pinned 2026.1 image passes Harbor verification.
 schema_version = "1.3"
 artifacts = ["/app/CMakeLists.txt", "/app/diagnosis.md"]
 
@@ -8,8 +7,8 @@ track = "executable"
 category = "compile-time-backend-link"
 difficulty = "hard"
 origin = "constructed"
-source_url = "https://intel.github.io/llvm/design/SYCLNativeCPU.html"
-runtime_package = "Intel oneAPI DPC++/C++ Compiler 2026.1.1 Native CPU"
+source_url = "https://intel.github.io/llvm/UsersManual.html"
+runtime_package = "Intel oneAPI DPC++/C++ Compiler 2026.1.1 OpenCL CPU"
 
 [verifier]
 timeout_sec = 300.0

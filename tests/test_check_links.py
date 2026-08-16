@@ -12,6 +12,11 @@ import check_links  # noqa: E402
 
 
 class LinkCheckTests(unittest.TestCase):
+    def test_skips_generated_workspace_directories(self) -> None:
+        self.assertTrue(
+            {"node_modules", "output", "tmp"}.issubset(check_links.SKIP_DIRECTORIES)
+        )
+
     def test_skips_loopback_http_urls(self) -> None:
         self.assertFalse(check_links.should_check_external("http://127.0.0.1:8080"))
         self.assertFalse(check_links.should_check_external("http://localhost:8080/jobs"))

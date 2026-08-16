@@ -28,7 +28,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 4 | 3 | 1 | 2 | 2 | 2 |
 | `uxl-oneccl` | 6 | 4 | 1 | 3 | 2 | 0 | 2 |
-| `uxl-sycl-build-debug` | 6 | 4 | 2 | 2 | 2 | 0 | 2 |
+| `uxl-sycl-build-debug` | 6 | 5 | 3 | 2 | 2 | 0 | 1 |
 | `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
 
 ## Evaluator health
@@ -49,7 +49,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
 | `uxl-onedpl` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
 | `uxl-oneccl` | 4 | 4 | 2 | 1 | 1 | 0 | 0 |
-| `uxl-sycl-build-debug` | 4 | 4 | 1 | 1 | 1 | 1 | 0 |
+| `uxl-sycl-build-debug` | 5 | 4 | 1 | 1 | 1 | 1 | 1 |
 | `uxl-performance-validation` | 4 | 4 | 0 | 3 | 1 | 0 | 0 |
 
 ## uxl-onednn (oneDNN)
@@ -195,7 +195,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | live | not-applicable | reproduce -> verify | target-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | executable | hosted-toolchain | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
+| `sycl-compile-time-backend-link` | implemented | discriminating | uncalibrated | executable | hosted-toolchain | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
 | `sycl-loader-plugin-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 | `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
 | `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | hardware | target-device | live | not-applicable | reproduce -> verify | target-device | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |

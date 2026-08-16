@@ -1,4 +1,4 @@
-FROM ubuntu:24.04@sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467
+FROM ubuntu:24.04@sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467 AS toolchain-base
 
 ARG INTEL_DPCPP_VERSION=2026.1.1-325
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,13 +22,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV ONEAPI_ROOT=/opt/intel/oneapi
-ENV BASH_ENV=/opt/intel/oneapi/2026.1/oneapi-vars.sh
-SHELL ["/bin/bash", "-lc"]
+ENV PATH=/opt/intel/oneapi/compiler/latest/bin:${PATH}
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/compiler/latest/lib:/opt/intel/oneapi/compiler/latest/lib/x64:/opt/intel/oneapi/umf/latest/lib:/opt/intel/oneapi/tbb/latest/lib:/opt/intel/oneapi/tcm/latest/lib:/opt/intel/oneapi/common/latest/lib
+
+FROM toolchain-base AS final
 
 COPY smoke.cpp /opt/uxl-toolchain-smoke/smoke.cpp
-RUN icpx -std=c++17 -O0 -fsycl -fsycl-targets=native_cpu \
+RUN icpx --version \
+    && icpx -std=c++17 -O0 -fsycl \
         /opt/uxl-toolchain-smoke/smoke.cpp \
         -o /opt/uxl-toolchain-smoke/smoke \
-    && ONEAPI_DEVICE_SELECTOR=native_cpu:cpu /opt/uxl-toolchain-smoke/smoke
+    && ONEAPI_DEVICE_SELECTOR=opencl:cpu sycl-ls \
+    && ONEAPI_DEVICE_SELECTOR=opencl:cpu /opt/uxl-toolchain-smoke/smoke
 
 WORKDIR /app

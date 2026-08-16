@@ -18,7 +18,16 @@ URL_RE = re.compile(r"https?://[^\s)>\"]+")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 SKIP_SCHEMES = {"mailto", "app", "plugin"}
 SKIP_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
-SKIP_DIRECTORIES = {".git", "eval-answers", "eval-prompts", "eval-results", "harbor-jobs"}
+SKIP_DIRECTORIES = {
+    ".git",
+    "eval-answers",
+    "eval-prompts",
+    "eval-results",
+    "harbor-jobs",
+    "node_modules",
+    "output",
+    "tmp",
+}
 TRANSIENT_NETWORK_ERRORS = (
     "network is unreachable",
     "temporarily unavailable",

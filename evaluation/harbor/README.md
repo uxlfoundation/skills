@@ -18,7 +18,7 @@ Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before convert
 
 The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
 
-The `hosted-toolchain` environment identifies tasks that use generic hosted CPU hardware but require an opt-in heavyweight compiler/runtime/backend image. It prevents SYCL provisioning cost from being confused with target-hardware dependence or included in the lightweight default smoke suite.
+The `hosted-toolchain` environment identifies tasks that use hosted CPU hardware but require an opt-in heavyweight compiler/runtime/backend image and a declared runtime capability. It prevents SYCL provisioning cost from being confused with target-hardware performance coverage or included in the lightweight default smoke suite.
 
 Answer-quality fixtures test interpretation and reasoning but do not receive live-triage credit. A debugging capability must have planned coverage from a task that reproduces live and exercises reproduce, investigate, repair, and verify. Implemented real end-to-end credit additionally requires a maintainer incident or upstream regression as the task origin.
 
@@ -68,6 +68,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `performance-floating-reduction-tolerance`: hosted-CPU executable numerical-validation task.
 - `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
 - `sycl-cmake-compiler-cache`: hosted structured toolchain-diagnosis task.
+- `sycl-compile-time-backend-link`: opt-in hosted-toolchain task that reproduces a mixed-driver SYCL link failure and executes the repair on an OpenCL CPU device.
 - `sycl-loader-plugin-mismatch`: hosted structured runtime-loader task.
 - `sycl-selector-silent-cpu-fallback`: hosted-CPU executable runtime-device-proof task.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
@@ -243,9 +244,10 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-14 oneDAL conversion-cost benchmark](results/2026-08-14-onedal-conversion-cost.md): live oneDAL fit/predict task with deterministic conversion, compute, and end-to-end timing boundaries.
 - [2026-08-14 oneDAL conversion-cost calibration](results/2026-08-14-onedal-conversion-calibration.md): one-attempt three-arm quality ceiling; the current skill used 43.3% more tokens than no skill.
 - [2026-08-14 hosted-toolchain tier audit](results/2026-08-14-toolchain-tier-audit.md): separates the two remaining SYCL/compiler-dependent jobs from lightweight free-runner and target-hardware tiers.
-- [2026-08-14 hosted-toolchain image selection](results/2026-08-14-toolchain-image-selection.md): selects a pinned compiler-only Native CPU bootstrap and records the validation gate without pulling a multi-gigabyte toolkit locally.
+- [2026-08-14 hosted-toolchain image selection](results/2026-08-14-toolchain-image-selection.md): selects a pinned compiler-only bootstrap and records the validated OpenCL CPU route without pulling the full toolkit.
 - [2026-08-14 SYCL compile/link task design](results/2026-08-14-sycl-toolchain-task-design.md): specifies the first executable toolchain-tier failure, protected verification contract, and promotion sequence.
 - [2026-08-14 SYCL task draft and WSL reclaim](results/2026-08-14-sycl-draft-and-wsl-reclaim.md): records live compile/link discrimination, oracle CPU execution, removal of the obsolete toolkit, and the remaining administrator compaction gate.
+- [2026-08-16 SYCL compile/link activation](results/2026-08-16-sycl-compile-link-activation.md): records the final image gate, direct link failure, Harbor baseline/oracle discrimination, and runner constraint.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.

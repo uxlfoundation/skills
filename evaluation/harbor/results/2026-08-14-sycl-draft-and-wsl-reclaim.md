@@ -9,7 +9,7 @@ The complete `sycl-compile-time-backend-link` task is drafted but deliberately r
 - The host-only `g++` final link failed with unresolved `sycl::_V1` symbols, establishing the intended link-phase baseline.
 - The oracle used `icpx -fsycl` for the final link, resolved `libsycl.so.6`, executed on the explicitly selected CPU device, and passed the public input plus four additional input cases.
 
-The draft has no active `task.toml`; it will not count as implemented until the pinned DPC++ 2026.1 image passes Native CPU execution and Harbor records unchanged baseline/oracle discrimination.
+The draft has no active `task.toml`; it will not count as implemented until the pinned DPC++ 2026.1 image passes OpenCL CPU execution and Harbor records unchanged baseline/oracle discrimination.
 
 ## Storage reclaim
 
