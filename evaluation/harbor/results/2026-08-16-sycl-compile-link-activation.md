@@ -35,4 +35,4 @@ Direct execution separately confirms that the unchanged project reaches the inte
 
 The task evaluates hardware-agnostic build and triage behavior, not target-specific performance. Its infrastructure requires a compatible OpenCL CPU runtime and has been validated on the local Intel CPU runner. CI should dispatch it only to a runner class that passes the same device gate; it must not assume an arbitrary free public runner is compatible.
 
-The skill still needs matched no-skill versus skill calibration. Until then, its portfolio calibration remains `uncalibrated`, even though the task implementation and oracle are valid.
+The subsequent [matched calibration](2026-08-16-sycl-compile-link-calibration.md) reached full reward in every arm, so this task is classified as `smoke` / `ceiling`. The harder planned SYCL coverage is now `sycl-transitive-target-link-contract`, which stays on the hosted CPU toolchain instead of adding another target-device requirement without evidence that one is needed.

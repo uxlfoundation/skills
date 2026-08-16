@@ -19,7 +19,7 @@ Harbor tasks must consume the recorded immutable digest, not the mutable local t
 The intended adoption order is:
 
 1. Verify the OpenCL CPU smoke test on each hosted runner class used by the evaluator.
-2. Calibrate the implemented `sycl-compile-time-backend-link` task with matched no-skill and skill arms.
+2. Implement and calibrate the harder `sycl-transitive-target-link-contract` task; the compile/link task is now smoke coverage after all calibration arms passed.
 3. Add only the oneMath CPU backend needed by `onemath-dispatch-overhead-benchmark`, preferably as a derived image.
 
 The skill and task remain hardware-agnostic. The image has currently been verified on an Intel CPU; CI must route it only to a runner class where the OpenCL CPU gate passes. It must not assume that an arbitrary public runner exposes a compatible CPU runtime.
