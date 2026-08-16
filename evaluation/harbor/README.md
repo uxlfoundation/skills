@@ -71,6 +71,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `sycl-compile-time-backend-link`: opt-in hosted-toolchain task that reproduces a mixed-driver SYCL link failure and executes the repair on an OpenCL CPU device.
 - `sycl-loader-plugin-mismatch`: hosted structured runtime-loader task.
 - `sycl-selector-silent-cpu-fallback`: hosted-CPU executable runtime-device-proof task.
+- `sycl-transitive-target-link-contract`: opt-in hosted-toolchain task for target-scoped propagation of the SYCL final-link contract.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -249,6 +250,7 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-14 SYCL task draft and WSL reclaim](results/2026-08-14-sycl-draft-and-wsl-reclaim.md): records live compile/link discrimination, oracle CPU execution, removal of the obsolete toolkit, and the remaining administrator compaction gate.
 - [2026-08-16 SYCL compile/link activation](results/2026-08-16-sycl-compile-link-activation.md): records the final image gate, direct link failure, Harbor baseline/oracle discrimination, and runner constraint.
 - [2026-08-16 SYCL compile/link calibration](results/2026-08-16-sycl-compile-link-calibration.md): all arms pass; the task becomes smoke/ceiling, with 9.3% lower candidate token burn than no skill in the one-attempt screen.
+- [2026-08-16 SYCL transitive-link activation](results/2026-08-16-sycl-transitive-link-activation.md): records target-graph baseline/oracle discrimination and authentic CPU execution.
 - [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
 - [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
 - [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.

@@ -58,4 +58,4 @@ All three artifacts made the same valid repair and supplied appropriate link-pha
 
 Candidate total token burn was 9.3% lower than no skill (245,905 versus 270,999), but candidate cost was 7.9% higher ($0.336707 versus $0.312054) because the token mix differed. With one attempt per arm, this is a directional efficiency observation, not promotion evidence.
 
-The task is classified as `smoke` / `ceiling`: it protects a real compiler, linker, runtime, and CPU-device path, but does not measure incremental skill quality for this model. Its planned discriminating replacement is the harder hardware-agnostic `sycl-transitive-target-link-contract` task; the redundant planned target-device environment report is removed from the v1 portfolio.
+The task is classified as `smoke` / `ceiling`: it protects a real compiler, linker, runtime, and CPU-device path, but does not measure incremental skill quality for this model. Its discriminating replacement is the harder hardware-agnostic `sycl-transitive-target-link-contract` task; the redundant planned target-device environment report is removed from the v1 portfolio.
