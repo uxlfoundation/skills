@@ -1,0 +1,7 @@
+services:
+  main:
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "${INTEL_RENDER_GID:-109}"
+      - "${INTEL_VIDEO_GID:-44}"

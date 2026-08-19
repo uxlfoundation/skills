@@ -1,3 +1,3 @@
-A SYCL application builds successfully but cannot find the expected GPU at runtime.
+A build-only CI job is being moved to a controlled Intel GPU runner. Qualify the runner for SYCL execution and diagnose any device-discovery failure.
 
-Run `/app/sycl_probe.py` and save its complete JSON output to `/app/sycl-probe.json`. Diagnose the device-discovery problem in `/app/diagnosis.md`, clearly separating build success from runtime availability. Include the observed `sycl-ls` evidence, relevant driver and runtime-path checks, device-filter checks, and a minimal smoke-test plan.
+Run `/app/sycl_probe.py` and save its complete JSON output to `/app/sycl-probe.json`. The probe compiles `/app/gpu_smoke.cpp`, selects a Level Zero GPU, executes a kernel, and verifies its output. Diagnose any device-discovery problem in `/app/diagnosis.md`, clearly separating build success from runtime availability. Include the observed `sycl-ls` and kernel evidence, relevant driver and runtime-path checks, device-filter checks, and the next minimal smoke test or escalation step.
