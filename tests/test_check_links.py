@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -24,6 +25,29 @@ class LinkCheckTests(unittest.TestCase):
 
     def test_checks_non_loopback_http_urls(self) -> None:
         self.assertTrue(check_links.should_check_external("https://github.com/example/project"))
+
+    def test_ignores_links_and_cpp_lambdas_inside_fenced_code(self) -> None:
+        content = """\
+[real](https://example.com/real)
+
+```cpp
+q.submit([&](sycl::handler& h) {});
+// https://example.com/not-a-doc-link
+```
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.md"
+            path.write_text(content, encoding="utf-8")
+            self.assertEqual(
+                check_links.extract_links(path), {"https://example.com/real"}
+            )
+
+    def test_ignores_bare_urls_inside_inline_code(self) -> None:
+        content = "Use `https://example.com/not-a-link` and [this](guide.md)."
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.md"
+            path.write_text(content, encoding="utf-8")
+            self.assertEqual(check_links.extract_links(path), {"guide.md"})
 
 
 if __name__ == "__main__":

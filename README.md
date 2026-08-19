@@ -2,7 +2,7 @@
 
 Public catalog for agent skills that teach AI coding agents how to use UXL Foundation oneAPI libraries correctly.
 
-This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The long-term source-of-truth model should be hybrid:
+This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The working recommendation, subject to UXL project review, is a hybrid source-of-truth model:
 
 - Library-owned skills live first in the owning project repositories.
 - This catalog mirrors reviewed skills for discovery, installation, validation, and release governance.
@@ -23,7 +23,7 @@ This repository is the central distribution catalog for UXL skills. Skill status
 
 The catalog manifest is [skills.yaml](skills.yaml). Human-readable review records live in [skill-cards](skill-cards).
 
-## Placement Model
+## Proposed Placement Model
 
 Use this repo as an incubator first. Once project maintainers review the skill contents, copy each project skill into the matching repository under `skills/<skill-name>/`, then mirror it back here with provenance in release metadata.
 
@@ -57,6 +57,8 @@ python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_valid
 ```
 
 Harbor evaluation tasks, baseline/treatment commands, and hardware guidance live in [evaluation/harbor/README.md](evaluation/harbor/README.md). Harbor `0.20.0` is the pinned evaluation harness.
+
+Start with the one-page [evaluator quickstart](docs/evaluator-quickstart.md), then use the [evaluator operator guide](docs/evaluator-operator-guide.md) for complete instructions. They explain how to modify a skill or task, validate it, run an oracle, compare no-skill/previous/candidate arms, inspect exact prompts and success criteria, and retain experiment results. The [self-hosted runner policy](docs/self-hosted-runners.md) describes the hardware-neutral execution contract. The current [Intel GPU adapter](docs/intel-gpu-runner.md) and [private runner control repository template](evaluation/runner-control-repo-template/README.md) are one concrete implementation of that contract.
 
 ## Agent Tools
 

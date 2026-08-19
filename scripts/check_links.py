@@ -16,6 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
+INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
 SKIP_SCHEMES = {"mailto", "app", "plugin"}
 SKIP_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
 SKIP_DIRECTORIES = {
@@ -53,8 +55,29 @@ def clean_url(url: str) -> str:
     return url.rstrip(".,;")
 
 
+def strip_markdown_code(text: str) -> str:
+    """Remove fenced and inline code before interpreting Markdown links."""
+    visible_lines: list[str] = []
+    fence_character: str | None = None
+    for line in text.splitlines(keepends=True):
+        fence = FENCE_RE.match(line)
+        if fence:
+            marker_character = fence.group(1)[0]
+            if fence_character is None:
+                fence_character = marker_character
+            elif marker_character == fence_character:
+                fence_character = None
+            visible_lines.append("\n" if line.endswith("\n") else "")
+            continue
+        if fence_character is not None:
+            visible_lines.append("\n" if line.endswith("\n") else "")
+            continue
+        visible_lines.append(INLINE_CODE_RE.sub("", line))
+    return "".join(visible_lines)
+
+
 def extract_links(path: Path) -> set[str]:
-    text = path.read_text(encoding="utf-8")
+    text = strip_markdown_code(path.read_text(encoding="utf-8"))
     links = {clean_url(match) for match in URL_RE.findall(text)}
     for match in MD_LINK_RE.findall(text):
         links.add(clean_url(match.strip()))
