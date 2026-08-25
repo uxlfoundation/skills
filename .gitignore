@@ -8,3 +8,4 @@ output/
 eval-results/
 eval-prompts/
 eval-answers/
+scripts/runner/*.log

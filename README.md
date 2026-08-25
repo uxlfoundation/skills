@@ -68,6 +68,10 @@ The CI workflow also runs `agent-sh/agnix` against the repository agent configur
 
 Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). The Harbor-based forward-test workflow lives in [forward-testing.md](docs/forward-testing.md).
 
+The [UXL agentic plan](docs/agentic-plan.md) translates the agentic-pipeline steering proposal into a two-quarter, benchmark-led execution program.
+
+The [2026 H2 roadmap](docs/roadmap-2026-h2.md) prioritizes catalog promotion, maintainer review, missing evaluation evidence, and the first agentic proof point. Windows/WSL Intel GPU qualification material is grouped under [docs/runner](docs/runner/README.md).
+
 Regenerate tool wrappers after changing canonical guidance:
 
 ```powershell
