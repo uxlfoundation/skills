@@ -14,7 +14,7 @@ The first milestone is infrastructure qualification: prove that the selected Int
 
 Do not attach a persistent privileged runner to pull-request workflows in the public skills repository. A private control repository should check out this public repository at an explicit commit SHA and dispatch only reviewed manual or scheduled jobs.
 
-A copy-ready private repository scaffold is available under [`evaluation/runner-control-repo-template/`](../evaluation/runner-control-repo-template/README.md). Its workflow accepts only a full commit SHA, pins GitHub-authored actions, runs the hardware oracle, writes a job summary, and uploads the complete Harbor evidence even after failures.
+A copy-ready private repository scaffold is available under [`evaluation/runner-control-repo-template/`](../evaluation/runner-control-repo-template/README.md). Its workflow accepts only a full commit SHA, pins GitHub-authored actions, invokes the reviewed oracle implementation from that exact checkout, writes a job summary, and uploads the complete Harbor evidence even after failures. The project-independent pattern is described in [Private Machine Runner](private-machine-runner.md).
 
 ## Host requirements
 
@@ -41,10 +41,11 @@ The UXL control plane has a passing Windows/WSL Intel GPU reference:
 - qualification: access-controlled GitHub Actions run `32800920037`, reward `1.0`;
 - lifecycle: repository-scoped, manual-dispatch, ephemeral runner.
 
-On that workstation, start a waiting one-job runner with the helper in the private control repository:
+On that workstation, start a waiting one-job runner with the reusable helper in this repository:
 
 ```powershell
-.\scripts\start-ephemeral-wsl-runner.ps1
+.\scripts\runner\start-ephemeral-wsl-runner.ps1 `
+  -Repository uxlfoundation/uxl-skills-runner-control
 ```
 
 ## 1. Qualify the Linux host

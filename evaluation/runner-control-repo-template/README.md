@@ -2,14 +2,17 @@
 
 This directory demonstrates the reusable private-control-repository pattern with the current Intel GPU adapter. The security and evidence contract applies to any specialized hardware: accept only reviewed immutable evaluator revisions, avoid untrusted triggers, qualify the runner before model trials, and return complete provenance and Harbor artifacts. Platform-specific workflows must supply their own task, labels, device mapping, and oracle.
 
-This copy-ready example controls a personal or laboratory Intel GPU runner. Do not enable it unchanged in the public skills repository or claim that its device contract applies to other platforms.
+These copy-ready examples control personal or laboratory Intel GPU runners. Do not enable them unchanged in the public skills repository or claim that either device contract applies to other platforms.
 
-The workflow accepts only a full 40-character commit SHA, checks out `uxlfoundation/skills` at that immutable revision, qualifies the host and pinned oneAPI container, runs the `sycl-device-discovery` Harbor oracle, and uploads the complete job directory. It does not run a model experiment or accept pull-request triggers.
+Both workflows accept only a full 40-character commit SHA, check out `uxlfoundation/skills` at that immutable revision, run a hardware oracle, and upload the complete job directory. They do not run a model experiment or accept pull-request triggers.
+
+- `intel-gpu-oracle.yml` contains the native-Linux `/dev/dri` implementation.
+- `windows-wsl-intel-gpu-oracle.yml` is the thin dispatcher used for the private Windows/WSL machine. The hardware-specific implementation lives in the reviewed `skills` checkout at `scripts/runner/run-windows-wsl-intel-gpu-oracle.sh`.
 
 ## Create the control repository
 
 1. Create a new private GitHub repository, such as `uxl-skills-runner-control`.
-2. Copy the contents of this template directory into its root, including `.github/workflows/intel-gpu-oracle.yml`.
+2. Copy the contents of this template directory into its root, including only the workflow for the intended platform.
 3. Review and commit the workflow on the default branch.
 4. Keep Actions disabled for forks and do not add `pull_request`, `pull_request_target`, or public `repository_dispatch` triggers.
 5. If organization administration is available, place the runner in a runner group restricted to this repository.
@@ -18,7 +21,7 @@ The workflow pins its GitHub-authored actions to the full commits for `actions/c
 
 ## Register one reviewed job
 
-On the qualified Linux GPU host:
+On a qualified native-Linux GPU host:
 
 1. Open **Settings → Actions → Runners → New self-hosted runner** in the private control repository.
 2. Select Linux x64 and use the exact download and checksum commands GitHub displays.
@@ -45,6 +48,16 @@ python scripts/import_harbor_artifact.py <downloaded-artifact.zip>
 ```
 
 An ephemeral runner deregisters after one job. It does not erase its `_work` directory or Docker layers. Preserve the artifact first, then inspect and clean the dedicated runner workspace according to the host owner's policy.
+
+For the Windows/WSL lane, install the GitHub runner inside WSL once, then start a waiting one-job runner from a `skills` checkout:
+
+```powershell
+.\scripts\runner\start-ephemeral-wsl-runner.ps1 `
+  -Repository owner/private-runner-control `
+  -Labels 'uxl,sycl,gpu,intel-gpu,windows-wsl,personal-lab'
+```
+
+See [Private Machine Runner](../../docs/private-machine-runner.md) for the same pattern in project-independent terms.
 
 ## Promotion beyond the oracle
 

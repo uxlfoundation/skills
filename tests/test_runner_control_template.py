@@ -12,6 +12,16 @@ WORKFLOW = (
     / "workflows"
     / "intel-gpu-oracle.yml"
 )
+WSL_WORKFLOW = (
+    ROOT
+    / "evaluation"
+    / "runner-control-repo-template"
+    / ".github"
+    / "workflows"
+    / "windows-wsl-intel-gpu-oracle.yml"
+)
+WSL_ORACLE = ROOT / "scripts" / "runner" / "run-windows-wsl-intel-gpu-oracle.sh"
+WSL_LAUNCHER = ROOT / "scripts" / "runner" / "start-ephemeral-wsl-runner.ps1"
 
 
 class RunnerControlTemplateTests(unittest.TestCase):
@@ -61,6 +71,46 @@ class RunnerControlTemplateTests(unittest.TestCase):
         self.assertIn("--reward-floor 1.0", self.workflow)
         upload = self.workflow.index("Upload complete Harbor evidence")
         self.assertIn("if: always()", self.workflow[upload : upload + 250])
+
+
+class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.workflow = WSL_WORKFLOW.read_text(encoding="utf-8")
+        cls.oracle = WSL_ORACLE.read_text(encoding="utf-8")
+        cls.launcher = WSL_LAUNCHER.read_text(encoding="utf-8")
+
+    def test_dispatcher_is_manual_and_thin(self) -> None:
+        self.assertIn("  workflow_dispatch:", self.workflow)
+        self.assertNotIn("  pull_request:", self.workflow)
+        self.assertNotIn("  pull_request_target:", self.workflow)
+        self.assertNotIn("  push:", self.workflow)
+        self.assertIn("^[0-9a-fA-F]{40}$", self.workflow)
+        self.assertIn(
+            "bash scripts/runner/run-windows-wsl-intel-gpu-oracle.sh",
+            self.workflow,
+        )
+
+    def test_dispatcher_actions_are_pinned(self) -> None:
+        uses = re.findall(
+            r"^\s*(?:-\s*)?uses:\s*([^\s]+)$", self.workflow, re.MULTILINE
+        )
+        self.assertEqual(len(uses), 2)
+        for action in uses:
+            self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
+
+    def test_public_oracle_proves_the_wsl_device_contract(self) -> None:
+        self.assertIn("test -c /dev/dxg", self.oracle)
+        self.assertIn("src=/usr/lib/wsl,dst=/usr/lib/wsl,readonly", self.oracle)
+        self.assertIn(
+            "--include-task-name sycl-device-discovery-windows-wsl", self.oracle
+        )
+        self.assertIn("--reward-floor 1.0", self.oracle)
+
+    def test_launcher_refuses_a_public_repository_and_is_ephemeral(self) -> None:
+        self.assertIn("$repo.visibility -ne 'PRIVATE'", self.launcher)
+        self.assertIn("--ephemeral", self.launcher)
+        self.assertIn("tmp\\runner", self.launcher)
 
 
 if __name__ == "__main__":

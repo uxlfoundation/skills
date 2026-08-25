@@ -188,7 +188,7 @@ After the job finishes:
 
 Treat a passed oracle as runner qualification, not skill-benefit evidence. Add a three-arm model experiment only after the oracle passes and a maintainer-backed target-dependent task provides meaningful headroom.
 
-Qualification reference: access-controlled run `32800920037` passed with evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76` and reward `1.0`. The sanitized [evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site) is deployed from [`uxlfoundation/uxl-evaluator-dashboard`](https://github.com/uxlfoundation/uxl-evaluator-dashboard); raw trajectories and machine evidence remain access-controlled.
+Qualification reference: access-controlled run `32800920037` passed with evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76` and reward `1.0`. The sanitized [evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site) is deployed from [`evaluation/dashboard`](../evaluation/dashboard/); raw trajectories and machine evidence remain access-controlled.
 
 The importer refuses archive path traversal and conflicting same-named jobs. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
 
