@@ -98,6 +98,14 @@ class HardwareVerifierTests(unittest.TestCase):
         self.assertEqual(scores["reward"], 0.0)
         self.assertEqual(scores["wsl_gpu_interface_visible"], 0.0)
 
+    def test_wsl_oracle_diagnosis_passes(self) -> None:
+        probe = passing_probe()
+        probe["device_nodes"] = [{"path": "/dev/dxg"}]
+        diagnosis_path = WSL_CHECKER_PATH.parents[1] / "solution" / "diagnosis.md"
+        diagnosis = diagnosis_path.read_text(encoding="utf-8")
+        scores = WSL_CHECKER.evaluate(probe, diagnosis)
+        self.assertEqual(scores["reward"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()
