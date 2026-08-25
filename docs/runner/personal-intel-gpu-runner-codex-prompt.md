@@ -1,4 +1,4 @@
-# Codex handoff: prepare a personal Intel GPU machine as a UXL evaluator runner
+# Codex handoff: prepare a personal Intel GPU machine as a UXL Skills Evaluator runner
 
 Copy everything below the separator into Codex on the personal Intel GPU machine.
 
