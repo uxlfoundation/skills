@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("exports the UXL evaluator scorecard for GitHub Pages", async () => {
+test("exports the UXL Skills Evaluator scorecard for GitHub Pages", async () => {
   const html = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
-  assert.match(html, /<title>UXL Evaluator Control Room<\/title>/i);
+  assert.match(html, /<title>UXL Skills Evaluator<\/title>/i);
+  assert.match(html, /UXL Skills Evaluator home/);
+  assert.match(html, /uxl-foundation-icon-color\.svg/);
   assert.match(html, /Windows\/WSL Intel GPU lane qualified/);
   assert.match(html, /51<\/strong><span>evaluation tasks/);
   assert.match(html, /884bc80/);
@@ -38,4 +40,5 @@ test("keeps source, publishing, and evidence contracts reviewable", async () => 
   assert.match(readme, /Raw Harbor job records.*remain in the private/s);
   assert.match(readme, /GitHub Pages/);
   await access(new URL("../public/og.png", import.meta.url));
+  await access(new URL("../public/uxl-foundation-icon-color.svg", import.meta.url));
 });

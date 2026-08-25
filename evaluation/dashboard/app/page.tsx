@@ -27,7 +27,12 @@ export default function Home() {
   return (
     <main>
       <nav>
-        <a className="brand" href="#top" aria-label="UXL evaluator home">UXL<span>/</span>EVAL</a>
+        <a className="brand" href="#top" aria-label="UXL Skills Evaluator home">
+          {/* The official SVG is tiny and must keep its relative GitHub Pages path. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="uxl-foundation-icon-color.svg" alt="" aria-hidden="true" />
+          <span className="brand-name">UXL Skills Evaluator</span>
+        </a>
         <div className="nav-links">
           <a href="#coverage">Coverage</a>
           <a href="#lanes">Runners</a>
@@ -37,7 +42,7 @@ export default function Home() {
       </nav>
 
       <section className="hero" id="top">
-        <div className="eyebrow"><span /> UXL evaluator control room</div>
+        <div className="eyebrow"><span /> UXL Skills Evaluator</div>
         <h1>Evidence you can<br />route to real hardware.</h1>
         <p className="lede">
           One view of skill quality, execution coverage, and specialized runner
@@ -136,7 +141,16 @@ export default function Home() {
         </ol>
       </section>
 
-      <footer><div className="brand">UXL<span>/</span>EVAL</div><p>Public scorecard. Detailed trajectories and machine evidence remain access-controlled.</p><a href="#top">Back to top ↑</a></footer>
+      <footer>
+        <div className="brand">
+          {/* The official SVG is tiny and must keep its relative GitHub Pages path. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="uxl-foundation-icon-color.svg" alt="" aria-hidden="true" />
+          <span className="brand-name">UXL Skills Evaluator</span>
+        </div>
+        <p>Public scorecard. Detailed trajectories and machine evidence remain access-controlled.</p>
+        <a href="#top">Back to top ↑</a>
+      </footer>
     </main>
   );
 }

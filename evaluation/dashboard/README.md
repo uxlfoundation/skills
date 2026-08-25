@@ -1,4 +1,4 @@
-# UXL Evaluator Dashboard
+# UXL Skills Evaluator Dashboard
 
 Public-facing control-room view for the UXL Foundation skills evaluator. It shows the current skill and Harbor-task inventory, available execution lanes, the evidence chain for the Windows/WSL Intel GPU lane, and the project definition of done.
 
@@ -31,6 +31,8 @@ npm test
 The public dashboard is published at <https://uxlfoundation.github.io/skills/> with GitHub Pages. The repository workflow builds this directory on a GitHub-hosted runner, verifies the static export, and deploys it after changes reach `main`. Pull requests run the same build and checks without publishing.
 
 Pages receives only `dist/client`. Keep raw Harbor records, runner logs, credentials, and unsanitized machine provenance out of the dashboard source and public build.
+
+The navigation and footer use the official color icon from the [UXL Foundation artwork repository](https://github.com/uxlfoundation/artwork/blob/main/foundation/uxl-foundation-icon-color.svg). UXL marks remain subject to the Linux Foundation trademark policy referenced by that repository.
 
 ## Evidence model
 

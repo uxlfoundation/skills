@@ -7,8 +7,9 @@ body { margin:0; background:linear-gradient(90deg,transparent 49.92%,rgba(16,21,
 a { color:inherit; text-decoration:none; }
 main { min-height:100vh; }
 nav { height:76px; padding:0 clamp(28px,7vw,112px); display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); position:relative; z-index:3; }
-.brand { font-size:18px; font-weight:800; letter-spacing:-.04em; }
-.brand span { color:var(--blue); }
+.brand { display:inline-flex; align-items:center; gap:10px; font-size:16px; font-weight:800; letter-spacing:-.035em; }
+.brand img { width:30px; height:32px; object-fit:contain; flex:none; }
+.brand-name { white-space:nowrap; }
 .nav-links { display:flex; align-items:center; gap:30px; font-size:13px; }
 .source-link { color:white; background:var(--ink); padding:12px 16px; }
 .hero { min-height:calc(66vh - 76px); padding:48px clamp(28px,7vw,112px) 52px; position:relative; overflow:hidden; }
@@ -73,6 +74,7 @@ h2 { margin:12px 0 60px; font-size:clamp(36px,4vw,60px); line-height:1; letter-s
 .done li b { margin-top:42px; font-size:19px; }
 .done li p { color:var(--muted); line-height:1.5; font-size:14px; }
 footer { min-height:130px; padding:34px clamp(28px,7vw,112px); display:grid; grid-template-columns:1fr 2fr 1fr; align-items:center; background:var(--paper); }
+footer .brand img { width:27px; height:29px; }
 footer p { color:var(--muted); font-size:12px; text-align:center; }
 footer > a { text-align:right; color:var(--blue); font-size:13px; }
 
