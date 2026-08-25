@@ -108,7 +108,7 @@ Suggested task name:
 sycl-device-discovery-windows-wsl
 ```
 
-The oracle passed end to end in [run 32800920037](https://github.com/uxlfoundation/uxl-skills-runner-control/actions/runs/32800920037) at evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`, earning reward `1.0`.
+The oracle passed end to end in access-controlled run `32800920037` at evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`, earning reward `1.0`.
 
 ## Security and runner-control requirements
 

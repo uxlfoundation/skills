@@ -176,7 +176,7 @@ To view a downloaded remote result, extract its job folders under `harbor-jobs/`
 
 Follow the [self-hosted runner contract](self-hosted-runners.md) whenever faithful reproduction requires a device, backend, topology, driver, or instruction set that hosted runners do not provide. An approved runner checks out a reviewed immutable evaluator revision, qualifies the environment with an oracle, and returns the complete `harbor-jobs/` evidence. It must not accept untrusted pull-request triggers.
 
-The access-controlled [`uxlfoundation/uxl-skills-runner-control`](https://github.com/uxlfoundation/uxl-skills-runner-control) repository implements this pattern with an Intel GPU adapter. Its workflow requires a reviewed 40-character evaluator commit SHA, runs only the `sycl-device-discovery-windows-wsl` oracle, and uploads the full job directory without model credentials.
+The access-controlled `uxlfoundation/uxl-skills-runner-control` repository implements this pattern with an Intel GPU adapter. Its workflow requires a reviewed 40-character evaluator commit SHA, runs only the `sycl-device-discovery-windows-wsl` oracle, and uploads the full job directory without model credentials.
 
 After the job finishes:
 
@@ -188,7 +188,7 @@ After the job finishes:
 
 Treat a passed oracle as runner qualification, not skill-benefit evidence. Add a three-arm model experiment only after the oracle passes and a maintainer-backed target-dependent task provides meaningful headroom.
 
-Qualification reference: [run 32800920037](https://github.com/uxlfoundation/uxl-skills-runner-control/actions/runs/32800920037) passed with evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76` and reward `1.0`. The sanitized [evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site) is deployed from [`uxlfoundation/uxl-evaluator-dashboard`](https://github.com/uxlfoundation/uxl-evaluator-dashboard); raw trajectories and machine evidence remain access-controlled.
+Qualification reference: access-controlled run `32800920037` passed with evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76` and reward `1.0`. The sanitized [evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site) is deployed from [`uxlfoundation/uxl-evaluator-dashboard`](https://github.com/uxlfoundation/uxl-evaluator-dashboard); raw trajectories and machine evidence remain access-controlled.
 
 The importer refuses archive path traversal and conflicting same-named jobs. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
 
