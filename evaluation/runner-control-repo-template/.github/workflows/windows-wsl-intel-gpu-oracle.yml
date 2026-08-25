@@ -1,0 +1,57 @@
+name: UXL Windows/WSL Intel GPU oracle
+
+on:
+  workflow_dispatch:
+    inputs:
+      skills_commit:
+        description: Full reviewed commit SHA from uxlfoundation/skills
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uxl-windows-wsl-intel-gpu
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: [self-hosted, linux, x64, uxl, sycl, gpu, intel-gpu, windows-wsl, personal-lab]
+    timeout-minutes: 90
+    env:
+      HARBOR_TELEMETRY: "off"
+      PYTHONUTF8: "1"
+      SKILLS_COMMIT: ${{ inputs.skills_commit }}
+    steps:
+      - name: Require an immutable evaluator commit
+        shell: bash
+        run: |
+          if [[ ! "$SKILLS_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "skills_commit must be a full 40-character Git commit SHA" >&2
+            exit 2
+          fi
+
+      - name: Check out the reviewed evaluator revision
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          repository: uxlfoundation/skills
+          ref: ${{ inputs.skills_commit }}
+          path: evaluator
+          fetch-depth: 1
+          persist-credentials: false
+          clean: true
+
+      - name: Run the reviewed evaluator implementation
+        working-directory: evaluator
+        shell: bash
+        run: bash scripts/runner/run-windows-wsl-intel-gpu-oracle.sh
+
+      - name: Upload complete Harbor evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: uxl-windows-wsl-intel-gpu-oracle-${{ inputs.skills_commit }}
+          path: evaluator/harbor-jobs
+          if-no-files-found: warn
+          retention-days: 30

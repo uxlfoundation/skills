@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 700,
+  "groups": {
+    "diagnosis": {
+      "oversplitting": [
+        ["\\b(?:grain|chunk)\\w*\\b"],
+        ["\\b(?:simple_partitioner|simple\\s+partitioner)\\b"],
+        ["\\boverhead\\b"],
+        ["\\b(?:cheap(?:en\\w*)?|inexpensive|low[- ](?:cost|work|intensity)|memory[- ](?:heavy|bound))\\b"]
+      ],
+      "coarse_grain_risk": [
+        ["\\b(?:coarse|large|65536|too[- ]large)\\b.{0,40}\\b(?:grain|chunk|bod(?:y|ies))\\b|\\b(?:grain|chunk)\\w*\\b.{0,40}\\b(?:coarse|large|65536|too[- ]large)\\b"],
+        ["\\b(?:idle|starv|underutil|load\\s+imbalance|tail|p95)\\w*\\b"],
+        ["\\b(?:body\\s+(?:cost|work)|work\\s+per\\s+element|intensity|problem|input)\\b"]
+      ],
+      "affinity_layers": [
+        ["\\baffinity_partitioner\\b|\\baffinity\\s+partitioner\\b"],
+        ["\\b(?:cache|iteration[- ]to[- ]thread|same\\s+(?:data|buffer)|repeated|reuse)\\w*\\b"],
+        ["\\b(?:CPU\\s+(?:set|affinity)|cpuset|pinning|taskset|OS\\s+(?:thread|scheduling))\\b"],
+        ["\\b(?:NUMA|first[- ]touch|remote\\s+(?:memory|NUMA)|memory\\s+placement)\\b"]
+      ]
+    },
+    "repair": {
+      "adaptive_chunking": [
+        ["\\b(?:auto_partitioner|auto(?:matic)?\\s+partition(?:er|ing)|default\\s+(?:automatic\\s+)?(?:partitioner|partitioning|chunking))\\b"],
+        ["\\b(?:grain|chunk)\\w*\\b"],
+        ["\\b(?:sweep|measure|benchmark|tune|crossover)\\w*\\b"],
+        ["\\b(?:serial\\s+(?:cutoff|fallback|path|candidate)|serial\\b.{0,60}\\bcutoff|parallel\\s+cutoff)\\b"]
+      ],
+      "qualified_affinity": [
+        ["\\baffinity_partitioner\\b|\\baffinity\\s+partitioner\\b"],
+        ["\\b(?:retain|reuse|persistent|same)\\w*\\b.{0,45}\\b(?:affinity_partitioner|affinity\\s+partitioner|object|partitioner|instance)\\b|\\b(?:affinity_partitioner|affinity\\s+partitioner|object|partitioner|instance)\\b.{0,45}\\b(?:retain|reuse|persistent|same)\\w*\\b|\\b(?:live|persist)\\w*\\b.{0,30}\\bacross\\s+(?:calls?|runs?|iterations?|repetitions?)\\b"],
+        ["\\b(?:repeated|same\\s+(?:data|buffer)|cache[- ]resident|cache\\s+fit|warm)\\b"],
+        ["\\b(?:conditional|only|measure|benchmark|not\\s+universal|little\\s+benefit)\\b"]
+      ],
+      "placement_control": [
+        ["\\b(?:task_arena|task\\s+arena|arena\\s+(?:limit|concurrency)|CPU\\s+set|cpuset|taskset|numactl|NUMA\\s+constraint)\\b"],
+        ["\\b(?:max(?:imum)?\\s+concurrency|thread\\s+count|worker\\s+count|effective\\s+concurrency)\\b"],
+        ["\\b(?:first[- ]touch|local\\s+(?:memory|allocation)|memory\\s+placement|remote\\s+memory)\\b"]
+      ]
+    },
+    "validation": {
+      "correctness_gate": [
+        ["\\bserial\\b"],
+        ["\\b(?:reference|baseline|oracle|stencil)\\b"],
+        ["\\b(?:tolerance|checksum|compare|parity)\\w*\\b"],
+        ["\\b(?:boundary|odd|sizes?|inputs?)\\b"]
+      ],
+      "experiment_matrix": [
+        ["\\b(?:grain|chunk)\\w*\\b"],
+        ["\\bpartition(?:er|ing)\\w*\\b|\\baffinity(?:_partitioner|\\s+partitioner)?\\b"],
+        ["\\b(?:sizes?|elements?|work\\s+per\\s+element|body\\s+cost|intensity)\\b"],
+        ["\\b(?:cold|warm|same\\s+buffer|new\\s+buffer|reuse|repeated)\\b"],
+        ["\\b(?:thread|worker|concurrency)\\w*\\b"],
+        ["\\b(?:placement|NUMA|CPU\\s+set|pinning)\\b"],
+        ["\\b(?:warmup|repetitions?|median|p95|one\\s+(?:factor|variable))\\b"]
+      ],
+      "scheduler_and_locality_evidence": [
+        ["\\b(?:body(?:/task)?|task(?:/body)?)\\s+(?:calls?|counts?|invocations?|duration|time)\\b"],
+        ["\\b(?:CPU\\s+utilization|active\\s+(?:workers?|threads?)|idle\\s+(?:workers?|threads?))\\b"],
+        ["\\b(?:context\\s+switch|migration)\\w*\\b"],
+        ["\\b(?:cache\\s+miss(?:es)?|memory\\s+bandwidth|remote[- ]NUMA|NUMA\\s+traffic)\\b"]
+      ],
+      "bounded_claim": [
+        ["\\b(?:tested|measured)\\b"],
+        ["\\b(?:hardware|topology|configuration|environment)\\b"],
+        ["\\b(?:oneTBB|build|compiler|version)\\b"],
+        ["\\b(?:workload|input|reuse|placement|thread)\\w*\\b"],
+        ["\\b(?:claim|universal|scope|only)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\b(?:always|universally)\\s+(?:choose|use|set).{0,30}\\b(?:grain|chunk)(?:size)?\\b.{0,12}\\b(?:256|4096)\\b",
+    "\\b(?:grain|chunk)(?:size)?\\b.{0,12}\\b(?:256|4096)\\b\\s+(?:always|universally)\\s+(?:wins?|works?|best|optimal|fastest)\\b",
+    "\\baffinity_partitioner\\b.{0,45}\\b(?:pins?\\s+(?:OS\\s+)?threads?|binds?\\s+(?:threads?|memory)|fixes?\\s+NUMA)\\b",
+    "\\b(?:always|universally)\\s+(?:use|enable).{0,20}\\baffinity\\b",
+    "\\bmore\\s+threads?\\s+(?:always|necessarily)\\s+(?:improve|fix|speed)\\w*\\b"
+  ]
+}

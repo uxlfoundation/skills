@@ -1,0 +1,165 @@
+name: UXL Intel GPU oracle
+
+on:
+  workflow_dispatch:
+    inputs:
+      skills_commit:
+        description: Full reviewed commit SHA from uxlfoundation/skills
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uxl-personal-intel-gpu
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: [self-hosted, linux, x64, uxl, sycl, gpu, intel-gpu, personal-lab]
+    timeout-minutes: 60
+    env:
+      HARBOR_TELEMETRY: "off"
+      PYTHONUTF8: "1"
+      SKILLS_COMMIT: ${{ inputs.skills_commit }}
+    steps:
+      - name: Require an immutable evaluator commit
+        shell: bash
+        run: |
+          if [[ ! "$SKILLS_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "skills_commit must be a full 40-character Git commit SHA" >&2
+            exit 2
+          fi
+
+      - name: Check out the reviewed evaluator revision
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          repository: uxlfoundation/skills
+          ref: ${{ inputs.skills_commit }}
+          path: evaluator
+          fetch-depth: 1
+          persist-credentials: false
+          clean: true
+
+      - name: Verify checkout and host prerequisites
+        working-directory: evaluator
+        shell: bash
+        run: |
+          actual_commit="$(git rev-parse HEAD)"
+          if [[ "${actual_commit,,}" != "${SKILLS_COMMIT,,}" ]]; then
+            echo "Checked out $actual_commit instead of $SKILLS_COMMIT" >&2
+            exit 3
+          fi
+          test "$(uname -m)" = "x86_64"
+          test -d /dev/dri
+          render_node="$(find /dev/dri -maxdepth 1 -name 'renderD*' -print -quit)"
+          card_node="$(find /dev/dri -maxdepth 1 -name 'card*' -print -quit)"
+          test -n "$render_node"
+          render_gid="$(stat -c '%g' "$render_node")"
+          if [[ -n "$card_node" ]]; then
+            video_gid="$(stat -c '%g' "$card_node")"
+          else
+            video_gid="$render_gid"
+          fi
+          echo "INTEL_RENDER_GID=$render_gid" >> "$GITHUB_ENV"
+          echo "INTEL_VIDEO_GID=$video_gid" >> "$GITHUB_ENV"
+          python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version'
+          docker version
+          docker compose version
+
+      - name: Create the pinned Harbor environment
+        working-directory: evaluator
+        shell: bash
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install harbor==0.20.0
+
+      - name: Capture non-secret host provenance
+        working-directory: evaluator
+        shell: bash
+        run: |
+          .venv/bin/python scripts/capture_hardware_provenance.py \
+            --output harbor-jobs/runner-provenance.json \
+            --require-intel-gpu
+
+      - name: Prove the pinned container can enumerate the Intel GPU
+        working-directory: evaluator
+        shell: bash
+        run: |
+          docker run --rm \
+            --device /dev/dri:/dev/dri \
+            --group-add "$INTEL_RENDER_GID" \
+            intel/oneapi:2026.1.0-devel-ubuntu24.04@sha256:e9db518398753434ee5aab9740a25f1d3134396a30be1569cfad8f8b0d90740c \
+            bash -lc 'ONEAPI_DEVICE_SELECTOR=level_zero:gpu sycl-ls'
+
+      - name: Run the Harbor hardware oracle
+        working-directory: evaluator
+        shell: bash
+        run: |
+          .venv/bin/harbor run \
+            --path evaluation/harbor/tasks \
+            --agent oracle \
+            --include-task-name sycl-device-discovery \
+            --job-name uxl-sycl-intel-gpu-oracle \
+            --jobs-dir harbor-jobs \
+            --n-concurrent 1 \
+            --yes
+
+      - name: Require reward 1.0
+        working-directory: evaluator
+        shell: bash
+        run: |
+          .venv/bin/python scripts/check_harbor_job.py \
+            harbor-jobs/uxl-sycl-intel-gpu-oracle/result.json \
+            --expected-trials 1 \
+            --reward-floor 1.0
+
+      - name: Write the qualification summary
+        if: always()
+        working-directory: evaluator
+        shell: bash
+        run: |
+          {
+            echo "## UXL Intel GPU qualification"
+            echo
+            echo "- Evaluator commit: \`$SKILLS_COMMIT\`"
+            if [[ -f harbor-jobs/uxl-sycl-intel-gpu-oracle/result.json ]]; then
+              python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(
+              Path("harbor-jobs/uxl-sycl-intel-gpu-oracle/result.json").read_text(
+                  encoding="utf-8"
+              )
+          )
+          stats = result.get("stats") or {}
+          rewards = [
+              metric["reward"]
+              for evaluation in (stats.get("evals") or {}).values()
+              for metric in (evaluation.get("metrics") or [])
+              if isinstance(metric.get("reward"), (int, float))
+          ]
+          print(f"- Trials: {result.get('n_total_trials', 'unknown')}")
+          print(
+              f"- Average reward: {sum(rewards) / len(rewards):.3f}"
+              if rewards
+              else "- Average reward: unknown"
+          )
+          print(f"- Finished: {result.get('finished_at', 'unknown')}")
+          PY
+            else
+              echo "- Harbor result: not produced; inspect the failed step and uploaded provenance"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload complete Harbor evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: uxl-intel-gpu-oracle-${{ inputs.skills_commit }}
+          path: evaluator/harbor-jobs
+          if-no-files-found: warn
+          retention-days: 30

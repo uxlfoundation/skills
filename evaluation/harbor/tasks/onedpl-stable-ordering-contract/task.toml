@@ -1,0 +1,22 @@
+schema_version = "1.3"
+artifacts = ["/app/order_events.cpp"]
+
+[metadata]
+skill = "uxl-onedpl"
+track = "executable"
+category = "algorithm-ordering-contract"
+difficulty = "medium"
+
+[verifier]
+timeout_sec = 90.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 2048
+network_mode = "public"
+workdir = "/app"

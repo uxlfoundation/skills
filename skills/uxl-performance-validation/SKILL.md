@@ -24,7 +24,7 @@ Help an agent turn "this should be faster" into repeatable evidence: correctness
 - oneDNN: prefer `benchdnn` or existing primitive benchmarks when available.
 - oneMath: state whether timing includes queue creation, backend dispatch, transfers, and events.
 - oneDAL: include data conversion and metric parity, especially for scikit-learn acceleration.
-- oneTBB: state thread limits, input size, grainsize, affinity, and serial baseline.
+- oneTBB: state visible CPUs, cgroup and affinity limits, arena or global limits, input size, grainsize, and serial baseline. Diagnose effective concurrency before timing; prefer a cgroup-aware runtime over hardcoded limits.
 - oneDPL: state host/device policy, data location, transfers, and synchronization.
 - oneCCL: state rank count, topology, tensor size, collective sequence, and worker/plugin settings.
 
@@ -34,6 +34,7 @@ Help an agent turn "this should be faster" into repeatable evidence: correctness
 - Floating point reductions can differ because of non-associativity. Use tolerances and explain them.
 - GPU timing without synchronization measures launch overhead, not completion.
 - Debug builds, thermal throttling, affinity, and background load can swamp real effects.
+- Container CPU quotas and CPU affinity are separate controls: online or schedulable CPUs can exceed the quota. Compare cgroup quota/period state with oneTBB arena concurrency before attributing oversubscription to hardware.
 - Do not compare an optimized library path to an intentionally naive baseline unless the claim says so.
 
 ## Report Template

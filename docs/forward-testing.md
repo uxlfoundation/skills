@@ -4,12 +4,15 @@ Use Harbor jobs to learn whether a skill improves real agent behavior. Harbor ow
 
 ## Run With and Without Skills
 
-For each Harbor task, run at least two jobs with the same task revision, agent, model, attempt count, timeouts, and environment:
+For each Harbor task, run three jobs with the same task revision, agent, model, attempt count, timeouts, and environment:
 
 - Baseline: do not pass `--skill` or a skill-specific extra instruction.
-- Skill-explicit: pass the matching skill with `--skill` and the matching file from `evaluation/harbor/instructions/` with `--extra-instruction-path`.
+- Previous skill: pass the skill from the comparison Git revision.
+- Candidate skill: pass the candidate skill from the current working tree.
 
-Use at least three attempts per arm for promotion evidence. Harbor stores the task result, reward, verifier logs, trajectory, timing, usage, and collected artifacts under `harbor-jobs/`.
+Use at least three attempts per arm for calibration and five for promotion evidence. Harbor stores the task result, reward, verifier logs, trajectory, timing, usage, and collected artifacts under `harbor-jobs/`.
+
+For triage claims, the failure must reproduce in the declared environment and the task must exercise reproduce, investigate, repair, and verify. Fixture and review tasks can support reasoning coverage but are not substitutes for live triage.
 
 ## Review Results
 
@@ -20,8 +23,13 @@ Run `harbor view harbor-jobs` and compare the paired jobs. Review deterministic 
 - Appropriate clarifying questions.
 - Clear correctness validation.
 - No unsupported performance or compatibility claims.
+- Verified success before efficiency is compared.
+- Uncached input, cached input, output tokens, cost, and runtime.
+- Cost and token burn per verified success.
 
-For skill promotion, record the mean baseline reward, mean skill-explicit reward, delta, trial count, agent/model, Harbor version, task revision, and skill digest. Keep the raw Harbor job directories or uploaded private job references.
+For skill promotion, record the mean reward for every arm, verified-success count, efficiency deltas, trial count, agent/model, Harbor version, task revision, skill digest, and execution environment. Keep the raw Harbor job directories or uploaded private job references.
+
+Exclude runner, network, provisioning, and service failures and rerun the unchanged trial. Preserve and report those failures separately rather than scoring them as skill failures.
 
 ## Record Evidence
 

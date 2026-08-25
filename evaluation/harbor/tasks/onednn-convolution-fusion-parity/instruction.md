@@ -1,0 +1,3 @@
+The CPU inference integration in `/app/residual_conv.cpp` must compute a fused residual block with the contract `ReLU(convolution + bias + residual)`. It uses an actual oneDNN convolution, `format_tag::any` primitive descriptors, and sum plus ReLU post-ops, but its result does not match the independent plain-layout reference.
+
+Run `bash /app/reproduce.sh`, diagnose the post-op and destination-memory semantics, and repair `/app/residual_conv.cpp`. Preserve the command-line interface, oneDNN convolution, optimized descriptor selection, and fused sum-plus-ReLU path. Do not replace the oneDNN path with a scalar or unfused implementation. The repair must handle other channel counts, shapes, seeds, and residual scales.

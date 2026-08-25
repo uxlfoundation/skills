@@ -1,0 +1,8 @@
+services:
+  main:
+    devices:
+      - /dev/dxg:/dev/dxg
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl:ro
+    environment:
+      ONEAPI_DEVICE_SELECTOR: level_zero:gpu

@@ -29,7 +29,9 @@ class JobSummary:
     uncached_input_tokens: int
     cached_input_tokens: int
     output_tokens: int
-    cost_usd: float
+    token_usage_available: bool
+    token_usage_source: str
+    cost_usd: float | None
     runtime_seconds: float | None
 
     @property
@@ -40,6 +42,23 @@ class JobSummary:
             and self.errored_trials == 0
             and self.unfinished_trials == 0
         )
+
+    @property
+    def total_tokens(self) -> int:
+        return self.uncached_input_tokens + self.cached_input_tokens + self.output_tokens
+
+    def verified_successes(self, reward_floor: float) -> int:
+        return sum(reward >= reward_floor for reward in self.trial_rewards)
+
+    def tokens_per_verified_success(self, reward_floor: float) -> float | None:
+        if not self.token_usage_available:
+            return None
+        successes = self.verified_successes(reward_floor)
+        return self.total_tokens / successes if successes else None
+
+    def cost_per_verified_success(self, reward_floor: float) -> float | None:
+        successes = self.verified_successes(reward_floor)
+        return self.cost_usd / successes if successes and self.cost_usd is not None else None
 
 
 def _number(value: Any) -> float | None:
@@ -127,6 +146,43 @@ def _runtime_seconds(result: dict[str, Any]) -> float | None:
         return None
 
 
+def _codex_event_usage(job_directory: Path) -> tuple[int, int, int] | None:
+    """Recover usage when Harbor cannot convert the Codex event trajectory."""
+    totals = {"input_tokens": 0, "cached_input_tokens": 0, "output_tokens": 0}
+    found = False
+    for path in sorted(job_directory.glob("*/agent/codex.txt")):
+        try:
+            lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+        except OSError:
+            continue
+        for line in lines:
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(event, dict) or event.get("type") != "turn.completed":
+                continue
+            usage = event.get("usage")
+            if not isinstance(usage, dict):
+                continue
+            values = {
+                name: usage.get(name)
+                for name in totals
+            }
+            if not all(isinstance(value, int) and not isinstance(value, bool) for value in values.values()):
+                continue
+            found = True
+            for name, value in values.items():
+                totals[name] += value
+    if not found:
+        return None
+    return (
+        totals["input_tokens"],
+        totals["cached_input_tokens"],
+        totals["output_tokens"],
+    )
+
+
 def load_job(path: Path, label: str) -> JobSummary:
     try:
         result = json.loads(path.read_text(encoding="utf-8"))
@@ -144,8 +200,28 @@ def load_job(path: Path, label: str) -> JobSummary:
     if not isinstance(evals, dict):
         evals = {}
 
-    total_input = _integer(stats.get("n_input_tokens"))
-    cached_input = _integer(stats.get("n_cache_tokens"))
+    harbor_token_values = (
+        stats.get("n_input_tokens"),
+        stats.get("n_cache_tokens"),
+        stats.get("n_output_tokens"),
+    )
+    token_usage_available = all(
+        isinstance(value, int) and not isinstance(value, bool)
+        for value in harbor_token_values
+    )
+    token_usage_source = "harbor-result" if token_usage_available else "unavailable"
+    if token_usage_available:
+        total_input, cached_input, output_tokens = (
+            int(value) for value in harbor_token_values
+        )
+    else:
+        recovered_usage = _codex_event_usage(path.parent)
+        if recovered_usage is None:
+            total_input = cached_input = output_tokens = 0
+        else:
+            total_input, cached_input, output_tokens = recovered_usage
+            token_usage_available = True
+            token_usage_source = "codex-event-fallback"
     unfinished = sum(
         _integer(stats.get(name))
         for name in ("n_running_trials", "n_pending_trials", "n_cancelled_trials")
@@ -164,8 +240,10 @@ def load_job(path: Path, label: str) -> JobSummary:
         trial_rewards=_trial_rewards(evals),
         uncached_input_tokens=max(total_input - cached_input, 0),
         cached_input_tokens=cached_input,
-        output_tokens=_integer(stats.get("n_output_tokens")),
-        cost_usd=_number(stats.get("cost_usd")) or 0.0,
+        output_tokens=output_tokens,
+        token_usage_available=token_usage_available,
+        token_usage_source=token_usage_source,
+        cost_usd=_number(stats.get("cost_usd")),
         runtime_seconds=_runtime_seconds(result),
     )
 
@@ -180,7 +258,9 @@ def _format_delta(candidate: float | None, reference: float | None) -> str:
     return f"{candidate - reference:+.4f}"
 
 
-def _format_percent(candidate: float, reference: float) -> str:
+def _format_percent(candidate: float | None, reference: float | None) -> str:
+    if candidate is None or reference is None:
+        return "n/a"
     if reference == 0:
         return "n/a" if candidate == 0 else "+inf"
     return f"{((candidate / reference) - 1.0) * 100:+.1f}%"
@@ -191,6 +271,22 @@ def _format_runtime(value: float | None) -> str:
         return "n/a"
     minutes, seconds = divmod(round(value), 60)
     return f"{minutes}m {seconds:02d}s" if minutes else f"{seconds}s"
+
+
+def _format_tokens_per_success(value: float | None) -> str:
+    return "n/a" if value is None else f"{round(value):,}"
+
+
+def _format_cost_per_success(value: float | None) -> str:
+    return "n/a" if value is None else f"${value:.6f}"
+
+
+def _format_cost(value: float | None) -> str:
+    return "n/a" if value is None else f"${value:.6f}"
+
+
+def _format_tokens(value: int, available: bool) -> str:
+    return f"{value:,}" if available else "n/a"
 
 
 def _format_trial_rewards(values: tuple[float, ...]) -> str:
@@ -219,7 +315,10 @@ def _display_path(path: Path) -> str:
 
 
 def assess_candidate(
-    previous: JobSummary, candidate: JobSummary, tolerance: float
+    previous: JobSummary,
+    candidate: JobSummary,
+    tolerance: float,
+    verified_reward_floor: float = 1.0,
 ) -> tuple[str, bool]:
     if not candidate.reliable:
         return "INVALID: candidate run is incomplete or errored", True
@@ -227,12 +326,49 @@ def assess_candidate(
         return "INVALID: candidate run has no aggregate reward", True
     if previous.mean_reward is None:
         return "UNKNOWN: previous run has no aggregate reward", False
+    previous_successes = previous.verified_successes(verified_reward_floor)
+    candidate_successes = candidate.verified_successes(verified_reward_floor)
+    if candidate_successes < previous_successes:
+        return (
+            "REGRESSION: candidate verified successes changed from "
+            f"{previous_successes} to {candidate_successes}",
+            True,
+        )
     delta = candidate.mean_reward - previous.mean_reward
     if delta < -tolerance:
         return f"REGRESSION: candidate reward changed by {delta:+.4f}", True
     if delta > tolerance:
         return f"IMPROVEMENT: candidate reward changed by {delta:+.4f}", False
     return f"NO QUALITY CHANGE: reward changed by {delta:+.4f}", False
+
+
+def assess_efficiency(
+    previous: JobSummary, candidate: JobSummary, verified_reward_floor: float
+) -> str:
+    previous_successes = previous.verified_successes(verified_reward_floor)
+    candidate_successes = candidate.verified_successes(verified_reward_floor)
+    if candidate_successes == 0:
+        return "UNAVAILABLE: candidate produced no verified success"
+    if previous_successes == 0:
+        return "IMPROVEMENT: candidate produced a verified success and previous did not"
+    assessments: list[str] = []
+    previous_tokens = previous.tokens_per_verified_success(verified_reward_floor)
+    candidate_tokens = candidate.tokens_per_verified_success(verified_reward_floor)
+    if previous_tokens is not None and candidate_tokens is not None:
+        assessments.append(
+            "candidate tokens per verified success changed by "
+            f"{_format_percent(candidate_tokens, previous_tokens)}"
+        )
+    previous_cost = previous.cost_per_verified_success(verified_reward_floor)
+    candidate_cost = candidate.cost_per_verified_success(verified_reward_floor)
+    if previous_cost is not None and candidate_cost is not None:
+        assessments.append(
+            f"candidate cost per verified success changed by "
+            f"{_format_percent(candidate_cost, previous_cost)}"
+        )
+    if assessments:
+        return "; ".join(assessments)
+    return "UNAVAILABLE: cost and comparable token usage were not reported"
 
 
 def render_report(
@@ -250,8 +386,14 @@ def render_report(
     attempts: int,
     dashboard_base_url: str | None,
     tolerance: float,
+    verified_reward_floor: float = 1.0,
 ) -> tuple[str, bool]:
-    assessment, failed = assess_candidate(previous, candidate, tolerance)
+    assessment, failed = assess_candidate(
+        previous, candidate, tolerance, verified_reward_floor
+    )
+    efficiency_assessment = assess_efficiency(
+        previous, candidate, verified_reward_floor
+    )
     jobs = (no_skill, previous, candidate)
     all_reliable = all(job.reliable for job in jobs)
     ceiling = all(
@@ -270,8 +412,20 @@ def render_report(
         f"- Candidate versus no skill: {_format_delta(candidate.mean_reward, no_skill.mean_reward)} reward.",
         f"- Candidate versus previous: {_format_delta(candidate.mean_reward, previous.mean_reward)} reward, "
         f"{_format_percent(candidate.cost_usd, previous.cost_usd)} cost.",
+        f"- Quality gate at reward `{verified_reward_floor:.4f}`: candidate "
+        f"{candidate.verified_successes(verified_reward_floor)}/{candidate.completed_trials}, "
+        f"previous {previous.verified_successes(verified_reward_floor)}/{previous.completed_trials}.",
+        f"- Efficiency: {efficiency_assessment}.",
         f"- Reliability: {'all runs completed without errors' if all_reliable else 'one or more runs are incomplete or errored'}.",
     ]
+    fallback_labels = [
+        job.label for job in jobs if job.token_usage_source == "codex-event-fallback"
+    ]
+    if fallback_labels:
+        lines.append(
+            "- Token accounting: recovered from raw Codex `turn.completed` events for "
+            f"{', '.join(fallback_labels)} because Harbor did not populate job-level usage."
+        )
     if ceiling:
         lines.append(
             "- **Ceiling warning:** all three arms reached full reward; this task cannot distinguish skill value."
@@ -291,8 +445,29 @@ def render_report(
             f"| {job.label} | {_job_link(job, dashboard_base_url)} | "
             f"{_format_reward(job.mean_reward)} | {job.completed_trials}/{job.total_trials} | "
             f"{job.errored_trials} | {_format_trial_rewards(job.trial_rewards)} | "
-            f"{job.uncached_input_tokens:,} | {job.cached_input_tokens:,} | "
-            f"{job.output_tokens:,} | ${job.cost_usd:.6f} | {_format_runtime(job.runtime_seconds)} |"
+            f"{_format_tokens(job.uncached_input_tokens, job.token_usage_available)} | "
+            f"{_format_tokens(job.cached_input_tokens, job.token_usage_available)} | "
+            f"{_format_tokens(job.output_tokens, job.token_usage_available)} | "
+            f"{_format_cost(job.cost_usd)} | {_format_runtime(job.runtime_seconds)} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## Verified-success efficiency",
+            "",
+            f"Quality gate: trial reward at least `{verified_reward_floor:.4f}`.",
+            "",
+            "| Arm | Verified successes | Total token burn | Tokens / verified success | Cost / verified success |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ]
+    )
+    for job in jobs:
+        lines.append(
+            f"| {job.label} | {job.verified_successes(verified_reward_floor)}/{job.completed_trials} | "
+            f"{_format_tokens(job.total_tokens, job.token_usage_available)} | "
+            f"{_format_tokens_per_success(job.tokens_per_verified_success(verified_reward_floor))} | "
+            f"{_format_cost_per_success(job.cost_per_verified_success(verified_reward_floor))} |"
         )
 
     metric_names = sorted(
@@ -327,6 +502,7 @@ def render_report(
             f"- Candidate skill: `{candidate_ref}`",
             f"- Agent/model: `{agent}` / `{model}`",
             f"- Attempts per arm: `{attempts}`",
+            f"- Verified reward floor: `{verified_reward_floor:.4f}`",
             f"- No-skill result: `{_display_path(no_skill.path)}`",
             f"- Previous result: `{_display_path(previous.path)}`",
             f"- Candidate result: `{_display_path(candidate.path)}`",
@@ -355,11 +531,14 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--dashboard-base-url")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reward-tolerance", type=float, default=1e-6)
+    parser.add_argument("--verified-reward-floor", type=float, default=1.0)
     parser.add_argument("--fail-on-regression", action="store_true")
     args = parser.parse_args(argv)
 
     if args.reward_tolerance < 0:
         parser.error("--reward-tolerance cannot be negative")
+    if not 0 <= args.verified_reward_floor <= 1:
+        parser.error("--verified-reward-floor must be between 0 and 1")
 
     try:
         no_skill = load_job(args.no_skill, "No skill")
@@ -383,6 +562,7 @@ def main(argv: list[str]) -> int:
         attempts=args.attempts,
         dashboard_base_url=args.dashboard_base_url,
         tolerance=args.reward_tolerance,
+        verified_reward_floor=args.verified_reward_floor,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="utf-8")

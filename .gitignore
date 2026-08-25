@@ -3,6 +3,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 harbor-jobs/
+tmp/
+output/
 eval-results/
 eval-prompts/
 eval-answers/
+scripts/runner/*.log

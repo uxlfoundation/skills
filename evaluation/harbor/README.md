@@ -10,9 +10,17 @@ $env:HARBOR_TELEMETRY = "off"
 
 ## Skill suites and coverage
 
-[`suites.json`](suites.json) is the machine-readable evaluator portfolio. It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable view.
+[`suites.json`](suites.json) is the machine-readable evaluator portfolio, governed by [`schemas/harbor-suites.schema.json`](../../schemas/harbor-suites.schema.json). It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, reproduction mode, scenario origin, workflow stages, hardware requirements, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable audit.
 
-The v1 portfolio targets 49 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
+The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
+
+Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md), [wave 2](results/2026-08-11-incident-sourcing-wave-2.md), and [wave 3](results/2026-08-11-incident-sourcing-wave-3.md).
+
+The v1 portfolio targets 50 tasks across all eight skills. Every skill must cover correctness, selection, integration, debugging, and performance, with at least five tasks and at least two intended to be discriminating. A task that reaches a model ceiling remains useful as smoke or regression coverage but does not satisfy the discriminating-task target.
+
+The `hosted-toolchain` environment identifies tasks that use hosted CPU hardware but require an opt-in heavyweight compiler/runtime/backend image and a declared runtime capability. It prevents SYCL provisioning cost from being confused with target-hardware performance coverage or included in the lightweight default smoke suite.
+
+Answer-quality fixtures test interpretation and reasoning but do not receive live-triage credit. A debugging capability must have planned coverage from a task that reproduces live and exercises reproduce, investigate, repair, and verify. Implemented real end-to-end credit additionally requires a maintainer incident or upstream regression as the task origin.
 
 Validate and regenerate the portfolio with:
 
@@ -30,19 +38,40 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `oneccl-datatype-count-mismatch`: hosted structured collective-contract task.
 - `oneccl-async-allreduce-wait`: hosted-CPU executable async-completion and buffer-lifetime task.
 - `oneccl-divergent-collective-sequence`: hosted structured collective-hang task.
+- `oneccl-cpp-or-nccl-like-api`: hosted structured, version-aware C++ versus NCCL-like C API selection and interoperability task.
+- `onedal-batch-online-distributed-choice`: hosted structured computation-mode decision task.
 - `onedal-sklearn-or-native-kmeans`: hosted structured interface-selection task.
+- `onedal-table-orientation-regression`: hosted-CPU executable oneDAL table-contract and metric-parity task.
+- `onedal-extra-trees-random-split`: hosted-CPU source-level task sourced from oneDAL issue #3648, with public and hidden weighted quality-regression cases.
+- `onedal-conversion-cost-benchmark`: hosted-CPU executable benchmark-instrumentation task separating framework conversion, oneDAL compute, and end-to-end time.
 - `onednn-framework-blocked-layout`: hosted structured layout-integration task.
+- `onednn-convolution-fusion-parity`: hosted-CPU executable post-op order and residual-destination task.
+- `onednn-extra-reorder-regression`: hosted-CPU executable constant-weight layout-cache task using oneDNN verbose evidence.
+- `onednn-benchdnn-no-ref-memory`: hosted-CPU executable task sourced from a public `benchdnn` mode regression.
+- `onednn-matmul-memory-descriptors`: hosted-CPU executable batched-matmul task for logical strides over framework-owned transposed weights.
 - `onedpl-missing-device-synchronization`: hosted structured async-device task.
+- `onedpl-iterator-category-failure`: hosted-CPU source-repair task sourced from oneDPL issue #2342, covering valid iterators with overloaded comma operators across algorithm families.
+- `onedpl-move-only-numeric-accumulator`: hosted-CPU source-repair task sourced from oneDPL issue #1955, covering move-only accumulators across parallel numeric backends.
+- `onedpl-stable-ordering-contract`: hosted-CPU executable oneDPL stable-order contract task.
 - `onetbb-bounded-image-flow-graph`: hosted structured backpressure and scheduler task.
+- `onetbb-cancellation-exception-propagation`: hosted-CPU executable bounded-ownership and per-job-failure smoke task.
 - `onetbb-histogram-local-aggregation`: hosted-CPU executable smoke task.
+- `onetbb-join-node-ordering`: hosted-CPU executable task sourced from a public maintainer incident about flow-graph ordering.
+- `onetbb-grainsize-affinity-regression`: hosted evidence-driven grainsize, cache-affinity, and NUMA-placement diagnostic task.
+- `onetbb-nested-thread-pool-arena`: hosted-CPU executable process-wide runtime-budget task.
 - `onetbb-stable-compaction-scan`: harder hosted-CPU task for deterministic prefix-scan reasoning.
 - `onemath-runtime-library-missing`: hosted structured diagnostic-answer task.
+- `onemath-deprecated-header-include`: hosted-CPU preprocessing task sourced from a public compatibility-header incident.
+- `onemath-packed-band-storage-fixtures`: hosted-CPU source-repair task sourced from oneMath PR #85, covering triangular packed and banded BLAS storage contracts.
 - `performance-benchmark-report-repair`: hosted-CPU executable reporting task.
+- `performance-cgroup-concurrency-quota`: hosted-CPU oneTBB resource-constraint task sourced from a public cgroup quota incident.
 - `performance-floating-reduction-tolerance`: hosted-CPU executable numerical-validation task.
 - `performance-tiny-async-gpu-claim`: hosted structured benchmark-review task.
 - `sycl-cmake-compiler-cache`: hosted structured toolchain-diagnosis task.
+- `sycl-compile-time-backend-link`: opt-in hosted-toolchain task that reproduces a mixed-driver SYCL link failure and executes the repair on an OpenCL CPU device.
 - `sycl-loader-plugin-mismatch`: hosted structured runtime-loader task.
 - `sycl-selector-silent-cpu-fallback`: hosted-CPU executable runtime-device-proof task.
+- `sycl-transitive-target-link-contract`: opt-in hosted-toolchain task for target-scoped propagation of the SYCL final-link contract.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -54,16 +83,35 @@ harbor run `
   --path evaluation/harbor/tasks `
   --agent oracle `
   --include-task-name oneccl-async-allreduce-wait `
+  --include-task-name oneccl-cpp-or-nccl-like-api `
   --include-task-name oneccl-datatype-count-mismatch `
   --include-task-name oneccl-divergent-collective-sequence `
+  --include-task-name onedal-batch-online-distributed-choice `
   --include-task-name onedal-sklearn-or-native-kmeans `
+  --include-task-name onedal-table-orientation-regression `
+  --include-task-name onedal-extra-trees-random-split `
+  --include-task-name onedal-conversion-cost-benchmark `
   --include-task-name onednn-framework-blocked-layout `
+  --include-task-name onednn-convolution-fusion-parity `
+  --include-task-name onednn-extra-reorder-regression `
+  --include-task-name onednn-benchdnn-no-ref-memory `
+  --include-task-name onednn-matmul-memory-descriptors `
   --include-task-name onedpl-missing-device-synchronization `
+  --include-task-name onedpl-iterator-category-failure `
+  --include-task-name onedpl-move-only-numeric-accumulator `
+  --include-task-name onedpl-stable-ordering-contract `
+  --include-task-name onemath-deprecated-header-include `
+  --include-task-name onemath-packed-band-storage-fixtures `
   --include-task-name onemath-runtime-library-missing `
   --include-task-name onetbb-bounded-image-flow-graph `
+  --include-task-name onetbb-cancellation-exception-propagation `
+  --include-task-name onetbb-grainsize-affinity-regression `
   --include-task-name onetbb-histogram-local-aggregation `
+  --include-task-name onetbb-join-node-ordering `
+  --include-task-name onetbb-nested-thread-pool-arena `
   --include-task-name onetbb-stable-compaction-scan `
   --include-task-name performance-benchmark-report-repair `
+  --include-task-name performance-cgroup-concurrency-quota `
   --include-task-name performance-floating-reduction-tolerance `
   --include-task-name performance-tiny-async-gpu-claim `
   --include-task-name sycl-cmake-compiler-cache `
@@ -76,7 +124,7 @@ harbor run `
 
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
-  --expected-trials 16 `
+  --expected-trials 35 `
   --reward-floor 1.0
 ```
 
@@ -124,13 +172,26 @@ The generated report is written to `harbor-jobs/<job-prefix>-comparison.md`. It 
 - Trial completion, errors, and per-trial reward distributions.
 - Component metrics from Harbor's native `result.json`.
 - Uncached input, cached input, output tokens, cost, and runtime.
+- Verified successes, token burn per verified success, and cost per verified success.
 - Git commit/tree provenance and a warning when all arms hit a task ceiling.
 
 Use `-DryRun` to inspect the commands without starting jobs. Use `-FailOnRegression` when an incomplete, errored, or lower-reward candidate should produce a failing exit code. Pass `-JobPrefix` for stable job names and `-ReportPath` when a report should be recorded outside the ignored `harbor-jobs` directory.
 
+On Windows/WSL runners, add `-GuardWslCrashDumps` for tasks that intentionally crash a Linux process while reproducing a historical failure. The opt-in guard truncates only new `%TEMP%\wsl-crashes\wsl-crash-*.dmp` files while the comparison is active; task output, exit status, Harbor artifacts, and verifier behavior remain unchanged. This prevents repeated expected crashes from exhausting the Windows host disk. Prefer updating WSL and setting `maxCrashDumpCount=0` when the runner permits an administrator-approved WSL update.
+
+Use `-VerifiedRewardFloor` when a task's deterministic success threshold differs from the portfolio default. Quality remains the gate: lower cost cannot compensate for fewer verified successes.
+
+Total token burn per verified success is the primary efficiency measure. Cost per verified success and runtime remain useful secondary measures because pricing and hardware can change independently of the skill.
+
 ## Inspect prompts and criteria
 
 The job viewer and task-definition viewer answer different questions. Run them on separate ports:
+
+```powershell
+.\scripts\start_harbor_dashboards.ps1 -OpenBrowser
+```
+
+The launcher uses native Harbor when `-NoWsl` is supplied and otherwise uses the configured Ubuntu WSL distribution. It is safe to run again when either dashboard is already active. The equivalent direct commands are:
 
 ```powershell
 harbor view harbor-jobs --jobs --port 8080
@@ -159,6 +220,53 @@ Treat the trial's **Reward** and verifier files as authoritative. A prominent jo
 - [2026-08-08 coverage wave 1](results/2026-08-08-coverage-wave-1.md): six-task expansion, rubric audit, and three-attempt headroom calibration.
 - [2026-08-08 coverage wave 2](results/2026-08-08-coverage-wave-2.md): four-task expansion targeting performance, oneTBB, oneCCL, and SYCL gaps.
 - [2026-08-08 coverage wave 3](results/2026-08-08-coverage-wave-3.md): executable async-completion, device-proof, and numerical-validation tasks.
+- [2026-08-09 oneTBB bounded-flow skill iteration](results/2026-08-09-onetbb-bounded-flow-skill.md): three-arm skill comparison and audited verifier correction.
+- [2026-08-10 oneTBB failure-flow generalization probe](results/2026-08-10-onetbb-failure-flow-generalization.md): executable task calibration and implementation-neutral verifier audit.
+- [2026-08-10 oneTBB runtime-composition calibration](results/2026-08-10-onetbb-runtime-composition.md): shared-arena executable task, alternate-submission verifier audit, and ceiling classification.
+- [2026-08-10 oneTBB grainsize/affinity skill iteration](results/2026-08-10-onetbb-grainsize-affinity-skill.md): evidence-driven task, implementation-neutral rubric audit, and three-attempt skill calibration.
+- [2026-08-10 evaluator reproducibility audit](results/2026-08-10-reproducibility-audit.md): schema v2 task audit, live-versus-fixture coverage, hardware requirements, and the next incident-sourcing wave.
+- [2026-08-11 maintainer incident sourcing wave 2](results/2026-08-11-incident-sourcing-wave-2.md): verified oneMath installed-header coverage and evidence-based oneDPL toolchain deferral.
+- [2026-08-11 maintainer incident sourcing wave 3](results/2026-08-11-incident-sourcing-wave-3.md): verified deterministic oneTBB cgroup-quota triage on a generic hosted CPU.
+- [2026-08-11 oneMath compatibility-header calibration](results/2026-08-11-onemath-header-skill-calibration.md): ceiling classification with verified-success token and cost measurements.
+- [2026-08-11 performance cgroup-concurrency calibration](results/2026-08-11-performance-cgroup-skill-calibration.md): ceiling classification after the candidate increased token burn at unchanged quality.
+- [2026-08-12 oneDNN benchdnn incident](results/2026-08-12-onednn-benchdnn-incident.md): portable AVX2 reproduction of a maintainer-reported no-reference-memory crash, hardened with a hidden fused-convolution shape.
+- [2026-08-12 oneDAL mode selection](results/2026-08-12-onedal-mode-selection.md): hardware-agnostic batch/online/distributed decision coverage with deterministic shortcut rejection.
+- [2026-08-12 oneDAL table orientation](results/2026-08-12-onedal-table-orientation.md): real oneDAL CPU execution with a square-fixture trap and held-out rectangular parity cases.
+- [2026-08-12 oneDAL table calibration](results/2026-08-12-onedal-table-calibration.md): one-attempt three-arm ceiling; candidate token burn increased 17.8% at unchanged quality.
+- [2026-08-12 oneDPL stable ordering](results/2026-08-12-onedpl-stable-ordering.md): real oneDPL host-policy execution with equal-key stability and permutation checks.
+- [2026-08-12 oneDPL stable-ordering calibration](results/2026-08-12-onedpl-stable-calibration.md): one-attempt three-arm ceiling; the candidate used 9.9% more tokens than the previous skill at unchanged quality.
+- [2026-08-12 oneDNN convolution fusion parity](results/2026-08-12-onednn-convolution-fusion-parity.md): real oneDNN CPU execution with fused post-op order, residual initialization, and hidden shape checks.
+- [2026-08-12 oneDNN convolution-fusion calibration](results/2026-08-12-onednn-convolution-fusion-calibration.md): one-attempt three-arm ceiling; current skill used 21.5% fewer tokens than the original skill but 6.5% more than no skill.
+- [2026-08-13 oneDNN benchdnn incident calibration](results/2026-08-13-onednn-benchdnn-calibration.md): three-attempt quality ceiling with 11.6% fewer tokens per verified success than no skill and 68.1% fewer than the original skill.
+- [2026-08-13 oneDAL mode-selection calibration](results/2026-08-13-onedal-mode-calibration.md): audited one-attempt quality ceiling; current skill used 44.2% fewer tokens than the original skill but 4.6% more than no skill.
+- [2026-08-13 calibration-state audit](results/2026-08-13-calibration-state-audit.md): introduces `no-lift`, hardens the oneCCL datatype rubric, and corrects four previously ambiguous task states.
+- [2026-08-13 oneDAL ExtraTrees incident](results/2026-08-13-onedal-extra-trees-incident.md): live source reproduction, upstream repair, and Harbor baseline/oracle discrimination for oneDAL issue #3648.
+- [2026-08-13 oneDAL ExtraTrees calibration](results/2026-08-13-onedal-extra-trees-calibration.md): one-attempt three-arm quality ceiling; the current skill used 7.0% fewer tokens than no skill and 9.9% fewer than the original skill.
+- [2026-08-14 oneDAL conversion-cost benchmark](results/2026-08-14-onedal-conversion-cost.md): live oneDAL fit/predict task with deterministic conversion, compute, and end-to-end timing boundaries.
+- [2026-08-14 oneDAL conversion-cost calibration](results/2026-08-14-onedal-conversion-calibration.md): one-attempt three-arm quality ceiling; the current skill used 43.3% more tokens than no skill.
+- [2026-08-14 hosted-toolchain tier audit](results/2026-08-14-toolchain-tier-audit.md): separates the two remaining SYCL/compiler-dependent jobs from lightweight free-runner and target-hardware tiers.
+- [2026-08-14 hosted-toolchain image selection](results/2026-08-14-toolchain-image-selection.md): selects a pinned compiler-only bootstrap and records the validated OpenCL CPU route without pulling the full toolkit.
+- [2026-08-14 SYCL compile/link task design](results/2026-08-14-sycl-toolchain-task-design.md): specifies the first executable toolchain-tier failure, protected verification contract, and promotion sequence.
+- [2026-08-14 SYCL task draft and WSL reclaim](results/2026-08-14-sycl-draft-and-wsl-reclaim.md): records live compile/link discrimination, oracle CPU execution, removal of the obsolete toolkit, and the remaining administrator compaction gate.
+- [2026-08-16 SYCL compile/link activation](results/2026-08-16-sycl-compile-link-activation.md): records the final image gate, direct link failure, Harbor baseline/oracle discrimination, and runner constraint.
+- [2026-08-16 SYCL compile/link calibration](results/2026-08-16-sycl-compile-link-calibration.md): all arms pass; the task becomes smoke/ceiling, with 9.3% lower candidate token burn than no skill in the one-attempt screen.
+- [2026-08-16 SYCL transitive-link activation](results/2026-08-16-sycl-transitive-link-activation.md): records target-graph baseline/oracle discrimination and authentic CPU execution.
+- [2026-08-16 SYCL transitive-link calibration](results/2026-08-16-sycl-transitive-link-calibration-final.md): nine valid trials all pass; candidate skill uses 7.8% more tokens than no skill, so the task becomes smoke/ceiling.
+- [2026-08-16 SYCL incident sourcing wave 4](results/2026-08-16-sycl-incident-sourcing-wave-4.md): selects oneDNN #2959 for a strict generic-CPU reproduction gate and rejects premature target-hardware or synthetic substitutes.
+- [2026-08-13 oneTBB join-node calibration](results/2026-08-13-onetbb-join-calibration.md): one-attempt three-arm ceiling; every repair passed, while the current skill used 61.0% more tokens than no skill.
+- [2026-08-13 oneDNN constant-weight reorder regression](results/2026-08-13-onednn-reorder-regression.md): live oneDNN CPU task that reduces four repeated constant-weight reorders to one while preserving numerical results.
+- [2026-08-13 oneDNN reorder calibration](results/2026-08-13-onednn-reorder-calibration.md): one-attempt three-arm ceiling; the current skill used 21.5% more tokens than no skill at unchanged quality.
+- [2026-08-14 oneDNN matmul descriptor task](results/2026-08-14-onednn-matmul-descriptors.md): live generic-CPU parity task for framework-packed batched weights and explicit logical strides.
+- [2026-08-14 oneDNN matmul descriptor calibration](results/2026-08-14-onednn-matmul-calibration.md): one-attempt three-arm quality ceiling; the current skill used 50.7% more tokens than no skill.
+- [2026-08-13 oneDPL move-only numeric incident](results/2026-08-13-onedpl-move-only-incident.md): live pre-fix reproduction, accepted upstream repair, and Harbor baseline/oracle discrimination for oneDPL issue #1955.
+- [2026-08-13 oneDPL move-only numeric calibration](results/2026-08-13-onedpl-move-only-calibration.md): one-attempt three-arm quality ceiling; the current skill used 197.0% more tokens than no skill at unchanged quality.
+- [2026-08-13 oneDPL overloaded-comma iterator incident](results/2026-08-13-onedpl-no-comma-incident.md): live hosted-CPU reproduction and accepted upstream repair for oneDPL issue #2342.
+- [2026-08-14 oneDPL overloaded-comma iterator calibration](results/2026-08-14-onedpl-no-comma-calibration.md): one-attempt three-arm quality ceiling; the current skill used 4.6% fewer tokens than no skill but 37.2% more than the original skill.
+- [2026-08-13 oneMath packed/band storage incident](results/2026-08-13-onemath-packed-band-storage-incident.md): live source-fixture reproduction and accepted upstream repair for triangular packed and banded BLAS storage.
+- [2026-08-13 oneMath packed/band storage calibration](results/2026-08-13-onemath-packed-band-storage-calibration.md): one-attempt three-arm quality ceiling; the current skill used 131.4% more tokens than no skill at unchanged quality.
+- [2026-08-13 oneCCL incident sourcing](results/2026-08-13-oneccl-incident-sourcing.md): reserves a verified Level Zero zero-count `alltoallv` incident for target-GPU execution and rejects candidates without accepted repair boundaries.
+- [2026-08-13 oneCCL API selection](results/2026-08-13-oneccl-api-selection.md): structured, version-aware C++ versus NCCL-like C API choice with explicit interoperability and lifecycle boundaries.
+- [2026-08-13 oneCCL API-selection calibration](results/2026-08-13-oneccl-api-calibration.md): three-attempt quality lift for the current skill, with lower token burn than the original skill but residual correctness headroom.
 
 `check_harbor_job.py` is a CI assertion over Harbor's `result.json`; Harbor remains the evaluation harness and result format owner.
 

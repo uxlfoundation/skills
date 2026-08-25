@@ -27,6 +27,15 @@
         "must_include": ["layout", "reorder", "shape", "backend", "benchmark"],
         "must_not_include": ["ignore reorders", "no benchmark needed"]
       }
+    },
+    {
+      "id": "onednn-benchdnn-mode-triage",
+      "prompt": "Use $uxl-onednn to triage a fused-convolution benchdnn case that passes correctness mode but crashes in run and simulation modes.",
+      "expected_output": "Preserves the descriptor and modes, separates reference fill/reorder from execution, captures verbose implementation evidence, recognizes the no-reference-memory contract, and reruns correctness and performance controls after repair.",
+      "checks": {
+        "must_include": ["mode", "reference", "reorder", "verbose", "correctness"],
+        "must_not_include": ["speedup", "change the problem"]
+      }
     }
   ]
 }

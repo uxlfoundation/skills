@@ -25,6 +25,14 @@ Help an agent produce correct, measurable oneDNN work for deep learning framewor
 5. Validate with a small deterministic case, then representative real shapes.
 6. Use `benchdnn` or existing project benchmarks for performance claims. Report baseline, new result, problem shape, engine, build type, and environment.
 
+## Triage Workflow
+
+1. Preserve the exact `benchdnn` problem descriptor, engine, mode, and mode modifiers before reducing the case.
+2. Classify the failing phase: primitive creation, reference-data fill or reorder, execution, correctness comparison, or performance reporting.
+3. Capture oneDNN verbose output and the selected implementation alongside the first complete error. Compare the same descriptor across the failing mode and a meaningful control.
+4. Use correctness mode before interpreting performance mode. Run and simulation modes disable reference-memory work; a harness path in those modes must not fill, reorder, map, or compare reference memories.
+5. Repair the narrowest project-owned boundary, then rerun the original modes and any available correctness or performance controls. A passing benchmark harness is validation evidence, not proof of a speedup.
+
 ## Gotchas
 
 - Do not treat logical tensor shape as physical layout. Reorders and blocked formats can dominate runtime.

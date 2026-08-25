@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "minimum_characters": 650,
+  "groups": {
+    "mode_decision": {
+      "batch_fit": [
+        ["\\bbatch\\b"],
+        ["\\b(?:entire|complete|full)\\s+(?:data(?:\\s*set)?|table)\\b"],
+        ["\\b(?:single[- ]process|one\\s+process|one\\s+host|fits?\\s+in\\s+(?:device\\s+)?memory|in[- ]memory)\\b"]
+      ],
+      "online_fit": [
+        ["\\bonline\\b"],
+        ["\\b(?:blocks?|chunks?|stream(?:ed|ing)?)\\b"],
+        ["\\b(?:incremental|partial(?:_compute|\\s+results?)|finalize|does\\s+not\\s+fit|memory\\s+pressure)\\b"]
+      ],
+      "distributed_fit": [
+        ["\\bdistributed\\b"],
+        ["\\b(?:partition(?:ed|ing)?|shard(?:ed|ing)?)\\b"],
+        ["\\b(?:ranks?|processes|nodes?|devices)\\b"],
+        ["\\b(?:communicator|collectives?|SPMD|launcher|merge)\\b"]
+      ]
+    },
+    "required_evidence": {
+      "support_contract": [
+        ["\\b(?:algorithm|covariance)\\b"],
+        ["\\b(?:oneAPI|DAAL|interface)\\b"],
+        ["\\b(?:version|release)\\b"],
+        ["\\b(?:support|supported|availability)\\b"],
+        ["\\b(?:CPU|GPU|device)\\b"]
+      ],
+      "data_contract": [
+        ["\\b(?:rows?|samples?)\\b"],
+        ["\\b(?:columns?|features?)\\b"],
+        ["\\b(?:dtype|data\\s+type)\\b"],
+        ["\\b(?:dense|sparse|layout)\\b"],
+        ["\\b(?:arrival|stream|memory|size)\\b"]
+      ],
+      "runtime_contract": [
+        ["\\b(?:ranks?|processes|nodes?)\\b"],
+        ["\\b(?:communicator|collective|launcher)\\b"],
+        ["\\b(?:partition|shard)\\w*\\b"],
+        ["\\b(?:network|interconnect|topology)\\b"]
+      ]
+    },
+    "validation": {
+      "reference_parity": [
+        ["\\b(?:batch.{0,60}\\breference|reference.{0,60}\\bbatch|(?:independent(?:ly)?|trusted).{0,60}\\breference|baseline)\\b"],
+        ["\\b(?:same|identical|immutable|fixed|freeze(?:s|d)?|preserve(?:s|d)?|match(?:es|ed)?)\\b.{0,120}\\b(?:inputs?|data(?:\\s*set)?s?|preprocess\\w*|parameters?|dtype|data\\s+type|feature\\s+order|covariance\\s+definition|requested\\s+outputs?)\\b"],
+        ["\\b(?:covariance|result|output)\\b"],
+        ["\\b(?:tolerance|metric|numerical)\\b"]
+      ],
+      "online_invariants": [
+        ["\\b(?:chunk|block)\\b"],
+        ["\\b(?:boundaries|order|sizes?)\\b"],
+        ["\\b(?:row\\s+count|every\\s+row|no\\s+(?:missing|duplicate))\\b"],
+        ["\\b(?:partial|incremental)\\w*\\b"],
+        ["\\bfinal(?:ize|ization| result)\\b"]
+      ],
+      "distributed_invariants": [
+        ["\\b(?:partition|shard)\\w*\\b"],
+        ["\\b(?:disjoint|overlap|duplicate|missing)\\b"],
+        ["\\b(?:rank|node)\\b"],
+        ["\\b(?:collective|merge|reduction|final)\\b"],
+        ["\\b(?:failure|timeout|mismatch|deadlock)\\b"]
+      ]
+    },
+    "measurement": {
+      "fair_benchmark": [
+        ["\\brepresentative\\b"],
+        ["\\b(?:same|fixed|immutable|identical)\\b.{0,80}\\b(?:data(?:\\s*set)?s?|inputs?|hardware|resources?|threads?|devices?)\\b"],
+        ["\\b(?:warm[- ]?ups?|iterations?|repetitions?|trials?|dispersion|variance|tail)\\b"],
+        ["\\bend[- ]to[- ]end\\b"],
+        ["\\b(?:conversion|table\\s+construction)\\b"],
+        ["\\b(?:communication|network|collective)\\b"],
+        ["\\b(?:synchronization|merge|finalize|finalization)\\b"]
+      ],
+      "bounded_recommendation": [
+        ["\\b(?:keep|retain|start\\s+with)\\s+(?:(?:the|dense|current|production)\\s+){0,2}batch\\b"],
+        ["\\b(?:only\\s+if|unless|until)\\b"],
+        ["\\b(?:evidence|measured|benchmark|constraint)\\b"],
+        ["\\b(?:correctness|parity|tolerance)\\b"]
+      ]
+    }
+  },
+  "unsupported_claims": [
+    "\\bonline\\s+(?:mode\\s+)?is\\s+always\\s+faster\\b",
+    "\\bdistributed\\s+(?:mode\\s+)?is\\s+always\\s+faster\\b",
+    "\\bmore\\s+(?:ranks|nodes|devices)\\s+(?:are|is)\\s+always\\s+faster\\b",
+    "\\bskip\\s+(?:parity|correctness)\\b"
+  ]
+}

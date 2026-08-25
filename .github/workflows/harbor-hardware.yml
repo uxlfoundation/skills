@@ -3,43 +3,77 @@ name: harbor-hardware
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: uxl-intel-gpu-evaluation
+  cancel-in-progress: false
+
 jobs:
   sycl-gpu:
-    runs-on: [self-hosted, linux, x64, uxl, sycl, gpu]
+    runs-on: [self-hosted, linux, x64, uxl, sycl, gpu, intel-gpu]
     timeout-minutes: 60
     env:
       HARBOR_TELEMETRY: "off"
       PYTHONUTF8: "1"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
-          python-version: "3.12"
-      - run: python -m pip install harbor==0.20.0
-      - name: Capture host probes
+          persist-credentials: false
+      - name: Create the pinned Harbor environment
         run: |
-          sycl-ls || true
-          cmake --version || true
-          python skills/uxl-sycl-build-debug/scripts/sycl_probe.py
+          python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version'
+          python3 -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install harbor==0.20.0
+      - name: Configure Intel GPU device permissions
+        run: |
+          test -d /dev/dri
+          render_node="$(find /dev/dri -maxdepth 1 -name 'renderD*' -print -quit)"
+          card_node="$(find /dev/dri -maxdepth 1 -name 'card*' -print -quit)"
+          test -n "$render_node"
+          render_gid="$(stat -c '%g' "$render_node")"
+          if [ -n "$card_node" ]; then
+            video_gid="$(stat -c '%g' "$card_node")"
+          else
+            video_gid="$render_gid"
+          fi
+          echo "INTEL_RENDER_GID=$render_gid" >> "$GITHUB_ENV"
+          echo "INTEL_VIDEO_GID=$video_gid" >> "$GITHUB_ENV"
+      - name: Capture host provenance
+        run: >-
+          .venv/bin/python scripts/capture_hardware_provenance.py
+          --output harbor-jobs/runner-provenance.json
+          --require-intel-gpu
+      - name: Check Docker and Intel GPU container access
+        run: |
+          docker version
+          docker compose version
+          docker run --rm \
+            --device /dev/dri:/dev/dri \
+            --group-add "$INTEL_RENDER_GID" \
+            intel/oneapi:2026.1.0-devel-ubuntu24.04@sha256:e9db518398753434ee5aab9740a25f1d3134396a30be1569cfad8f8b0d90740c \
+            bash -lc 'ONEAPI_DEVICE_SELECTOR=level_zero:gpu sycl-ls'
       - name: Run Harbor SYCL GPU oracle
         run: |
-          harbor run \
+          .venv/bin/harbor run \
             --path evaluation/harbor/tasks \
             --agent oracle \
             --include-task-name sycl-device-discovery \
-            --job-name uxl-sycl-gpu-oracle \
+            --job-name uxl-sycl-intel-gpu-oracle \
             --jobs-dir harbor-jobs \
             --n-concurrent 1 \
             --yes
       - name: Require successful Harbor oracle results
         run: >-
-          python scripts/check_harbor_job.py
-          harbor-jobs/uxl-sycl-gpu-oracle/result.json
+          .venv/bin/python scripts/check_harbor_job.py
+          harbor-jobs/uxl-sycl-intel-gpu-oracle/result.json
           --expected-trials 1
           --reward-floor 1.0
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
-          name: uxl-harbor-sycl-gpu
+          name: uxl-harbor-sycl-intel-gpu
           path: harbor-jobs
           retention-days: 30

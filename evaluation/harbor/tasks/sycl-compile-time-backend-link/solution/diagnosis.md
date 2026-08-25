@@ -1,0 +1,5 @@
+The first failure is at final link, not compilation or device discovery. The verbose build shows that `icpx -fsycl` successfully creates `sycl_kernel.o`, after which host-only `g++` tries to link that SYCL object without the DPC++ offload link step and reports unresolved SYCL/runtime symbols. Installing another backend cannot repair a command that has not produced an executable.
+
+The CMake repair uses the same configured DPC++ driver and `-fsycl` target options for both the SYCL object and final link. It is encoded in the clean CMake build rather than depending on shell-only flags. `/app/reproduce.sh` then selects the configured CPU backend explicitly, runs a deterministic kernel, prints the selected device, and compares the complete checksum with a host reference.
+
+This verifies compilation, linking, runtime discovery, queue construction, kernel completion, and correctness for the packaged generic-CPU target. It does not establish availability, correctness, or performance on any GPU or other target hardware.

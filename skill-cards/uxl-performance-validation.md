@@ -16,12 +16,14 @@ Guide agents through correctness-first performance validation: baselines, repres
 - Review unsupported performance claims.
 - Design benchmark plans and result tables.
 - Handle floating point tolerance and non-associativity.
+- Triage container oversubscription by comparing cgroup quotas with effective library concurrency.
 - Summarize benchmark CSV output.
 
 ## Limitations
 
 - Does not run vendor profilers directly.
 - Requires project-specific benchmarks for authoritative claims.
+- Treats cgroup-aware concurrency as generic resource triage, not evidence of device-specific performance.
 - Needs maintainer review from performance owners.
 
 ## Evidence

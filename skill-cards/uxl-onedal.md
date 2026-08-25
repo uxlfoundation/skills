@@ -15,13 +15,16 @@ Guide agents through oneDAL native C++ versus scikit-learn acceleration choices,
 
 - Choose Extension for Scikit-learn versus native oneDAL APIs.
 - Review distributed-mode proposals.
+- Select batch, online, or distributed computation from data arrival, memory, and launch topology.
 - Debug model quality changes after table conversion.
+- Detect orientation bugs hidden by square fixtures with rectangular-shape and metric-parity checks.
 - Require metric and preprocessing parity before performance tuning.
 
 ## Limitations
 
 - Does not encode full algorithm coverage.
 - Needs current upstream verification for GPU and algorithm support.
+- Mode advice is workload-level; exact mode availability must still be checked for the algorithm, interface, version, and device.
 - Needs maintainer review for oneAPI versus DAAL migration nuance.
 
 ## Evidence

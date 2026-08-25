@@ -21,15 +21,16 @@ Help an agent choose the right oneDAL path, preserve analytics semantics, and va
 - Use Extension for Scikit-learn when the user wants minimal-change acceleration of existing scikit-learn workflows.
 - Use native oneDAL oneAPI C++ interfaces when the user needs direct control, C++ integration, SYCL queues, or project-level oneDAL contributions.
 - Mention DAAL only when maintaining legacy code or when the repo already uses that interface.
-- Use distributed mode only when the data and launch environment are genuinely distributed; do not treat it as a faster batch default.
+- Use batch for an entire resident data set, online for blocks that arrive incrementally or do not fit in memory, and distributed only for data partitioned across a real multi-rank launch.
+- Confirm that the exact algorithm, interface, version, and device support the selected mode; do not treat online or distributed as a faster batch default.
 
 ## Implementation Workflow
 
 1. Define the analytics contract: preprocessing, train/test split, algorithm parameters, model outputs, metrics, random seeds, and expected tolerances.
 2. Map input data into the right oneDAL table representation. Treat row/column orientation and dense/sparse layout as observable behavior.
 3. Choose batch, online, or distributed computation from the workload, not from assumed performance.
-4. Add a small reference path and compare representative outputs.
-5. Benchmark only after correctness is stable. Include data size, mode, device, thread settings, and conversion costs.
+4. Add a small batch reference and compare representative outputs. For online work, verify chunk coverage and finalization; for distributed work, verify partitions, rank participation, and the merged result.
+5. Benchmark only after correctness is stable. Include data size, mode, device, thread settings, conversion costs, communication, and synchronization.
 
 ## Gotchas
 

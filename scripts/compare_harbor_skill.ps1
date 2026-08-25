@@ -22,6 +22,8 @@ param(
     [int]$Attempts = 3,
     [ValidateRange(1, 100)]
     [int]$Concurrency = 1,
+    [ValidateRange(0.0, 1.0)]
+    [double]$VerifiedRewardFloor = 1.0,
     [string]$ReasoningEffort = 'medium',
     [string]$TaskPath = 'evaluation/harbor/tasks',
     [string]$ExtraInstructionPath = '',
@@ -32,6 +34,7 @@ param(
     [string]$WslDistribution = 'Ubuntu',
     [string[]]$AgentEnv = @(),
     [switch]$DisableExtraInstruction,
+    [switch]$GuardWslCrashDumps,
     [switch]$NoWsl,
     [switch]$DryRun,
     [switch]$FailOnRegression
@@ -40,7 +43,10 @@ param(
 $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $temporaryRoot = $null
+$dumpGuardSentinel = $null
+$dumpGuardProcess = $null
 $previousTelemetry = [Environment]::GetEnvironmentVariable('HARBOR_TELEMETRY', 'Process')
+$previousPythonUtf8 = [Environment]::GetEnvironmentVariable('PYTHONUTF8', 'Process')
 
 function Invoke-CheckedGit {
     param([string[]]$Arguments)
@@ -100,6 +106,9 @@ function Get-DirectoryDigest {
 
 try {
     [Environment]::SetEnvironmentVariable('HARBOR_TELEMETRY', 'off', 'Process')
+    # Harbor 0.20 reads Codex JSONL with Python's default text encoding. Force
+    # UTF-8 so native Windows runs retain trajectories and token accounting.
+    [Environment]::SetEnvironmentVariable('PYTHONUTF8', '1', 'Process')
 
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         throw 'git is required but was not found on PATH.'
@@ -166,11 +175,32 @@ try {
     }
 
     $directHarbor = Get-Command harbor -ErrorAction SilentlyContinue
+    $localBinHarbor = $null
+    if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+        $userProfile = [Environment]::GetFolderPath([Environment+SpecialFolder]::UserProfile)
+        $candidateLocalBinHarbor = Join-Path (Join-Path $userProfile '.local\bin') 'harbor.exe'
+        if (Test-Path -LiteralPath $candidateLocalBinHarbor -PathType Leaf) {
+            $localBinHarbor = $candidateLocalBinHarbor
+        }
+    }
+    $uvToolHarbor = $null
+    if (-not $directHarbor -and
+        [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT -and
+        $env:APPDATA) {
+        $uvToolHarbor = Join-Path $env:APPDATA 'uv\tools\harbor\Scripts\harbor.exe'
+        if (-not (Test-Path -LiteralPath $uvToolHarbor -PathType Leaf)) {
+            $uvToolHarbor = $null
+        }
+    }
     $useWsl = $false
     $harborExecutable = $null
     $repoForHarbor = $repoRoot
     if ($directHarbor) {
         $harborExecutable = $directHarbor.Source
+    } elseif ($localBinHarbor) {
+        $harborExecutable = $localBinHarbor
+    } elseif ($uvToolHarbor) {
+        $harborExecutable = $uvToolHarbor
     } elseif (-not $NoWsl -and (Get-Command wsl.exe -ErrorAction SilentlyContinue)) {
         $useWsl = $true
         $harborExecutable = (& wsl.exe -d $WslDistribution -- bash -lc 'command -v harbor').Trim()
@@ -256,6 +286,25 @@ try {
     $temporaryBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
     $temporaryRoot = Join-Path $temporaryBase ("uxl-harbor-comparison-" + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $temporaryRoot | Out-Null
+    if ($GuardWslCrashDumps -and -not $DryRun) {
+        if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
+            throw '-GuardWslCrashDumps is supported only on Windows.'
+        }
+        $guardScript = Join-Path $PSScriptRoot 'guard_wsl_crash_dumps.ps1'
+        if (-not (Test-Path -LiteralPath $guardScript -PathType Leaf)) {
+            throw "WSL crash-dump guard was not found: $guardScript"
+        }
+        $dumpGuardSentinel = Join-Path $temporaryRoot 'guard-wsl-crash-dumps.active'
+        New-Item -ItemType File -Path $dumpGuardSentinel | Out-Null
+        $powerShellExecutable = Join-Path $PSHOME 'powershell.exe'
+        $dumpGuardProcess = Start-Process -FilePath $powerShellExecutable -ArgumentList @(
+            '-NoProfile',
+            '-ExecutionPolicy', 'Bypass',
+            '-File', "`"$guardScript`"",
+            '-SentinelPath', "`"$dumpGuardSentinel`""
+        ) -WindowStyle Hidden -PassThru
+        Write-Host "WSL crash-dump guard active for new dumps under $([IO.Path]::GetTempPath())wsl-crashes"
+    }
     $archivePath = Join-Path $temporaryRoot 'previous-skill.zip'
     $archiveOutput = & git -C $repoRoot archive --format=zip "--output=$archivePath" $previousCommit "skills/$SkillName" 2>&1
     if ($LASTEXITCODE -ne 0) {
@@ -363,6 +412,7 @@ try {
         '--agent', $Agent,
         '--model', $Model,
         '--attempts', $Attempts.ToString(),
+        '--verified-reward-floor', $VerifiedRewardFloor.ToString([Globalization.CultureInfo]::InvariantCulture),
         '--output', $reportHost
     )) {
         $summaryArguments.Add($value)
@@ -384,7 +434,17 @@ try {
     Write-Host "Comparison complete: $reportHost"
     Write-Host "View jobs: $DashboardBaseUrl"
 } finally {
+    if ($dumpGuardSentinel -and (Test-Path -LiteralPath $dumpGuardSentinel -PathType Leaf)) {
+        Remove-Item -LiteralPath $dumpGuardSentinel -Force -ErrorAction SilentlyContinue
+    }
+    if ($dumpGuardProcess) {
+        $dumpGuardProcess.WaitForExit(5000) | Out-Null
+        if (-not $dumpGuardProcess.HasExited) {
+            Stop-Process -Id $dumpGuardProcess.Id -Force -ErrorAction SilentlyContinue
+        }
+    }
     [Environment]::SetEnvironmentVariable('HARBOR_TELEMETRY', $previousTelemetry, 'Process')
+    [Environment]::SetEnvironmentVariable('PYTHONUTF8', $previousPythonUtf8, 'Process')
     if ($temporaryRoot) {
         $temporaryBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
         $resolvedTemporaryRoot = [IO.Path]::GetFullPath($temporaryRoot)

@@ -67,6 +67,142 @@ class StructuredAnswerTests(unittest.TestCase):
                 for criteria in details["criteria"].values():
                     self.assertTrue(all(criteria.values()), details)
 
+    def test_onetbb_rubric_accepts_equivalent_identity_and_queue_evidence(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onetbb-bounded-image-flow-graph"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Compare the bounded graph with a serial small-data baseline. Verify exactly
+        one output or error per input, record admission IDs, and prove buffer
+        ownership is released after every completion and failure. During a long
+        overload run, sample RSS, live jobs, per-stage queued counts, total thread
+        count, and CPU utilization. The queue and ownership evidence must plateau
+        under the configured limit. This paragraph intentionally uses equivalent
+        operational language rather than one exact phrase from the reference answer.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(
+            details["criteria"]["validation"]["correctness_and_lifetime"], details
+        )
+        self.assertTrue(
+            details["criteria"]["validation"]["resource_evidence"], details
+        )
+
+    def test_onetbb_grainsize_rubric_accepts_equivalent_tuning_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onetbb-grainsize-affinity-regression"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        The refactor cheapened the body, which now pays dominant overhead because grainsize 1 with
+        simple_partitioner creates one body call per element. Start with the
+        auto partitioning, measure several grains, and retain serial
+        execution for a possible measured cutoff around the crossover. Record the
+        CPU set and arena concurrency, and compare local first-touch with remote
+        placement. Gate the experiment on a
+        serial oracle, compare every output at odd and boundary sizes, and use
+        an explicit tolerance. A retained affinity_partitioner must live across
+        calls only for repeated same buffers and only after a measured benchmark
+        win. Record body/task calls, active-worker count, CPU utilization,
+        migrations, and cache misses. Sweep production sizes and body intensity,
+        worker counts, NUMA placement, warmups, repetitions, and median latency.
+        This wording intentionally describes the same contracts without requiring
+        the reference answer's exact phrases.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["diagnosis"]["oversplitting"], details)
+        self.assertTrue(details["criteria"]["repair"]["adaptive_chunking"], details)
+        self.assertTrue(details["criteria"]["repair"]["qualified_affinity"], details)
+        self.assertTrue(details["criteria"]["repair"]["placement_control"], details)
+        self.assertTrue(details["criteria"]["validation"]["correctness_gate"], details)
+        self.assertTrue(details["criteria"]["validation"]["experiment_matrix"], details)
+        self.assertTrue(
+            details["criteria"]["validation"]["scheduler_and_locality_evidence"],
+            details,
+        )
+
+    def test_onedal_mode_rubric_accepts_equivalent_parity_and_benchmark_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "onedal-batch-online-distributed-choice"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Retain batch for the complete dense table on one process and one host.
+        Online is justified for streamed chunks with partial computation and one
+        finalization; distributed execution requires row partitions, ranks, a
+        communicator, collectives, and a supported CPU or GPU interface and version.
+        Record rows, features, dtype, layout, memory size, launcher, and network
+        topology. Freeze preprocessing, feature order, dtype, covariance definition,
+        and requested outputs. Compare online and merged distributed covariance
+        results with an independently checked reference and full-data batch result
+        using numerical tolerances. Prove chunk boundaries and sizes cover every row
+        without missing or duplicate rows, and validate partial state plus the final
+        result. Prove partitions are disjoint, handle rank failure, and verify the
+        collective reduction. Benchmark representative immutable inputs and the same
+        allocated resources. Use randomized repetitions and report median, tail, and
+        variance. Measure end-to-end table construction and conversion, communication,
+        network collectives, synchronization, merge, and finalize costs. Keep batch
+        unless measured evidence shows a correctness-preserving constraint or win.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["validation"]["reference_parity"], details)
+        self.assertTrue(details["criteria"]["measurement"]["fair_benchmark"], details)
+
+    def test_oneccl_rubric_accepts_equivalent_contract_validation_language(self) -> None:
+        rubric_path = (
+            ROOT
+            / "evaluation"
+            / "harbor"
+            / "tasks"
+            / "oneccl-datatype-count-mismatch"
+            / "tests"
+            / "rubric.json"
+        )
+        rubric = ENGINE.load_rubric(rubric_path)
+        answer = """
+        Every rank enters the same allreduce sequence with an identical count and
+        datatype. Count is typed elements, not a byte length. BF16 storage labeled
+        FP32 can be misinterpreted and accessed out-of-bounds. Record the oneCCL
+        compile-time and loaded runtime versions plus the selected plugin and confirm
+        the combination is supported. A deterministic four-rank vector uses fixed
+        values and waits for completion; verify every logical output element is
+        exactly the expected sum. This deliberately omits the complete performance
+        experiment matrix.
+        """
+
+        _, details = ENGINE.score_answer(answer, rubric)
+
+        self.assertTrue(details["criteria"]["diagnosis"]["storage_type_mismatch"], details)
+        self.assertTrue(details["criteria"]["repair_and_evidence"]["support_evidence"], details)
+        self.assertTrue(details["criteria"]["validation"]["minimal_expected_result"], details)
+        self.assertTrue(details["criteria"]["validation"]["rank_wide_parity"], details)
+        self.assertFalse(details["criteria"]["validation"]["bounded_benchmark"], details)
+
 
 if __name__ == "__main__":
     unittest.main()

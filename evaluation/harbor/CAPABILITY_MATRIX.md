@@ -8,20 +8,49 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 - Minimum discriminating tasks per skill: 2
 - Required classes: `correctness`, `selection`, `integration`, `debugging`, `performance`
 - Attempts: development 1, calibration 3, promotion 5
+- Comparison arms: `no-skill`, `previous-skill`, `candidate-skill`
+- Full triage workflow: `reproduce` -> `investigate` -> `repair` -> `verify`
+- Accepted real-world origins: `maintainer-incident`, `upstream-regression`
+- Efficiency quality gate: `verified-success` at reward 1.00
+- Primary efficiency metric: `total-tokens-per-verified-success`
+- Infrastructure failures: `exclude-and-rerun`
 - Promotion guardrails: maximum task mean regression 0.10; maximum suite mean regression 0.03
 
 ## Coverage summary
 
-| Skill | Target | Implemented | Headroom | Ceiling | Planned |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| `uxl-onednn` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onemath` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onedal` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-onetbb` | 7 | 3 | 1 | 2 | 4 |
-| `uxl-onedpl` | 6 | 1 | 1 | 0 | 5 |
-| `uxl-oneccl` | 6 | 3 | 1 | 1 | 3 |
-| `uxl-sycl-build-debug` | 6 | 4 | 1 | 1 | 2 |
-| `uxl-performance-validation` | 6 | 3 | 0 | 1 | 3 |
+A real end-to-end task is implemented, reproduces live, performs every triage stage, and comes from a maintainer incident or upstream regression.
+
+| Skill | Target | Implemented | Live implemented | Fixture/review implemented | Target hardware | Real end-to-end | Planned |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `uxl-onednn` | 6 | 5 | 4 | 1 | 1 | 1 | 1 |
+| `uxl-onemath` | 6 | 3 | 2 | 1 | 2 | 2 | 3 |
+| `uxl-onedal` | 6 | 5 | 3 | 2 | 1 | 1 | 1 |
+| `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
+| `uxl-onedpl` | 6 | 4 | 3 | 1 | 2 | 2 | 2 |
+| `uxl-oneccl` | 6 | 4 | 1 | 3 | 2 | 0 | 2 |
+| `uxl-sycl-build-debug` | 8 | 7 | 5 | 2 | 2 | 0 | 1 |
+| `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
+
+## Evaluator health
+
+Calibration states describe what the evaluator currently demonstrates about skill value; they do not describe project or library health. See `EVALUATOR_POLICY.md` for the evidence rules.
+
+- `headroom`: repeated matched trials show a durable skill quality advantage.
+- `ceiling`: audited arms meet the full quality bar, so this task cannot measure quality lift.
+- `no-lift`: matched evidence has quality room but shows no durable skill advantage.
+- `manual`: the task requires a manually supplied target environment or hardware.
+- `uncalibrated`: no valid matched model screen has been recorded.
+
+| Skill | Implemented | Classified | Headroom | Ceiling | No lift | Manual | Uncalibrated |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `uxl-onednn` | 5 | 5 | 1 | 4 | 0 | 0 | 0 |
+| `uxl-onemath` | 3 | 3 | 1 | 2 | 0 | 0 | 0 |
+| `uxl-onedal` | 5 | 5 | 1 | 4 | 0 | 0 | 0 |
+| `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
+| `uxl-onedpl` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
+| `uxl-oneccl` | 4 | 4 | 2 | 1 | 1 | 0 | 0 |
+| `uxl-sycl-build-debug` | 7 | 7 | 1 | 3 | 1 | 2 | 0 |
+| `uxl-performance-validation` | 4 | 4 | 0 | 3 | 1 | 0 | 0 |
 
 ## uxl-onednn (oneDNN)
 
@@ -35,14 +64,14 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `onednn-matmul-memory-descriptors` | planned | smoke | uncalibrated | executable | hosted-cpu | `primitive-contracts`, `primitive-or-graph` |
-| `onednn-convolution-fusion-parity` | planned | discriminating | uncalibrated | executable | hosted-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
-| `onednn-extra-reorder-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
-| `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
-| `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `primitive-or-graph`, `backend-and-parity-triage` |
-| `onednn-benchdnn-claim-review` | planned | smoke | uncalibrated | answer-quality | hosted-container | `benchdnn-and-reorders` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `onednn-matmul-memory-descriptors` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph` |
+| `onednn-convolution-fusion-parity` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `primitive-contracts`, `primitive-or-graph`, `backend-and-parity-triage` |
+| `onednn-extra-reorder-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `framework-layout-boundaries`, `benchdnn-and-reorders` |
+| `onednn-framework-blocked-layout` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `primitive-contracts`, `framework-layout-boundaries`, `backend-and-parity-triage` |
+| `onednn-backend-unimplemented-primitive` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `primitive-or-graph`, `backend-and-parity-triage` |
+| `onednn-benchdnn-no-ref-memory` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-and-parity-triage`, `benchdnn-and-reorders` |
 
 ## uxl-onemath (oneMath)
 
@@ -56,14 +85,14 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `onemath-runtime-library-missing` | implemented | discriminating | headroom | answer-quality | hosted-container | `domain-and-dispatch`, `backend-build-and-link`, `runtime-backend-triage`, `representative-math-validation` |
-| `onemath-blas-leading-dimension` | planned | discriminating | uncalibrated | executable | hosted-cpu | `math-contracts`, `domain-and-dispatch` |
-| `onemath-runtime-vs-compile-dispatch` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `domain-and-dispatch`, `backend-build-and-link` |
-| `onemath-rng-device-event-chain` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `math-contracts`, `domain-and-dispatch`, `runtime-backend-triage` |
-| `onemath-third-party-backend-wrapper` | planned | smoke | uncalibrated | answer-quality | hosted-container | `backend-build-and-link`, `runtime-backend-triage` |
-| `onemath-dispatch-overhead-benchmark` | planned | smoke | uncalibrated | answer-quality | hosted-container | `math-contracts`, `representative-math-validation` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `onemath-runtime-library-missing` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `domain-and-dispatch`, `backend-build-and-link`, `runtime-backend-triage`, `representative-math-validation` |
+| `onemath-packed-band-storage-fixtures` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |
+| `onemath-deprecated-header-include` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `backend-build-and-link` |
+| `onemath-rng-device-event-chain` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `math-contracts`, `domain-and-dispatch`, `runtime-backend-triage` |
+| `onemath-third-party-backend-wrapper` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `backend-build-and-link`, `runtime-backend-triage` |
+| `onemath-dispatch-overhead-benchmark` | planned | smoke | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `math-contracts`, `representative-math-validation` |
 
 ## uxl-onedal (oneDAL)
 
@@ -77,14 +106,14 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `onedal-sklearn-or-native-kmeans` | implemented | discriminating | headroom | answer-quality | hosted-container | `analytics-parity`, `interface-and-mode` |
-| `onedal-table-orientation-regression` | planned | discriminating | uncalibrated | executable | hosted-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
-| `onedal-batch-online-distributed-choice` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `analytics-parity`, `interface-and-mode` |
-| `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `interface-and-mode`, `quality-regression-triage` |
-| `onedal-conversion-cost-benchmark` | planned | smoke | uncalibrated | answer-quality | hosted-container | `tables-and-frameworks`, `conversion-aware-benchmarking` |
-| `onedal-train-infer-metric-parity` | planned | smoke | uncalibrated | executable | hosted-cpu | `analytics-parity`, `conversion-aware-benchmarking` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `onedal-sklearn-or-native-kmeans` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `analytics-parity`, `interface-and-mode` |
+| `onedal-table-orientation-regression` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `tables-and-frameworks`, `quality-regression-triage` |
+| `onedal-batch-online-distributed-choice` | implemented | smoke | ceiling | answer-quality | hosted-container | review | not-applicable | investigate | none | `analytics-parity`, `interface-and-mode` |
+| `onedal-unavailable-gpu-path` | planned | discriminating | uncalibrated | executable | target-gpu | live | unassigned | reproduce -> investigate -> repair -> verify | target-gpu | `interface-and-mode`, `quality-regression-triage` |
+| `onedal-conversion-cost-benchmark` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `tables-and-frameworks`, `conversion-aware-benchmarking` |
+| `onedal-extra-trees-random-split` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `analytics-parity`, `quality-regression-triage` |
 
 ## uxl-onetbb (oneTBB)
 
@@ -98,15 +127,15 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `onetbb-histogram-local-aggregation` | implemented | smoke | ceiling | executable | hosted-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
-| `onetbb-stable-compaction-scan` | implemented | smoke | ceiling | executable | hosted-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
-| `onetbb-bounded-image-flow-graph` | implemented | discriminating | headroom | answer-quality | hosted-container | `parallel-pattern-selection`, `scheduler-triage` |
-| `onetbb-nested-thread-pool-arena` | planned | discriminating | uncalibrated | executable | hosted-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
-| `onetbb-cancellation-exception-propagation` | planned | discriminating | uncalibrated | executable | hosted-cpu | `race-order-and-exception-safety`, `runtime-composition` |
-| `onetbb-grainsize-affinity-regression` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `scheduler-triage`, `grain-affinity-benchmarking` |
-| `onetbb-legacy-api-migration` | planned | smoke | uncalibrated | answer-quality | hosted-container | `parallel-pattern-selection`, `runtime-composition` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `onetbb-histogram-local-aggregation` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
+| `onetbb-stable-compaction-scan` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection` |
+| `onetbb-bounded-image-flow-graph` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `parallel-pattern-selection`, `scheduler-triage` |
+| `onetbb-nested-thread-pool-arena` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `runtime-composition`, `scheduler-triage`, `grain-affinity-benchmarking` |
+| `onetbb-cancellation-exception-propagation` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `runtime-composition` |
+| `onetbb-grainsize-affinity-regression` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `scheduler-triage`, `grain-affinity-benchmarking` |
+| `onetbb-join-node-ordering` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `race-order-and-exception-safety`, `parallel-pattern-selection`, `scheduler-triage` |
 
 ## uxl-onedpl (oneDPL)
 
@@ -120,14 +149,14 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `onedpl-host-or-device-sort` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `algorithm-contracts`, `execution-policy-choice` |
-| `onedpl-missing-device-synchronization` | implemented | discriminating | headroom | answer-quality | hosted-container | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
-| `onedpl-iterator-category-failure` | planned | discriminating | uncalibrated | executable | hosted-cpu | `queue-data-and-iterators`, `device-result-triage` |
-| `onedpl-stable-ordering-contract` | planned | discriminating | uncalibrated | executable | hosted-cpu | `algorithm-contracts`, `execution-policy-choice` |
-| `onedpl-host-backend-configuration` | planned | smoke | uncalibrated | answer-quality | hosted-container | `execution-policy-choice`, `queue-data-and-iterators` |
-| `onedpl-transfer-inclusive-benchmark` | planned | smoke | uncalibrated | answer-quality | hosted-container | `algorithm-contracts`, `transfer-aware-benchmarking` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `onedpl-host-or-device-sort` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `algorithm-contracts`, `execution-policy-choice` |
+| `onedpl-missing-device-synchronization` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `algorithm-contracts`, `queue-data-and-iterators`, `device-result-triage` |
+| `onedpl-iterator-category-failure` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `queue-data-and-iterators`, `device-result-triage` |
+| `onedpl-stable-ordering-contract` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice` |
+| `onedpl-move-only-numeric-accumulator` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `algorithm-contracts`, `execution-policy-choice`, `queue-data-and-iterators` |
+| `onedpl-transfer-inclusive-benchmark` | planned | smoke | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `algorithm-contracts`, `transfer-aware-benchmarking` |
 
 ## uxl-oneccl (oneCCL)
 
@@ -141,14 +170,14 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `oneccl-async-allreduce-wait` | implemented | smoke | ceiling | executable | hosted-cpu | `collective-contracts`, `api-and-collective-choice` |
-| `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
-| `oneccl-datatype-count-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `collective-contracts`, `distributed-hang-triage` |
-| `oneccl-cpp-or-nccl-like-api` | planned | smoke | uncalibrated | answer-quality | hosted-container | `api-and-collective-choice`, `launcher-plugin-framework` |
-| `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `launcher-plugin-framework`, `distributed-hang-triage` |
-| `oneccl-worker-affinity-regression` | planned | smoke | uncalibrated | answer-quality | hosted-container | `launcher-plugin-framework`, `topology-worker-benchmarking` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `oneccl-async-allreduce-wait` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `collective-contracts`, `api-and-collective-choice` |
+| `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
+| `oneccl-datatype-count-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
+| `oneccl-cpp-or-nccl-like-api` | implemented | discriminating | headroom | answer-quality | hosted-container | review | not-applicable | investigate | none | `api-and-collective-choice`, `launcher-plugin-framework` |
+| `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `distributed-hang-triage` |
+| `oneccl-worker-affinity-regression` | planned | smoke | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `topology-worker-benchmarking` |
 
 ## uxl-sycl-build-debug (UXL cross-project)
 
@@ -162,14 +191,16 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-compile-time-backend-link` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
-| `sycl-loader-plugin-mismatch` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
-| `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
-| `sycl-reproducible-environment-report` | planned | smoke | uncalibrated | answer-quality | hosted-container | `reproducible-smoke-contract`, `toolchain-package-runtime`, `build-runtime-cost-boundaries` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `sycl-device-discovery` | implemented | hardware | manual | hardware | manual-gpu | live | not-applicable | reproduce -> verify | target-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-device-discovery-windows-wsl` | implemented | hardware | manual | hardware | manual-gpu | live | not-applicable | reproduce -> verify | target-gpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-cmake-compiler-cache` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-compile-time-backend-link` | implemented | smoke | ceiling | executable | hosted-toolchain | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime` |
+| `sycl-loader-plugin-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-selector-silent-cpu-fallback` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `evidence-driven-triage`, `build-runtime-cost-boundaries` |
+| `sycl-transitive-target-link-contract` | implemented | smoke | ceiling | executable | hosted-toolchain | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
+| `sycl-onednn-threading-runtime-composition` | planned | discriminating | uncalibrated | executable | hosted-toolchain | live | unassigned | reproduce -> investigate -> repair -> verify | generic-cpu | `reproducible-smoke-contract`, `failure-phase-classification`, `toolchain-package-runtime`, `evidence-driven-triage` |
 
 ## uxl-performance-validation (UXL cross-project)
 
@@ -183,11 +214,11 @@ This file is generated from `evaluation/harbor/suites.json`. Do not edit it by h
 
 ### Task portfolio
 
-| Task | Status | Role | Calibration | Track | Environment | Covers |
-| --- | --- | --- | --- | --- | --- | --- |
-| `performance-tiny-async-gpu-claim` | implemented | smoke | uncalibrated | answer-quality | hosted-container | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
-| `performance-benchmark-report-repair` | implemented | smoke | uncalibrated | executable | hosted-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
-| `performance-floating-reduction-tolerance` | implemented | smoke | ceiling | executable | hosted-cpu | `correctness-gated-measurement`, `invalid-claim-triage` |
-| `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
-| `performance-variance-and-outliers` | planned | smoke | uncalibrated | executable | hosted-cpu | `invalid-claim-triage`, `repeatable-performance-evidence` |
-| `performance-profile-after-regression` | planned | discriminating | uncalibrated | answer-quality | hosted-container | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |
+| Task | Status | Role | Calibration | Track | Environment | Reproduction | Origin | Workflow | Hardware | Covers |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `performance-tiny-async-gpu-claim` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `correctness-gated-measurement`, `benchmark-scope-selection`, `invalid-claim-triage` |
+| `performance-benchmark-report-repair` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `benchmark-scope-selection`, `repeatable-performance-evidence` |
+| `performance-floating-reduction-tolerance` | implemented | smoke | ceiling | executable | hosted-cpu | live | constructed | reproduce -> investigate -> repair -> verify | generic-cpu | `correctness-gated-measurement`, `invalid-claim-triage` |
+| `performance-transfer-scope-comparison` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `benchmark-scope-selection`, `library-and-hardware-context`, `repeatable-performance-evidence` |
+| `performance-cgroup-concurrency-quota` | implemented | smoke | ceiling | executable | hosted-cpu | live | maintainer-incident | reproduce -> investigate -> repair -> verify | generic-cpu | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |
+| `performance-profile-after-regression` | planned | discriminating | uncalibrated | executable | target-device | live | unassigned | reproduce -> investigate -> repair -> verify | target-device | `library-and-hardware-context`, `invalid-claim-triage`, `repeatable-performance-evidence` |

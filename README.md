@@ -2,7 +2,7 @@
 
 Public catalog for agent skills that teach AI coding agents how to use UXL Foundation oneAPI libraries correctly.
 
-This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The long-term source-of-truth model should be hybrid:
+This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The working recommendation, subject to UXL project review, is a hybrid source-of-truth model:
 
 - Library-owned skills live first in the owning project repositories.
 - This catalog mirrors reviewed skills for discovery, installation, validation, and release governance.
@@ -23,7 +23,7 @@ This repository is the central distribution catalog for UXL skills. Skill status
 
 The catalog manifest is [skills.yaml](skills.yaml). Human-readable review records live in [skill-cards](skill-cards).
 
-## Placement Model
+## Proposed Placement Model
 
 Use this repo as an incubator first. Once project maintainers review the skill contents, copy each project skill into the matching repository under `skills/<skill-name>/`, then mirror it back here with provenance in release metadata.
 
@@ -58,6 +58,8 @@ python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_valid
 
 Harbor evaluation tasks, baseline/treatment commands, and hardware guidance live in [evaluation/harbor/README.md](evaluation/harbor/README.md). Harbor `0.20.0` is the pinned evaluation harness.
 
+Start with the one-page [evaluator quickstart](docs/evaluator-quickstart.md), then use the [evaluator operator guide](docs/evaluator-operator-guide.md) for complete instructions. They explain how to modify a skill or task, validate it, run an oracle, compare no-skill/previous/candidate arms, inspect exact prompts and success criteria, and retain experiment results. The [self-hosted runner policy](docs/self-hosted-runners.md) describes the hardware-neutral execution contract. The current [Intel GPU adapter](docs/intel-gpu-runner.md) and access-controlled `uxlfoundation/uxl-skills-runner-control` dispatcher implement that contract. The reusable [private-machine runner pattern](docs/private-machine-runner.md) is suitable for other projects. The public evaluator control room is deployed from [evaluation/dashboard](evaluation/dashboard) by GitHub Pages.
+
 ## Agent Tools
 
 This repo includes instruction files for Codex/AGENTS-compatible agents, Claude Code, Gemini CLI, GitHub Copilot, Cursor, Continue, Aider, Windsurf, Cline, Devin-style workflows, and OpenHands-style repository skills. See [agent-tooling.md](docs/agent-tooling.md).
@@ -65,6 +67,10 @@ This repo includes instruction files for Codex/AGENTS-compatible agents, Claude 
 The CI workflow also runs `agent-sh/agnix` against the repository agent configuration files using [.agnix.toml](.agnix.toml).
 
 Install and usage guidance lives in [install-and-use.md](docs/install-and-use.md). The Harbor-based forward-test workflow lives in [forward-testing.md](docs/forward-testing.md).
+
+The [UXL agentic plan](docs/agentic-plan.md) translates the agentic-pipeline steering proposal into a two-quarter, benchmark-led execution program.
+
+The [2026 H2 roadmap](docs/roadmap-2026-h2.md) prioritizes catalog promotion, maintainer review, missing evaluation evidence, and the first agentic proof point. Windows/WSL Intel GPU qualification material is grouped under [docs/runner](docs/runner/README.md).
 
 Regenerate tool wrappers after changing canonical guidance:
 

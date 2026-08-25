@@ -1,0 +1,3 @@
+A oneTBB stencil loop regressed after its body and deployment environment changed. Investigate `/app/current_loop.cpp`, `/app/benchmark.csv`, and `/app/run_context.md`.
+
+Write a concise engineering review to `/app/answer.md`. Rank the evidence-supported causes, identify what the current measurements do and do not prove, propose the smallest defensible code/runtime changes, and give a correctness and performance experiment that would select the production configuration. Address both the single-loop behavior and the placement-dependent results. Bound every recommendation and performance claim to evidence rather than assuming one grainsize or affinity policy is universally best.
