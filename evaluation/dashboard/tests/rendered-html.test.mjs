@@ -10,7 +10,10 @@ test("exports the UXL evaluator scorecard for GitHub Pages", async () => {
   assert.match(html, /884bc80/);
   assert.match(html, /Harbor reward<\/dt><dd>1\.000/);
   assert.match(html, /https:\/\/uxlfoundation\.github\.io\/skills\/og\.png/);
-  assert.match(html, /(?:src|href)="\/skills\/_next\//);
+  const assetMatch = html.match(/(?:src|href)="((?:\/skills)?\/_next\/[^"]+)"/);
+  assert.ok(assetMatch, "expected the export to reference a compiled asset");
+  const artifactPath = assetMatch[1].replace(/^\/skills/, "");
+  await access(new URL(`../dist/client${artifactPath}`, import.meta.url));
   assert.doesNotMatch(html, /codex-preview|starter loading skeleton/i);
 });
 
