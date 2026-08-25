@@ -4,11 +4,15 @@ on:
   pull_request:
     paths:
       - evaluation/dashboard/**
+      - evaluation/harbor/suites.json
+      - skills.yaml
       - .github/workflows/deploy-dashboard-pages.yml
   push:
     branches: [main]
     paths:
       - evaluation/dashboard/**
+      - evaluation/harbor/suites.json
+      - skills.yaml
       - .github/workflows/deploy-dashboard-pages.yml
   workflow_dispatch:
 

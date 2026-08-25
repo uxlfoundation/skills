@@ -1,156 +1,150 @@
+import { Eyebrow, SiteFooter, SiteHeader, StatusPill } from "./components";
+import { capabilityClasses, capabilityCoverage, portfolio, skillStats, skills, sourceFreshness } from "./data";
+
 const summary = [
-  { value: "8", label: "UXL skills" },
-  { value: "51", label: "evaluation tasks" },
-  { value: "39", label: "implemented" },
-  { value: "1.0", label: "GPU oracle reward" },
+  { value: String(portfolio.skills), label: "published skills", note: "Across six projects and two cross-project workflows" },
+  { value: `${portfolio.implemented} / ${portfolio.tasks}`, label: "tasks implemented", note: `${portfolio.planned} planned evaluations remain` },
+  { value: String(portfolio.headroom), label: "tasks with headroom", note: "Able to measure useful skill judgment" },
+  { value: `${portfolio.maintainerReviewed} / ${portfolio.skills}`, label: "maintainer reviewed", note: "The portfolio’s clearest promotion gate" },
 ];
 
-const skills = [
-  { name: "oneTBB", coverage: "7 / 7", signal: "2 headroom", status: "incubating" },
-  { name: "oneDNN", coverage: "5 / 6", signal: "1 headroom", status: "incubating" },
-  { name: "oneDAL", coverage: "5 / 6", signal: "1 headroom", status: "incubating" },
-  { name: "oneDPL", coverage: "4 / 6", signal: "1 headroom", status: "incubating" },
-  { name: "oneMath", coverage: "3 / 6", signal: "1 headroom", status: "pilot" },
-  { name: "oneCCL", coverage: "4 / 6", signal: "2 headroom", status: "incubating" },
-  { name: "SYCL build + debug", coverage: "7 / 8", signal: "1 headroom", status: "incubating" },
-  { name: "Performance validation", coverage: "4 / 6", signal: "proof needed", status: "incubating" },
+const attention = [
+  { number: "01", title: "Maintainer review", detail: "Every published skill is awaiting owning-project review.", href: "skills/" },
+  { number: "02", title: "Coverage gaps", detail: `${portfolio.planned} planned evaluations still need implementation and calibration.`, href: "evaluations/" },
+  { number: "03", title: "Real-world evidence", detail: `${portfolio.maintainerIncidents} tasks currently originate from maintainer incidents.`, href: "methodology/" },
 ];
 
-const lanes = [
-  { label: "GitHub-hosted CPU", detail: "Portable correctness and integration", state: "Active" },
-  { label: "Hosted toolchain", detail: "Pinned SYCL compiler and runtime", state: "Active" },
-  { label: "Windows/WSL Intel GPU", detail: "Arc B580 · /dev/dxg · Level Zero", state: "Qualified" },
-  { label: "Distributed target", detail: "oneCCL topology and worker evidence", state: "Planned" },
-];
+function coverageTone(implemented: number, total: number) {
+  if (total === 0) return "empty";
+  if (implemented === total) return "full";
+  if (implemented > 0) return "partial";
+  return "empty";
+}
 
 export default function Home() {
   return (
     <main>
-      <nav>
-        <a className="brand" href="#top" aria-label="UXL Skills Evaluator home">
-          {/* The official SVG is tiny and must keep its relative GitHub Pages path. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="uxl-foundation-icon-color.svg" alt="" aria-hidden="true" />
-          <span className="brand-name">UXL Skills Evaluator</span>
-        </a>
-        <div className="nav-links">
-          <a href="#coverage">Coverage</a>
-          <a href="#lanes">Runners</a>
-          <a href="#evidence">Evidence</a>
-          <a className="source-link" href="https://github.com/uxlfoundation/skills">View source ↗</a>
-        </div>
-      </nav>
+      <SiteHeader active="overview" />
 
       <section className="hero" id="top">
-        <div className="eyebrow"><span /> UXL Skills Evaluator</div>
-        <h1>Evidence you can<br />route to real hardware.</h1>
-        <p className="lede">
-          One view of skill quality, execution coverage, and specialized runner
-          readiness across the UXL Foundation library ecosystem.
-        </p>
-        <div className="hero-status">
-          <div className="pulse" aria-hidden="true" />
-          <div>
-            <strong>Windows/WSL Intel GPU lane qualified</strong>
-            <span>Immutable evaluator · Intel Arc · Harbor oracle passed</span>
-          </div>
+        <div className="hero-copy">
+          <Eyebrow>Portfolio health · current catalog</Eyebrow>
+          <h1>Continuous evidence<br />for every UXL skill.</h1>
+          <p className="lede">
+            A vendor-neutral view of quality, evaluation coverage, ownership, and
+            promotion readiness across the UXL Foundation project ecosystem.
+          </p>
         </div>
+        <aside className="hero-brief" aria-label="Portfolio status">
+          <div className="status-line"><span className="pulse" aria-hidden="true" /><strong>Portfolio validation passing</strong></div>
+          <p>The catalog is released. All eight skills remain in pilot or incubation while maintainer review and promotion evidence progress.</p>
+          <a href="#portfolio">Review project health ↓</a>
+        </aside>
       </section>
 
-      <section className="summary" aria-label="Evaluator summary">
+      <section className="summary" aria-label="Portfolio summary">
         {summary.map((item) => (
           <div className="metric" key={item.label}>
             <strong>{item.value}</strong>
             <span>{item.label}</span>
+            <small>{item.note}</small>
           </div>
         ))}
       </section>
 
-      <section className="route">
-        <div>
-          <p className="section-label">Execution topology</p>
-          <h2>One evidence contract.<br />Multiple execution lanes.</h2>
+      <section className="attention section-pad" aria-labelledby="attention-title">
+        <div className="section-heading compact">
+          <div><p className="section-label">Needs attention</p><h2 id="attention-title">The next decisions are visible.</h2></div>
+          <p>Health is more than a pass rate. Ownership, evidence quality, source freshness, and missing evaluations determine whether a skill can be promoted.</p>
         </div>
-        <div className="route-line" aria-label="Evaluation execution flow">
-          <div><small>01</small><b>Reviewed commit</b><span>Tasks, skills, verifiers</span></div>
-          <i aria-hidden="true" />
-          <div><small>02</small><b>Matched execution</b><span>Hosted or target hardware</span></div>
-          <i aria-hidden="true" />
-          <div><small>03</small><b>Retained evidence</b><span>Reward, trajectory, provenance</span></div>
-        </div>
-      </section>
-
-      <section className="coverage" id="coverage">
-        <div className="section-head">
-          <div><p className="section-label">Portfolio coverage</p><h2>Built to measure judgment,<br />not keyword recall.</h2></div>
-          <p>Implemented tasks span correctness, selection, integration, debugging, and performance. Promotion requires matched trials and maintainer review.</p>
-        </div>
-        <div className="skill-table" role="table" aria-label="UXL skill evaluation coverage">
-          <div className="skill-row table-head" role="row"><span>Skill</span><span>Implemented</span><span>Evaluator signal</span><span>Status</span></div>
-          {skills.map((skill, index) => (
-            <div className="skill-row" role="row" key={skill.name}>
-              <span><em>{String(index + 1).padStart(2, "0")}</em>{skill.name}</span>
-              <span>{skill.coverage}</span><span>{skill.signal}</span><span>{skill.status}</span>
-            </div>
+        <div className="attention-grid">
+          {attention.map((item) => (
+            <a className="attention-card" href={item.href} key={item.number}>
+              <span>{item.number}</span><h3>{item.title}</h3><p>{item.detail}</p><b>Inspect →</b>
+            </a>
           ))}
         </div>
       </section>
 
-      <section className="lanes" id="lanes">
-        <div className="section-head inverse">
-          <div><p className="section-label">Runner fabric</p><h2>Use ordinary compute<br />until the evidence needs more.</h2></div>
-          <p>Portable tasks stay on hosted infrastructure. Device, topology, and driver-dependent work routes to controlled machines through private dispatch.</p>
+      <section className="portfolio section-pad" id="portfolio">
+        <div className="section-heading">
+          <div><p className="section-label">Project portfolio</p><h2>One standard.<br />Project-level accountability.</h2></div>
+          <p>Coverage counts are generated from the catalog and Harbor suite manifest. “Headroom” means an evaluation can distinguish useful judgment; it is not a library performance score.</p>
         </div>
-        <div className="lane-list">
-          {lanes.map((lane) => (
-            <div className="lane" key={lane.label}>
-              <div className={`lane-state ${lane.state.toLowerCase()}`}><span />{lane.state}</div>
-              <h3>{lane.label}</h3><p>{lane.detail}</p>
-            </div>
+        <div className="portfolio-table" role="table" aria-label="UXL skill portfolio health">
+          <div className="portfolio-row portfolio-head" role="row">
+            <span>Project skill</span><span>Maturity</span><span>Coverage</span><span>Evidence</span><span>Review</span><span>Next action</span>
+          </div>
+          {skills.map((skill) => {
+            const stats = skillStats(skill);
+            return (
+              <a className="portfolio-row" href={`skills/#${skill.name}`} role="row" key={skill.name}>
+                <span><b>{skill.displayName}</b><small>{sourceFreshness(skill)}</small></span>
+                <span><StatusPill tone={skill.status === "pilot" ? "planned" : "neutral"}>{skill.status}</StatusPill></span>
+                <span><b>{stats.implemented} / {skill.targetTaskCount}</b><small>{stats.planned} planned</small></span>
+                <span><b>{stats.headroom} headroom</b><small>{stats.quality}</small></span>
+                <span><StatusPill tone="watch">needed</StatusPill></span>
+                <span><b>{stats.nextAction}</b><i aria-hidden="true">→</i></span>
+              </a>
+            );
+          })}
+        </div>
+        <div className="table-legend">
+          <span><i className="legend-dot full" />Implemented coverage</span>
+          <span><i className="legend-dot partial" />Partial coverage</span>
+          <span><i className="legend-dot empty" />No implemented coverage</span>
+        </div>
+      </section>
+
+      <section className="capability section-pad" aria-labelledby="capability-title">
+        <div className="section-heading inverse">
+          <div><p className="section-label">Capability coverage</p><h2 id="capability-title">What each skill<br />is expected to teach.</h2></div>
+          <p>Every project is evaluated against the same five behavioral classes while retaining project-specific tasks and verifiers.</p>
+        </div>
+        <div className="heatmap" role="table" aria-label="Implemented evaluation coverage by capability">
+          <div className="heatmap-row heatmap-head" role="row">
+            <span>Skill</span>{capabilityClasses.map((name) => <span key={name}>{name}</span>)}
+          </div>
+          {skills.map((skill) => (
+            <a className="heatmap-row" href={`skills/#${skill.name}`} role="row" key={skill.name}>
+              <span>{skill.displayName}</span>
+              {capabilityClasses.map((name) => {
+                const cell = capabilityCoverage(skill, name);
+                return <span className={`coverage-cell ${coverageTone(cell.implemented, cell.total)}`} key={name}><b>{cell.implemented}</b><small>/{cell.total}</small></span>;
+              })}
+            </a>
           ))}
         </div>
       </section>
 
-      <section className="evidence" id="evidence">
-        <div className="evidence-title">
-          <p className="section-label">Latest hardware proof</p>
-          <h2>Intel GPU oracle<br />passed end to end.</h2>
-          <a href="https://github.com/uxlfoundation/skills/pull/6">Review infrastructure PR ↗</a>
+      <section className="evidence-path section-pad">
+        <div className="section-heading compact">
+          <div><p className="section-label">Evidence path</p><h2>From instruction to accepted result.</h2></div>
+          <p>Managers see the status; members can move from a project to the exact evaluation contract and reviewable source.</p>
         </div>
-        <div className="proof">
-          <div className="proof-mark">PASS</div>
-          <dl>
-            <div><dt>Evaluator</dt><dd>884bc80</dd></div>
-            <div><dt>Interface</dt><dd>/dev/dxg</dd></div>
-            <div><dt>Runtime</dt><dd>Level Zero GPU</dd></div>
-            <div><dt>Workload</dt><dd>Compiled SYCL kernel</dd></div>
-            <div><dt>Harbor reward</dt><dd>1.000</dd></div>
-            <div><dt>Evidence</dt><dd>Retained privately</dd></div>
-          </dl>
-        </div>
-      </section>
-
-      <section className="done">
-        <p className="section-label">Definition of done</p>
-        <h2>A skill is ready when ownership,<br />behavior, and evidence agree.</h2>
-        <ol>
-          <li><span>01</span><b>Maintainer owned</b><p>Current sources, reviewed limitations, clear project home.</p></li>
-          <li><span>02</span><b>Behavior proven</b><p>Five matched attempts per arm and a meaningful negative control.</p></li>
-          <li><span>03</span><b>Hardware honest</b><p>Every target-specific claim carries environment provenance.</p></li>
-          <li><span>04</span><b>Easy to consume</b><p>Clean installation to one verified result in ten minutes.</p></li>
+        <ol className="path-steps">
+          <li><span>01</span><h3>Current guidance</h3><p>Official sources, limitations, and intended behavior are recorded with the skill.</p><a href="skills/">Explore skills →</a></li>
+          <li><span>02</span><h3>Behavior tested</h3><p>Tasks exercise correctness, selection, integration, debugging, and performance judgment.</p><a href="evaluations/">Inspect evaluations →</a></li>
+          <li><span>03</span><h3>Matched comparison</h3><p>No-skill, previous-skill, and candidate-skill arms share the same task and environment.</p><a href="methodology/">Read the method →</a></li>
+          <li><span>04</span><h3>Portable evidence</h3><p>Hosted and specialized systems return the same result and provenance contract.</p><a href="platforms/">See platforms →</a></li>
         </ol>
       </section>
 
-      <footer>
-        <div className="brand">
-          {/* The official SVG is tiny and must keep its relative GitHub Pages path. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="uxl-foundation-icon-color.svg" alt="" aria-hidden="true" />
-          <span className="brand-name">UXL Skills Evaluator</span>
+      <section className="platform-preview section-pad">
+        <div>
+          <p className="section-label">Platform evidence</p>
+          <h2>Hardware is a dimension,<br />not the headline.</h2>
+          <p>Most evaluations run on hosted infrastructure. When a task genuinely depends on a device, backend, topology, or driver, any approved machine can plug into the same evidence contract.</p>
         </div>
-        <p>Public scorecard. Detailed trajectories and machine evidence remain access-controlled.</p>
-        <a href="#top">Back to top ↑</a>
-      </footer>
+        <div className="platform-preview-card">
+          <StatusPill tone="good">Adapter contract proven</StatusPill>
+          <strong>1 specialized runner adapter</strong>
+          <p>The first GPU proof of concept qualified the dispatch and evidence path. It does not establish vendor preference or skill benefit.</p>
+          <a href="platforms/">Review the neutral platform matrix →</a>
+        </div>
+      </section>
+
+      <SiteFooter />
     </main>
   );
 }

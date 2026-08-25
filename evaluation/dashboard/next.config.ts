@@ -4,7 +4,7 @@ const publishingToGitHubPages = process.env.GITHUB_PAGES === "true";
 
 const nextConfig: NextConfig = {
   output: "export",
-  trailingSlash: true,
+  trailingSlash: false,
   assetPrefix: publishingToGitHubPages ? "/skills" : "",
 };
 

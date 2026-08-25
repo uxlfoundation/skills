@@ -1,8 +1,18 @@
 # UXL Skills Evaluator Dashboard
 
-Public-facing control-room view for the UXL Foundation skills evaluator. It shows the current skill and Harbor-task inventory, available execution lanes, the evidence chain for the Windows/WSL Intel GPU lane, and the project definition of done.
+Public portfolio-health view for the UXL Foundation skills evaluator. It shows skill maturity, Harbor-task coverage, maintainer-review status, evaluation methodology, and vendor-neutral execution environments.
 
-The dashboard intentionally exposes only sanitized summary evidence. Raw Harbor job records, machine provenance, and runner logs remain in the private runner-control repository or on the operator workstation.
+The overview is designed for UXL leadership and members; the Skills and Evaluations sections drill into project-level evidence. The dashboard intentionally exposes only sanitized summary evidence. Raw Harbor job records, machine provenance, and runner logs remain in the private runner-control repository or on the operator workstation.
+
+## Data sources
+
+Dashboard data is generated from the repository’s canonical manifests:
+
+- `skills.yaml` supplies skill maturity, ownership, source freshness, and maintainer-review state.
+- `evaluation/harbor/suites.json` supplies capability and evaluation coverage.
+- `app/dashboard-data.json` is the deterministic generated snapshot consumed by the static site.
+
+Run `npm run data:generate` after changing either source manifest. Lint checks that the snapshot remains synchronized.
 
 ## Run locally
 
@@ -34,10 +44,10 @@ Pages receives only `dist/client`. Keep raw Harbor records, runner logs, credent
 
 The navigation and footer use the official color icon from the [UXL Foundation artwork repository](https://github.com/uxlfoundation/artwork/blob/main/foundation/uxl-foundation-icon-color.svg). UXL marks remain subject to the Linux Foundation trademark policy referenced by that repository.
 
-## Evidence model
+## Public information model
 
-- Git commit: immutable evaluator source revision.
-- Runner lane: declared hardware and software execution environment.
-- Hardware provenance: device interface, Level Zero visibility, and toolchain metadata.
-- Harbor result: task reward and retained job artifact.
-- Dashboard: sanitized, human-readable summary linked back to reviewable source.
+- **Overview:** portfolio health, promotion gates, capability coverage, and next actions.
+- **Skills:** per-project maturity, sources, limitations, capabilities, and task inventory.
+- **Evaluations:** searchable task contracts and links to their verifiers.
+- **Platforms:** hosted and specialized environments under one vendor-neutral evidence contract.
+- **Methodology:** evaluation states, matched comparisons, and promotion policy.
