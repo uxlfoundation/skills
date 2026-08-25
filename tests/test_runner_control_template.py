@@ -103,6 +103,10 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
         self.assertIn("test -c /dev/dxg", self.oracle)
         self.assertIn("src=/usr/lib/wsl,dst=/usr/lib/wsl,readonly", self.oracle)
         self.assertIn(
+            "set +u\nsource /opt/intel/oneapi/setvars.sh", self.oracle
+        )
+        self.assertIn("source /opt/intel/oneapi/setvars.sh >/dev/null 2>&1\nset -u", self.oracle)
+        self.assertIn(
             "--include-task-name sycl-device-discovery-windows-wsl", self.oracle
         )
         self.assertIn("--reward-floor 1.0", self.oracle)

@@ -60,7 +60,11 @@ python3 -m venv .venv
 .venv/bin/python -m pip install harbor==0.20.0
 
 mkdir -p harbor-jobs
+# Intel's environment setup reads optional unset variables, so temporarily relax
+# nounset while sourcing it and restore the evaluator's strict shell contract.
+set +u
 source /opt/intel/oneapi/setvars.sh >/dev/null 2>&1
+set -u
 .venv/bin/python scripts/capture_hardware_provenance.py \
   --output harbor-jobs/runner-provenance.json \
   --require-intel-gpu
