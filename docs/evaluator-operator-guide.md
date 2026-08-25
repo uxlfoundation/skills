@@ -34,7 +34,7 @@ uv tool install "harbor==0.20.0" --force
 uv tool update-shell
 ```
 
-Restart PowerShell, then verify `harbor --version` and `docker version`. The repository helpers can fall back to Ubuntu WSL for dashboard viewing, but model experiments should use the native Harbor command with Docker Desktop on this workstation.
+Restart PowerShell, then verify `harbor --version` and `docker version`. The repository helpers can also use Harbor `0.20.0` from an isolated WSL environment. On the qualified Windows/WSL workstation it is installed at `/home/uxlrunner/.local/share/uxl-harbor`; model experiments should still use the runner lane declared by the task.
 
 ## 2. Modify a skill
 
@@ -121,6 +121,12 @@ The wrapper writes `harbor-jobs/<prefix>-comparison.md`, including reward, compl
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -OpenBrowser
 ```
 
+On the qualified Windows/WSL workstation, use:
+
+```powershell
+.\scripts\start_harbor_dashboards.ps1 -WslDistribution Ubuntu-24.04
+```
+
 The results service indexes job folders when it starts. After completing a new experiment, refresh the index with:
 
 ```powershell
@@ -170,17 +176,19 @@ To view a downloaded remote result, extract its job folders under `harbor-jobs/`
 
 Follow the [self-hosted runner contract](self-hosted-runners.md) whenever faithful reproduction requires a device, backend, topology, driver, or instruction set that hosted runners do not provide. An approved runner checks out a reviewed immutable evaluator revision, qualifies the environment with an oracle, and returns the complete `harbor-jobs/` evidence. It must not accept untrusted pull-request triggers.
 
-The current [private runner control repository template](../evaluation/runner-control-repo-template/README.md) demonstrates this pattern with an Intel GPU adapter. Its workflow requires a reviewed 40-character evaluator commit SHA, runs only the `sycl-device-discovery` oracle, and uploads the full job directory without model credentials.
+The access-controlled [`uxlfoundation/uxl-skills-runner-control`](https://github.com/uxlfoundation/uxl-skills-runner-control) repository implements this pattern with an Intel GPU adapter. Its workflow requires a reviewed 40-character evaluator commit SHA, runs only the `sycl-device-discovery-windows-wsl` oracle, and uploads the full job directory without model credentials.
 
 After the job finishes:
 
 1. Open the private control repository's Actions run and read its qualification summary.
-2. Download `uxl-intel-gpu-oracle-<commit>` as a ZIP.
+2. Download `uxl-windows-wsl-intel-gpu-oracle-<commit>` as a ZIP.
 3. Run `python scripts/import_harbor_artifact.py <downloaded-artifact.zip>`.
-4. Restart the dashboard with `.\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser`.
+4. Restart the dashboard with the launcher appropriate to the operator host. On the qualified workstation, stop the existing WSL viewer once and relaunch with `.\scripts\start_harbor_dashboards.ps1 -WslDistribution Ubuntu-24.04`.
 5. Inspect the trial, verifier output, `runner-provenance.json`, `sycl-probe.json`, and diagnosis exactly like a local result.
 
 Treat a passed oracle as runner qualification, not skill-benefit evidence. Add a three-arm model experiment only after the oracle passes and a maintainer-backed target-dependent task provides meaningful headroom.
+
+Qualification reference: [run 32800920037](https://github.com/uxlfoundation/uxl-skills-runner-control/actions/runs/32800920037) passed with evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76` and reward `1.0`. The sanitized [evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site) is deployed from [`uxlfoundation/uxl-evaluator-dashboard`](https://github.com/uxlfoundation/uxl-evaluator-dashboard); raw trajectories and machine evidence remain access-controlled.
 
 The importer refuses archive path traversal and conflicting same-named jobs. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
 

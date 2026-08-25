@@ -35,4 +35,4 @@ Inspect the task instruction, verifier source, trial trajectory, verifier output
 
 ## Platform adapters
 
-The current [Intel GPU guide](intel-gpu-runner.md) and [private runner-control template](../evaluation/runner-control-repo-template/README.md) provide one concrete adapter. Additional platforms should add their own narrowly scoped guide, qualification task, runner labels, device mapping, and provenance checks while preserving this shared contract.
+The current [Intel GPU guide](intel-gpu-runner.md) and access-controlled [`uxlfoundation/uxl-skills-runner-control`](https://github.com/uxlfoundation/uxl-skills-runner-control) repository provide one concrete adapter. Additional platforms should add their own narrowly scoped guide, qualification task, runner labels, device mapping, and provenance checks while preserving this shared contract.

@@ -10,4 +10,4 @@ This directory contains the planning and qualification records for a manually en
 
 Supporting scripts live in [`scripts/runner/`](../../scripts/runner/). Historical execution logs are retained outside the repository under `../artifacts/runner-prep-2026-08-18/` at the UXL workspace level.
 
-The Windows/WSL lane is separate from the native-Linux `/dev/dri` runner contract. Do not register or enable a self-hosted runner until its workflow, labels, repository scope, and reviewed commit are explicit.
+The Windows/WSL lane is separate from the native-Linux `/dev/dri` runner contract. It is now implemented in a private, repository-scoped control plane and qualified by a reward-1.0 Harbor oracle. Register the machine only through the reviewed manual workflow and ephemeral launcher described in the runner guide.

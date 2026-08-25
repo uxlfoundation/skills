@@ -29,7 +29,23 @@ A copy-ready private repository scaffold is available under [`evaluation/runner-
 
 An Intel Tiber Developer Cloud Max Series instance or an existing UXL/Intel laboratory host can satisfy these requirements. Record the exact device rather than relying on a generic `gpu` label.
 
-The current task deliberately qualifies the Linux `/dev/dri` path. A Windows workstation whose WSL environment exposes only `/dev/dxg` is a different execution contract and does not satisfy this runner tier without a separate Windows/WSL task and verifier.
+The native-Linux task deliberately qualifies the `/dev/dri` path. The separate `sycl-device-discovery-windows-wsl` task qualifies Windows/WSL through `/dev/dxg`, a read-only `/usr/lib/wsl` mount, and Level Zero. Never route one contract to the other lane.
+
+### Qualified Windows/WSL lane
+
+The UXL control plane has a passing Windows/WSL Intel GPU reference:
+
+- private dispatcher: [`uxlfoundation/uxl-skills-runner-control`](https://github.com/uxlfoundation/uxl-skills-runner-control);
+- runner labels: `uxl,sycl,gpu,intel-gpu,windows-wsl,personal-lab`;
+- evaluator commit: `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`;
+- qualification: [GitHub Actions run 32800920037](https://github.com/uxlfoundation/uxl-skills-runner-control/actions/runs/32800920037), reward `1.0`;
+- lifecycle: repository-scoped, manual-dispatch, ephemeral runner.
+
+On that workstation, start a waiting one-job runner with the helper in the private control repository:
+
+```powershell
+.\scripts\start-ephemeral-wsl-runner.ps1
+```
 
 ## 1. Qualify the Linux host
 

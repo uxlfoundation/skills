@@ -78,9 +78,9 @@ Exit status: `0`.
 
 The same program also passed directly in Ubuntu WSL, selecting device `0xa780` and returning `42`. The pinned container's newer runtime enumerated both devices and selected the Arc B580.
 
-## Required broader-project changes
+## Implemented broader-project changes
 
-Create a distinct Windows/WSL Harbor task and workflow rather than broadening the existing native-Linux task.
+A distinct Windows/WSL Harbor task and workflow now exist alongside the unchanged native-Linux task.
 
 Recommended custom runner labels:
 
@@ -108,7 +108,7 @@ Suggested task name:
 sycl-device-discovery-windows-wsl
 ```
 
-The oracle for this new task must pass before any model or skill comparison is attempted.
+The oracle passed end to end in [run 32800920037](https://github.com/uxlfoundation/uxl-skills-runner-control/actions/runs/32800920037) at evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`, earning reward `1.0`.
 
 ## Security and runner-control requirements
 
@@ -121,12 +121,14 @@ The oracle for this new task must pass before any model or skill comparison is a
 - Never persist or log the one-time GitHub registration token.
 - Retain the `windows-wsl` custom label permanently for this machine.
 
-## Deliberately not completed
+## Completed operational state
 
-- GitHub Actions runner registration: waiting for a private control-repository URL and one-time registration token.
-- Harbor evaluator execution: waiting for a reviewed commit SHA or bundle containing the Windows/WSL task.
-- Harbor `0.20.0` environment: not created yet because the reviewed evaluator checkout is not available.
-- Native-Linux qualification: not applicable and not required for this machine.
+- Private control repository: `uxlfoundation/uxl-skills-runner-control`.
+- GitHub runner: Linux x64 runner inside WSL, repository-scoped and ephemeral.
+- Harbor evaluator: Windows/WSL task passed with complete artifact retention.
+- Harbor `0.20.0`: pinned in CI and installed in an isolated WSL operator environment.
+- Dashboards: local detailed Harbor views plus the owner-only [UXL evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site), built from public UXL source.
+- Native-Linux qualification: still not applicable to this machine.
 
 ## Artifacts in the preparation workspace
 
