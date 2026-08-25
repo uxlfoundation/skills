@@ -37,8 +37,8 @@ The UXL control plane has a passing Windows/WSL Intel GPU reference:
 
 - private dispatcher: access-controlled `uxlfoundation/uxl-skills-runner-control`;
 - runner labels: `uxl,sycl,gpu,intel-gpu,windows-wsl,personal-lab`;
-- evaluator commit: `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`;
-- qualification: access-controlled GitHub Actions run `32800920037`, reward `1.0`;
+- evaluator commit: `884bc80bff12c4a61adb5c7e2127338a55e6e1fc`;
+- qualification: access-controlled GitHub Actions run `32846295857`, reward `1.0`;
 - lifecycle: repository-scoped, manual-dispatch, ephemeral runner.
 
 On that workstation, start a waiting one-job runner with the reusable helper in this repository:

@@ -32,7 +32,7 @@ test("server-renders the UXL evaluator scorecard", async () => {
   assert.match(html, /<title>UXL Evaluator Control Room<\/title>/i);
   assert.match(html, /Windows\/WSL Intel GPU lane qualified/);
   assert.match(html, /51<\/strong><span>evaluation tasks/);
-  assert.match(html, /f3481bb/);
+  assert.match(html, /884bc80/);
   assert.match(html, /Harbor reward<\/dt><dd>1\.000/);
   assert.match(html, /https:\/\/evaluator\.example\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|starter loading skeleton/i);

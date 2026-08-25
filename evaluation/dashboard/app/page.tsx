@@ -115,7 +115,7 @@ export default function Home() {
         <div className="proof">
           <div className="proof-mark">PASS</div>
           <dl>
-            <div><dt>Evaluator</dt><dd>f3481bb</dd></div>
+            <div><dt>Evaluator</dt><dd>884bc80</dd></div>
             <div><dt>Interface</dt><dd>/dev/dxg</dd></div>
             <div><dt>Runtime</dt><dd>Level Zero GPU</dd></div>
             <div><dt>Workload</dt><dd>Compiled SYCL kernel</dd></div>

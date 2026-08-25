@@ -108,7 +108,7 @@ Suggested task name:
 sycl-device-discovery-windows-wsl
 ```
 
-The oracle passed end to end in access-controlled run `32800920037` at evaluator commit `f3481bb6aa331ab1fd09f1a5d8ec5c7d02981f76`, earning reward `1.0`.
+The consolidated dispatcher and public runner implementation passed end to end in access-controlled run `32846295857` at evaluator commit `884bc80bff12c4a61adb5c7e2127338a55e6e1fc`, earning reward `1.0`.
 
 ## Security and runner-control requirements
 
