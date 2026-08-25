@@ -7,7 +7,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 const siteUrl = "https://uxlfoundation.github.io/skills";
 const title = "UXL Skills Evaluator";
-const description = "Evidence-backed evaluation of UXL Foundation agent skills across hosted and specialized hardware runners.";
+const description = "Vendor-neutral portfolio health, evaluation coverage, and promotion readiness for UXL Foundation agent skills.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -2,43 +2,80 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("exports the UXL Skills Evaluator scorecard for GitHub Pages", async () => {
-  const html = await readFile(new URL("../dist/client/index.html", import.meta.url), "utf8");
+const dashboardRoot = new URL("../", import.meta.url);
+const clientRoot = new URL("../dist/client/", import.meta.url);
+
+async function exportedPage(path = "index.html") {
+  return readFile(new URL(path, clientRoot), "utf8");
+}
+
+test("exports a vendor-neutral UXL Skills Evaluator overview", async () => {
+  const html = await exportedPage();
   assert.match(html, /<title>UXL Skills Evaluator<\/title>/i);
   assert.match(html, /UXL Skills Evaluator home/);
-  assert.match(html, /uxl-foundation-icon-color\.svg/);
-  assert.match(html, /Windows\/WSL Intel GPU lane qualified/);
-  assert.match(html, /51<\/strong><span>evaluation tasks/);
-  assert.match(html, /884bc80/);
-  assert.match(html, /Harbor reward<\/dt><dd>1\.000/);
+  assert.match(html, /Continuous evidence/);
+  assert.match(html, /39 \/ 51/);
+  assert.match(html, /9<\/strong><span>tasks with headroom/);
+  assert.match(html, /0 \/ 8/);
+  assert.match(html, /Hardware is a dimension/);
+  assert.doesNotMatch(html, /Windows\/WSL Intel GPU lane qualified|Intel GPU oracle|Evidence you can.*real hardware/is);
   assert.match(html, /https:\/\/uxlfoundation\.github\.io\/skills\/og\.png/);
+  assert.match(html, /skills\/#uxl-onednn/);
+  assert.match(html, /platforms\//);
+  assert.match(html, /methodology\//);
+
   const assetMatch = html.match(/(?:src|href)="((?:\/skills)?\/_next\/[^"]+)"/);
   assert.ok(assetMatch, "expected the export to reference a compiled asset");
   const artifactPath = assetMatch[1].replace(/^\/skills/, "");
-  await access(new URL(`../dist/client${artifactPath}`, import.meta.url));
+  await access(new URL(`.${artifactPath}`, clientRoot));
   assert.doesNotMatch(html, /codex-preview|starter loading skeleton/i);
 });
 
-test("keeps source, publishing, and evidence contracts reviewable", async () => {
-  const [page, layout, packageJson, nextConfig, readme] = await Promise.all([
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../next.config.ts", import.meta.url), "utf8"),
-    readFile(new URL("../README.md", import.meta.url), "utf8"),
+test("exports skill, evaluation, platform, and methodology drill-downs", async () => {
+  const [skillHtml, evaluationHtml, platformHtml, methodologyHtml] = await Promise.all([
+    exportedPage("skills/index.html"),
+    exportedPage("evaluations/index.html"),
+    exportedPage("platforms/index.html"),
+    exportedPage("methodology/index.html"),
   ]);
 
-  assert.match(packageJson, /"name": "uxl-evaluator-dashboard"/);
+  assert.match(skillHtml, /Eight accountable portfolios/);
+  assert.match(skillHtml, /oneDNN/);
+  assert.match(skillHtml, /oneCCL/);
+  assert.match(skillHtml, /maintainer review needed/);
+  assert.match(evaluationHtml, /Evaluation explorer/);
+  assert.match(evaluationHtml, /<strong>51<\/strong> of/);
+  assert.match(evaluationHtml, /onednn-matmul-memory-descriptors/);
+  assert.match(platformHtml, /Evidence contract first/);
+  assert.match(platformHtml, /Vendor neutral/);
+  assert.match(platformHtml, /Environment evidence by skill/);
+  assert.match(platformHtml, /Project skill<\/span><span>Hosted CPU/);
+  assert.match(platformHtml, /Skill comparison<\/dt><dd>Not yet run/);
+  assert.match(methodologyHtml, /Correctness first/);
+  assert.match(methodologyHtml, /No-skill, previous-skill, candidate-skill/i);
+});
+
+test("keeps generated data, source, publishing, and privacy contracts reviewable", async () => {
+  const [page, layout, packageJson, nextConfig, readme, generated] = await Promise.all([
+    readFile(new URL("app/page.tsx", dashboardRoot), "utf8"),
+    readFile(new URL("app/layout.tsx", dashboardRoot), "utf8"),
+    readFile(new URL("package.json", dashboardRoot), "utf8"),
+    readFile(new URL("next.config.ts", dashboardRoot), "utf8"),
+    readFile(new URL("README.md", dashboardRoot), "utf8"),
+    readFile(new URL("app/dashboard-data.json", dashboardRoot), "utf8"),
+  ]);
+
+  assert.match(packageJson, /"data:generate"/);
   assert.doesNotMatch(packageJson, /openai\/sites|cloudflare|wrangler/i);
   assert.match(nextConfig, /output: "export"/);
   assert.match(nextConfig, /assetPrefix: publishingToGitHubPages \? "\/skills"/);
-  assert.match(layout, /https:\/\/uxlfoundation\.github\.io\/skills/);
-  assert.match(page, /https:\/\/github\.com\/uxlfoundation\/skills\/pull\/6/);
-  assert.match(page, /oneDNN/);
-  assert.match(page, /oneCCL/);
-  assert.match(page, /SYCL build \+ debug/);
+  assert.match(layout, /Vendor-neutral portfolio health/);
+  assert.match(page, /capabilityCoverage/);
   assert.match(readme, /Raw Harbor job records.*remain in the private/s);
   assert.match(readme, /GitHub Pages/);
-  await access(new URL("../public/og.png", import.meta.url));
-  await access(new URL("../public/uxl-foundation-icon-color.svg", import.meta.url));
+  const data = JSON.parse(generated);
+  assert.equal(data.skills.length, 8);
+  assert.equal(data.skills.flatMap((skill) => skill.tasks).length, 51);
+  await access(new URL("public/og.png", dashboardRoot));
+  await access(new URL("public/uxl-foundation-icon-color.svg", dashboardRoot));
 });
