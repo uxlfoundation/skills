@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
+const publishingToGitHubPages = process.env.GITHUB_PAGES === "true";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  trailingSlash: true,
+  assetPrefix: publishingToGitHubPages ? "/skills" : "",
 };
 
 export default nextConfig;

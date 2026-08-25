@@ -127,7 +127,7 @@ The consolidated dispatcher and public runner implementation passed end to end i
 - GitHub runner: Linux x64 runner inside WSL, repository-scoped and ephemeral.
 - Harbor evaluator: Windows/WSL task passed with complete artifact retention.
 - Harbor `0.20.0`: pinned in CI and installed in an isolated WSL operator environment.
-- Dashboards: local detailed Harbor views plus the owner-only [UXL evaluator control room](https://uxl-evaluator-control-room.melonakos.chatgpt.site), built from public UXL source.
+- Dashboards: local detailed Harbor views plus the sanitized public [UXL evaluator control room](https://uxlfoundation.github.io/skills/), built from public UXL source and deployed by GitHub Pages.
 - Native-Linux qualification: still not applicable to this machine.
 
 ## Artifacts in the preparation workspace

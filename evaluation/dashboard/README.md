@@ -28,7 +28,9 @@ npm test
 
 ## Deployment
 
-Production deployment is managed with OpenAI Sites. `.openai/hosting.json` binds this directory to its existing Sites project. Publish the exact validated `uxlfoundation/skills` Git commit through the Sites version and deployment workflow; do not create a second Sites project.
+The public dashboard is published at <https://uxlfoundation.github.io/skills/> with GitHub Pages. The repository workflow builds this directory on a GitHub-hosted runner, verifies the static export, and deploys it after changes reach `main`. Pull requests run the same build and checks without publishing.
+
+Pages receives only `dist/client`. Keep raw Harbor records, runner logs, credentials, and unsanitized machine provenance out of the dashboard source and public build.
 
 ## Evidence model
 
