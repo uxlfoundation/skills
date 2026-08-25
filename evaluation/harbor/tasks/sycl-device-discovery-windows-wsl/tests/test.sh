@@ -1,3 +1,3 @@
 #!/bin/bash
 set -uo pipefail
-python /tests/check_hardware.py
+python3 /tests/check_hardware.py
