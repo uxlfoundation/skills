@@ -179,7 +179,7 @@
     {
       "skill": "uxl-sycl-build-debug",
       "owner_project": "UXL cross-project",
-      "target_task_count": 7,
+      "target_task_count": 8,
       "capabilities": [
         {"id": "reproducible-smoke-contract", "class": "correctness", "description": "Preserve the original failure and verify build plus runtime with a minimal smoke test."},
         {"id": "failure-phase-classification", "class": "selection", "description": "Classify configure, compile, link, load, or device-selection failures before acting."},
@@ -189,6 +189,7 @@
       ],
       "tasks": [
         {"name": "sycl-device-discovery", "status": "implemented", "role": "hardware", "calibration": "manual", "track": "hardware", "environment": "manual-gpu", "reproduction": "live", "origin": "not-applicable", "workflow": ["reproduce", "verify"], "hardware": "target-gpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
+        {"name": "sycl-device-discovery-windows-wsl", "status": "implemented", "role": "hardware", "calibration": "manual", "track": "hardware", "environment": "manual-gpu", "reproduction": "live", "origin": "not-applicable", "workflow": ["reproduce", "verify"], "hardware": "target-gpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
         {"name": "sycl-cmake-compiler-cache", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},
         {"name": "sycl-compile-time-backend-link", "status": "implemented", "role": "smoke", "calibration": "ceiling", "track": "executable", "environment": "hosted-toolchain", "reproduction": "live", "origin": "constructed", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "generic-cpu", "covers": ["reproducible-smoke-contract", "failure-phase-classification", "toolchain-package-runtime"]},
         {"name": "sycl-loader-plugin-mismatch", "status": "implemented", "role": "smoke", "calibration": "no-lift", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["failure-phase-classification", "toolchain-package-runtime", "evidence-driven-triage"]},

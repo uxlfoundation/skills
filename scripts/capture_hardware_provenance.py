@@ -71,11 +71,14 @@ def read_os_release() -> dict[str, str]:
 
 
 def device_nodes() -> list[dict[str, object]]:
-    dri = Path("/dev/dri")
-    if not dri.is_dir():
-        return []
     nodes = []
-    for path in sorted(dri.iterdir()):
+    paths = [Path("/dev/dxg")]
+    dri = Path("/dev/dri")
+    if dri.is_dir():
+        paths.extend(sorted(dri.iterdir()))
+    for path in paths:
+        if not path.exists():
+            continue
         try:
             stat = path.stat()
             nodes.append(
@@ -115,9 +118,12 @@ def qualification(report: dict[str, object]) -> dict[str, bool]:
                 for term in ("gpu", "vga compatible", "display controller")
             )
         ),
-        "render_node_present": any(
+        "gpu_device_interface_present": any(
             isinstance(node, dict)
-            and "renderd" in str(node.get("path", "")).casefold()
+            and (
+                "renderd" in str(node.get("path", "")).casefold()
+                or str(node.get("path", "")).casefold() == "/dev/dxg"
+            )
             for node in nodes
         ),
     }

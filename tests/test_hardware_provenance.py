@@ -32,6 +32,19 @@ class HardwareProvenanceTests(unittest.TestCase):
         }
         self.assertFalse(all(qualification(report).values()))
 
+    def test_accepts_windows_wsl_dxg_interface(self) -> None:
+        report = {
+            "commands": {
+                "sycl_ls": {
+                    "return_code": 0,
+                    "output": "[level_zero:gpu:0] Intel(R) Arc B580",
+                },
+                "lspci": {"return_code": 1, "output": ""},
+            },
+            "device_nodes": [{"path": "/dev/dxg"}],
+        }
+        self.assertTrue(all(qualification(report).values()))
+
 
 if __name__ == "__main__":
     unittest.main()

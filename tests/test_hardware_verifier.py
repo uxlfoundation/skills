@@ -20,6 +20,23 @@ if SPEC is None or SPEC.loader is None:
 CHECKER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CHECKER)
 
+WSL_CHECKER_PATH = (
+    Path(__file__).parents[1]
+    / "evaluation"
+    / "harbor"
+    / "tasks"
+    / "sycl-device-discovery-windows-wsl"
+    / "tests"
+    / "check_hardware.py"
+)
+WSL_SPEC = importlib.util.spec_from_file_location(
+    "sycl_wsl_hardware_checker", WSL_CHECKER_PATH
+)
+if WSL_SPEC is None or WSL_SPEC.loader is None:
+    raise RuntimeError(f"Could not load checker: {WSL_CHECKER_PATH}")
+WSL_CHECKER = importlib.util.module_from_spec(WSL_SPEC)
+WSL_SPEC.loader.exec_module(WSL_CHECKER)
+
 
 def passing_probe() -> dict[str, object]:
     return {
@@ -66,6 +83,20 @@ class HardwareVerifierTests(unittest.TestCase):
         self.assertEqual(scores["reward"], 0.0)
         self.assertEqual(scores["smoke_executed"], 0.0)
         self.assertEqual(scores["smoke_selected_intel_gpu"], 0.0)
+
+    def test_wsl_checker_accepts_dxg_execution_evidence(self) -> None:
+        probe = passing_probe()
+        probe["device_nodes"] = [{"path": "/dev/dxg"}]
+        diagnosis = "runtime device sycl-ls driver smoke test /usr/lib/wsl/lib"
+        scores = WSL_CHECKER.evaluate(probe, diagnosis)
+        self.assertEqual(scores["reward"], 1.0)
+        self.assertEqual(scores["wsl_gpu_interface_visible"], 1.0)
+
+    def test_wsl_checker_rejects_native_render_node(self) -> None:
+        diagnosis = "runtime device sycl-ls driver smoke test /usr/lib/wsl/lib"
+        scores = WSL_CHECKER.evaluate(passing_probe(), diagnosis)
+        self.assertEqual(scores["reward"], 0.0)
+        self.assertEqual(scores["wsl_gpu_interface_visible"], 0.0)
 
 
 if __name__ == "__main__":
