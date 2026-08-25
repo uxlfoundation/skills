@@ -107,7 +107,13 @@ function Start-HarborView {
         if (-not (Get-Command wsl.exe -ErrorAction SilentlyContinue)) {
             throw 'wsl.exe was not found. Install Harbor natively or run with a configured WSL distribution.'
         }
-        $harborExecutable = (& wsl.exe -d $WslDistribution -- bash -lc 'command -v harbor').Trim()
+        $harborProbe = & wsl.exe -d $WslDistribution -- bash -lc `
+            'if command -v harbor >/dev/null 2>&1; then command -v harbor; elif [ -x "$HOME/.local/share/uxl-harbor/bin/harbor" ]; then readlink -f "$HOME/.local/share/uxl-harbor/bin/harbor"; fi'
+        $harborExecutable = if ($harborProbe) {
+            ([string]($harborProbe | Select-Object -First 1)).Trim()
+        } else {
+            ''
+        }
         if ($LASTEXITCODE -ne 0 -or -not $harborExecutable) {
             throw "Harbor was not found in WSL distribution '$WslDistribution'."
         }
