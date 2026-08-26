@@ -16,9 +16,23 @@ The tracks share the same contract: correctness first, matched baseline/candidat
 - Eight skills are published, but seven remain `incubating` and one remains `pilot`.
 - All skills still require owning-project maintainer review.
 - The Harbor portfolio has meaningful coverage, but oneMath, oneDPL, oneCCL, SYCL, and performance validation still have planned tasks.
-- oneCCL and SYCL lack a real end-to-end maintainer-incident or upstream-regression task.
+- oneCCL still lacks a real end-to-end maintainer-incident or upstream-regression task. SYCL now has one through the oneDNN runtime-composition evaluator.
 - Target-device and distributed evidence remains the largest promotion gap.
-- The [agentic plan](agentic-plan.md) supplies a two-quarter strategy, but its reference workload and first pilot have not yet been implemented.
+- The [agentic plan](agentic-plan.md) now has a deterministic reference workload, LangGraph adapter, retained baselines, and a first oneDAL correctness prototype. The tiny-corpus performance gate is a documented no-go, so no UXL speedup is claimed.
+
+## 2026-08-26 checkpoint
+
+Repository work completed in the resumed plan:
+
+- recorded the known-good release-candidate baseline;
+- refreshed official release and ownership sources for oneTBB, oneDNN, and oneDAL;
+- prepared maintainer review packets for those three projects;
+- ranked the remaining evaluator work by promotion value;
+- implemented and retained the deterministic agentic workload, LangGraph integration, and oneDAL go/no-go result;
+- reproduced oneDNN issue 2959 on the GLOW machine and activated a real runtime-composition evaluator; and
+- added a GitHub-hosted scheduled/dispatchable oracle workflow for that expensive task.
+
+External gates remain external: named maintainers must accept and perform reviews, matched model trials require the selected evaluation model and credentials, and vendor/device claims require qualified target machines. These gates are not represented as completed by repository preparation alone.
 
 ## Phase 1 — stabilize and choose (weeks 1–4)
 

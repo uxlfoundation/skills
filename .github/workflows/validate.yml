@@ -99,3 +99,22 @@ jobs:
           smoke,candidate,0.9,true
           CSV
           python skills/uxl-performance-validation/scripts/summarize_runs.py /tmp/uxl_perf_smoke.csv
+
+  agentic-adapters:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r evaluation/agentic/requirements-langgraph.txt
+      - run: python -m pip install -r evaluation/agentic/requirements-onedal.txt
+      - run: python -m unittest tests.test_agentic_reference_workload -v
+      - run: >-
+          python -m evaluation.agentic.reference_workload
+          --executor langgraph
+          --retriever onedal
+          --max-workers 4
+          --warmups 1
+          --repetitions 3
+          --summary-only

@@ -1,0 +1,2 @@
+# First framework-adapter validation target; update only with a recorded compatibility run.
+langgraph==1.2.11

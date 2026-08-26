@@ -1,0 +1,1 @@
+set(UXL_ONEDNN_RUNTIME "sycl")

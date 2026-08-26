@@ -1,0 +1,125 @@
+{
+  "configuration": {
+    "cost_usd": 0.0,
+    "external_dependencies": 0,
+    "external_model_calls": 0,
+    "repetitions": 5,
+    "retriever_setup_ms": 0.0007,
+    "warmups": 1
+  },
+  "contract_id": "uxl-agentic-reference-v1",
+  "correctness": {
+    "failure_paths": {
+      "pre_cancelled": "pass",
+      "tool_exception": "pass"
+    },
+    "passed": true
+  },
+  "environment": {
+    "implementation": "CPython",
+    "logical_cpus": 28,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13"
+  },
+  "executor": "serial",
+  "retriever": "lexical",
+  "scenarios": {
+    "retrieval-heavy": {
+      "attempts": 5,
+      "shape": "retrieval-heavy",
+      "stages": {
+        "end_to_end": {
+          "median_ms": 38.5664,
+          "p50_ms": 38.5664,
+          "p95_ms": 39.4783
+        },
+        "plan": {
+          "median_ms": 0.0011,
+          "p50_ms": 0.0011,
+          "p95_ms": 0.0016
+        },
+        "retrieval": {
+          "median_ms": 38.5567,
+          "p50_ms": 38.5567,
+          "p95_ms": 39.4688
+        },
+        "synthesis": {
+          "median_ms": 0.0018,
+          "p50_ms": 0.0018,
+          "p95_ms": 0.0021
+        },
+        "tool_execution": {
+          "median_ms": 0.0054,
+          "p50_ms": 0.0054,
+          "p95_ms": 0.0062
+        }
+      },
+      "verified_successes": 5
+    },
+    "short-turn": {
+      "attempts": 5,
+      "shape": "short-turn",
+      "stages": {
+        "end_to_end": {
+          "median_ms": 1.4087,
+          "p50_ms": 1.4087,
+          "p95_ms": 1.5672
+        },
+        "plan": {
+          "median_ms": 0.0012,
+          "p50_ms": 0.0012,
+          "p95_ms": 0.0014
+        },
+        "retrieval": {
+          "median_ms": 0.0387,
+          "p50_ms": 0.0387,
+          "p95_ms": 0.0425
+        },
+        "synthesis": {
+          "median_ms": 0.0009,
+          "p50_ms": 0.0009,
+          "p95_ms": 0.0016
+        },
+        "tool_execution": {
+          "median_ms": 1.3667,
+          "p50_ms": 1.3667,
+          "p95_ms": 1.523
+        }
+      },
+      "verified_successes": 5
+    },
+    "tool-fan-out": {
+      "attempts": 5,
+      "shape": "tool-fan-out",
+      "stages": {
+        "end_to_end": {
+          "median_ms": 71.7577,
+          "p50_ms": 71.7577,
+          "p95_ms": 73.6723
+        },
+        "plan": {
+          "median_ms": 0.001,
+          "p50_ms": 0.001,
+          "p95_ms": 0.0013
+        },
+        "retrieval": {
+          "median_ms": 0.0005,
+          "p50_ms": 0.0005,
+          "p95_ms": 0.0007
+        },
+        "synthesis": {
+          "median_ms": 0.0061,
+          "p50_ms": 0.0061,
+          "p95_ms": 0.0074
+        },
+        "tool_execution": {
+          "median_ms": 71.7503,
+          "p50_ms": 71.7503,
+          "p95_ms": 73.6617
+        }
+      },
+      "verified_successes": 5
+    }
+  },
+  "schema_version": "1.0"
+}

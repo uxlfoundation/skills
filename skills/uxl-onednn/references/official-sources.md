@@ -11,6 +11,9 @@ Use these first when answering oneDNN questions.
 - oneDNN verbose mode: https://uxlfoundation.github.io/oneDNN/dev_guide_verbose.html
 - Post-ops and ordering: https://uxlfoundation.github.io/oneDNN/dev_guide_attributes_post_ops.html
 - Convolution primitive example: https://uxlfoundation.github.io/oneDNN/page_convolution_example_cpp.html
+- Current release checked 2026-08-25 (`v3.13.1`): https://github.com/uxlfoundation/oneDNN/releases/tag/v3.13.1
+- Maintainer roster: https://github.com/uxlfoundation/oneDNN/blob/main/MAINTAINERS.md
+- Code owners: https://github.com/uxlfoundation/oneDNN/blob/main/.github/CODEOWNERS
 
 ## Maintainer Incident Sources
 

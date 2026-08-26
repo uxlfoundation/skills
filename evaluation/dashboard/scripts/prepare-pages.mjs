@@ -5,9 +5,14 @@ const generatedAssets = new URL("skills/_next/", client);
 const publishedAssets = new URL("_next/", client);
 
 await access(new URL("index.html", client));
-await access(generatedAssets);
-await rm(publishedAssets, { recursive: true, force: true });
-await rename(generatedAssets, publishedAssets);
+try {
+  await access(generatedAssets);
+  await rm(publishedAssets, { recursive: true, force: true });
+  await rename(generatedAssets, publishedAssets);
+} catch (error) {
+  if (error?.code !== "ENOENT") throw error;
+  await access(publishedAssets);
+}
 
 for (const route of ["skills", "evaluations", "platforms", "methodology"]) {
   const routeDirectory = new URL(`${route}/`, client);

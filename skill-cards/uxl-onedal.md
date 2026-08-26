@@ -31,4 +31,5 @@ Guide agents through oneDAL native C++ versus scikit-learn acceleration choices,
 
 - Source ledger: `skills/uxl-onedal/references/official-sources.md`
 - Evals: `skills/uxl-onedal/evals/evals.json`
+- Official sources and project ownership files rechecked on 2026-08-25 against release `2026.1.0`.
 - Validation: catalog validator and skill quick validation pass locally.

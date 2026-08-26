@@ -21,6 +21,9 @@ Use these first when answering oneTBB questions.
 - oneTBB specification: https://oneapi-spec.uxlfoundation.org/specifications/oneapi/v1.4-rev-1/elements/onetbb/source/nested-index
 - oneTBB system requirements: https://github.com/uxlfoundation/oneTBB/blob/master/SYSTEM_REQUIREMENTS.md
 - oneTBB release notes: https://github.com/uxlfoundation/oneTBB/releases
+- Current release checked 2026-08-25 (`v2023.1.0`): https://github.com/uxlfoundation/oneTBB/releases/tag/v2023.1.0
+- Maintainer roster: https://github.com/uxlfoundation/oneTBB/blob/master/MAINTAINERS.md
+- Code owners: https://github.com/uxlfoundation/oneTBB/blob/master/CODEOWNERS
 
 ## Refresh Rule
 
