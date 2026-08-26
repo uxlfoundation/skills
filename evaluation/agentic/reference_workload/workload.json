@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "contract_id": "uxl-agentic-reference-v1",
+  "description": "Deterministic tool-using retrieval workload for measuring orchestration and retrieval boundaries without model or network variance.",
+  "measurement": {
+    "clock": "monotonic_ns",
+    "stages": ["plan", "retrieval", "tool_execution", "synthesis", "end_to_end"],
+    "headline_percentiles": [50, 95],
+    "correctness_before_timing": true,
+    "external_model_calls": 0,
+    "external_dependencies": 0
+  },
+  "projects": {
+    "onednn": {"display_name": "oneDNN", "status": "incubating"},
+    "onemath": {"display_name": "oneMath", "status": "pilot"},
+    "onedal": {"display_name": "oneDAL", "status": "incubating"},
+    "onetbb": {"display_name": "oneTBB", "status": "incubating"},
+    "onedpl": {"display_name": "oneDPL", "status": "incubating"},
+    "oneccl": {"display_name": "oneCCL", "status": "incubating"},
+    "sycl": {"display_name": "SYCL", "status": "incubating"},
+    "performance": {"display_name": "Performance validation", "status": "incubating"}
+  },
+  "corpus": [
+    {"id": "onetbb-runtime", "text": "oneTBB schedules CPU tasks, parallel loops, reductions, pipelines, task arenas, and flow graphs."},
+    {"id": "onedal-retrieval", "text": "oneDAL provides analytics algorithms including nearest neighbor, clustering, tables, and distributed modes."},
+    {"id": "onednn-inference", "text": "oneDNN supplies neural network primitives, graph fusion, memory descriptors, layouts, and post operations."},
+    {"id": "onemath-dispatch", "text": "oneMath supplies BLAS LAPACK RNG DFT sparse math and backend dispatch APIs."},
+    {"id": "onedpl-algorithms", "text": "oneDPL provides parallel algorithms and execution policies for host and SYCL device data."},
+    {"id": "oneccl-collectives", "text": "oneCCL provides distributed collective communication including allreduce broadcast and communicator operations."},
+    {"id": "sycl-devices", "text": "SYCL provides portable device selection queues kernels memory and accelerator execution."},
+    {"id": "performance-method", "text": "Performance validation requires correctness gates baselines warmup repeated timing variance and hardware provenance."},
+    {"id": "agent-planning", "text": "Agent frameworks own planning orchestration tools application state and model interaction."},
+    {"id": "agent-tools", "text": "Tool calls can fan out concurrently but must preserve cancellation exceptions backpressure and result identity."},
+    {"id": "agent-retrieval", "text": "Retrieval quality must be fixed before comparing vector search latency conversion cost or routing performance."},
+    {"id": "agent-output", "text": "Structured outputs require schema validation deterministic field names and explicit failure behavior."},
+    {"id": "packaging", "text": "Python integrations should be pip installable report versions and reach a verified first result quickly."},
+    {"id": "hardware-portability", "text": "Hardware support claims require declared backend device driver runtime and fallback evidence across vendor lanes."},
+    {"id": "negative-control", "text": "A benchmark negative control detects overhead when an optimization has no relevant work to accelerate."},
+    {"id": "promotion-policy", "text": "Skill promotion requires maintainer review current sources realistic evals matched trials and retained evidence."}
+  ],
+  "scenarios": [
+    {
+      "id": "short-turn",
+      "shape": "short-turn",
+      "queries": ["CPU task scheduling arenas flow graphs"],
+      "retrieval_passes": 1,
+      "tool_calls": [
+        {"id": "status-onetbb", "tool": "project_status", "project": "onetbb", "delay_ms": 1}
+      ],
+      "expected": {
+        "routes": ["onetbb-runtime"],
+        "answer": "oneTBB is incubating; route=onetbb-runtime."
+      }
+    },
+    {
+      "id": "tool-fan-out",
+      "shape": "tool-fan-out",
+      "queries": [],
+      "retrieval_passes": 0,
+      "tool_calls": [
+        {"id": "status-onednn", "tool": "project_status", "project": "onednn", "delay_ms": 12},
+        {"id": "status-onemath", "tool": "project_status", "project": "onemath", "delay_ms": 14},
+        {"id": "status-onedal", "tool": "project_status", "project": "onedal", "delay_ms": 16},
+        {"id": "status-onetbb", "tool": "project_status", "project": "onetbb", "delay_ms": 18}
+      ],
+      "expected": {
+        "routes": [],
+        "answer": "oneDAL=incubating; oneDNN=incubating; oneMath=pilot; oneTBB=incubating."
+      }
+    },
+    {
+      "id": "retrieval-heavy",
+      "shape": "retrieval-heavy",
+      "queries": [
+        "nearest neighbor clustering analytics tables",
+        "neural network primitives fusion layouts",
+        "collective allreduce broadcast communicator",
+        "device queues kernels accelerator",
+        "correctness baselines warmup variance provenance",
+        "cancellation exceptions concurrent tool fan out"
+      ],
+      "retrieval_passes": 200,
+      "tool_calls": [],
+      "expected": {
+        "routes": ["onedal-retrieval", "onednn-inference", "oneccl-collectives", "sycl-devices", "performance-method", "agent-tools"],
+        "answer": "routes=onedal-retrieval,onednn-inference,oneccl-collectives,sycl-devices,performance-method,agent-tools."
+      }
+    }
+  ]
+}

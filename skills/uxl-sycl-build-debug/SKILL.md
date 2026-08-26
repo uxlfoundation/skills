@@ -39,6 +39,7 @@ Help an agent separate compiler, CMake, linker, runtime loader, and device-selec
 - `find_package` failures often come from CMake cache state; inspect the cache before adding new hints.
 - GPU examples may silently select a CPU if the queue selector is too broad.
 - Runtime dispatch libraries must be findable at execution time, not only at link time.
+- Match a library's CPU threading runtime to the application. A oneDNN SYCL/TBB build composed with an OpenMP caller can fail nondeterministically; confirm the loaded objects with `ldd` or equivalent. Verbose logging changes scheduling and is diagnostic evidence, not a repair.
 
 ## Output Contract
 

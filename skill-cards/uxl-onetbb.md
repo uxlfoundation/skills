@@ -29,4 +29,5 @@ Guide agents through oneTBB pattern selection, shared-state analysis, grainsize 
 
 - Source ledger: `skills/uxl-onetbb/references/official-sources.md`
 - Evals: `skills/uxl-onetbb/evals/evals.json`
+- Official sources and project ownership files rechecked on 2026-08-25 against release `v2023.1.0`.
 - Validation: catalog validator and skill quick validation pass locally.

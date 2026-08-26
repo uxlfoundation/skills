@@ -1,0 +1,2 @@
+# First UXL retrieval prototype; CPU execution only and no hardware performance claim.
+scikit-learn-intelex==2026.1.0

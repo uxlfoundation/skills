@@ -16,12 +16,14 @@ Guide agents through cross-project SYCL build and runtime triage: compiler selec
 - Classify configure, compile, link, runtime load, and device discovery failures.
 - Generate a safe local SYCL toolchain report.
 - Keep compiler, backend, package, and runtime hypotheses separate.
+- Diagnose mixed SYCL/TBB and OpenMP runtime composition with repeated-run and dynamic-loader evidence.
 - Route library-specific issues back to the relevant UXL skill.
 
 ## Limitations
 
 - The probe script reports local evidence but does not install toolchains.
 - Current backend support must be checked in upstream docs.
+- The live oneDNN runtime-composition evaluator is CPU-only and does not establish behavior on every compiler, runtime, or vendor device.
 - Needs review from maintainers across projects that use SYCL.
 
 ## Evidence
@@ -30,3 +32,4 @@ Guide agents through cross-project SYCL build and runtime triage: compiler selec
 - Evals: `skills/uxl-sycl-build-debug/evals/evals.json`
 - Script: `skills/uxl-sycl-build-debug/scripts/sycl_probe.py`
 - Validation: catalog validator and skill quick validation pass locally.
+- Source ledger last checked: 2026-08-25.

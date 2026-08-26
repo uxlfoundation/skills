@@ -9,6 +9,11 @@ Use these first for cross-project SYCL build and runtime issues.
 - oneAPI DPC++ compiler source: https://github.com/intel/llvm
 - AdaptiveCpp: https://github.com/AdaptiveCpp/AdaptiveCpp
 - UXL Open Source WG CI documentation: https://github.com/uxlfoundation/open-source-working-group/blob/main/project-infrastructure/project-ci-documentation.md
+- oneDNN build options and CPU threading runtimes: https://uxlfoundation.github.io/oneDNN/dev_guide_build_options.html
+- oneDNN issue 2959, SYCL/TBB and OpenMP runtime-composition crash: https://github.com/uxlfoundation/oneDNN/issues/2959
+- oneDNN maintainer guidance for issue 2959: https://github.com/uxlfoundation/oneDNN/issues/2959#issuecomment-2756505490
+
+Last verified: 2026-08-25.
 
 ## Refresh Rule
 

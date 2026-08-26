@@ -1,0 +1,61 @@
+name: harbor-hosted-toolchain
+
+on:
+  pull_request:
+    paths:
+      - evaluation/harbor/tasks/sycl-onednn-threading-runtime-composition/**
+      - .github/workflows/harbor-hosted-toolchain.yml
+  push:
+    branches: [main]
+    paths:
+      - evaluation/harbor/tasks/sycl-onednn-threading-runtime-composition/**
+      - .github/workflows/harbor-hosted-toolchain.yml
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 2"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uxl-hosted-toolchain-evaluation
+  cancel-in-progress: false
+
+jobs:
+  onednn-runtime-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      HARBOR_TELEMETRY: "off"
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@49933ea5288caeca8642d1e84afbd3f7d6820020 # v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned Harbor
+        run: python -m pip install harbor==0.20.0
+      - name: Run oneDNN runtime-composition oracle
+        run: |
+          harbor run \
+            --path evaluation/harbor/tasks \
+            --agent oracle \
+            --include-task-name sycl-onednn-threading-runtime-composition \
+            --job-name uxl-hosted-toolchain-oracle \
+            --jobs-dir harbor-jobs \
+            --n-concurrent 1 \
+            --yes
+      - name: Require successful oracle result
+        run: >-
+          python scripts/check_harbor_job.py
+          harbor-jobs/uxl-hosted-toolchain-oracle/result.json
+          --expected-trials 1
+          --reward-floor 1.0
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v4
+        if: always()
+        with:
+          name: uxl-hosted-toolchain-oracle
+          path: harbor-jobs
+          retention-days: 30

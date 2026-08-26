@@ -27,6 +27,15 @@
         "must_include": ["link", "backend", "library", "search path", "runtime"],
         "must_not_include": ["include path only", "ignore libraries"]
       }
+    },
+    {
+      "id": "sycl-onednn-threading-runtime-composition",
+      "prompt": "Use $uxl-sycl-build-debug to diagnose a oneDNN CPU example that intermittently crashes when the library was built for the SYCL/TBB CPU runtime but the application also enables OpenMP. The example becomes stable when oneDNN verbose logging is enabled.",
+      "expected_output": "Classifies this as an execution-time runtime-composition failure, preserves repeated-run evidence, inspects the resolved oneDNN/SYCL/TBB/OpenMP libraries, rejects verbose logging as a repair, and selects and verifies one coherent threading runtime.",
+      "checks": {
+        "must_include": ["runtime", "SYCL", "TBB", "OpenMP", "loader", "verbose", "repeated"],
+        "must_not_include": ["verbose logging fixes", "single successful run proves"]
+      }
     }
   ]
 }

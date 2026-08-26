@@ -72,6 +72,7 @@ New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/
 - `sycl-loader-plugin-mismatch`: hosted structured runtime-loader task.
 - `sycl-selector-silent-cpu-fallback`: hosted-CPU executable runtime-device-proof task.
 - `sycl-transitive-target-link-contract`: opt-in hosted-toolchain task for target-scoped propagation of the SYCL final-link contract.
+- `sycl-onednn-threading-runtime-composition`: opt-in hosted-toolchain task reproducing oneDNN issue 2959 with pinned SYCL/TBB and OpenMP builds.
 - `sycl-device-discovery`: manually dispatched SYCL GPU task.
 
 ## Local smoke tests
@@ -125,6 +126,23 @@ harbor run `
 python scripts/check_harbor_job.py `
   harbor-jobs/uxl-oracle-smoke/result.json `
   --expected-trials 35 `
+  --reward-floor 1.0
+```
+
+The expensive oneDNN runtime-composition task has its own scheduled and manually dispatchable workflow in `.github/workflows/harbor-hosted-toolchain.yml`. Its pinned image is also safe to test locally with:
+
+```powershell
+harbor run --path evaluation/harbor/tasks `
+  --agent oracle `
+  --include-task-name sycl-onednn-threading-runtime-composition `
+  --job-name uxl-hosted-toolchain-oracle `
+  --jobs-dir harbor-jobs `
+  --n-concurrent 1 `
+  --yes
+
+python scripts/check_harbor_job.py `
+  harbor-jobs/uxl-hosted-toolchain-oracle/result.json `
+  --expected-trials 1 `
   --reward-floor 1.0
 ```
 

@@ -12,6 +12,9 @@ Use these first when answering oneDAL questions.
 - oneDAL SPMD model: https://uxlfoundation.github.io/oneDAL/onedal/spmd/index.html
 - oneDAL mathematical notation (rows are observations; columns are features): https://uxlfoundation.github.io/oneDAL/onedal/notations.html
 - oneDAL basic-statistics input table contract: https://uxlfoundation.github.io/oneDAL/api/algorithms/statistics/basic-statistics.html
+- Current release checked 2026-08-25 (`2026.1.0`): https://github.com/uxlfoundation/oneDAL/releases/tag/2026.1.0
+- Maintainer roster: https://github.com/uxlfoundation/oneDAL/blob/main/MAINTAINERS.md
+- Code owners: https://github.com/uxlfoundation/oneDAL/blob/main/.github/CODEOWNERS
 
 ## Refresh Rule
 

@@ -14,7 +14,7 @@ test("exports a vendor-neutral UXL Skills Evaluator overview", async () => {
   assert.match(html, /<title>UXL Skills Evaluator<\/title>/i);
   assert.match(html, /UXL Skills Evaluator home/);
   assert.match(html, /Continuous evidence/);
-  assert.match(html, /39 \/ 51/);
+  assert.match(html, /40 \/ 51/);
   assert.match(html, /9<\/strong><span>tasks with headroom/);
   assert.match(html, /0 \/ 8/);
   assert.match(html, /Hardware is a dimension/);
