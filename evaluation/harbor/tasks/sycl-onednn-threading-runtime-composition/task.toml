@@ -22,5 +22,5 @@ workdir = "/app"
 network_mode = "public"
 build_timeout_sec = 3600.0
 os = "linux"
-cpus = 8
+cpus = 4
 memory_mb = 16384
