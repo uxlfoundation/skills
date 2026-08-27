@@ -18,11 +18,9 @@ The repair follows upstream commit [`993878af`](https://github.com/uxlfoundation
 
 The task runs on a generic hosted CPU and validates the source repair contract. It does not reproduce the original Aurora Level Zero driver failure. GLOW's discrete Arc B580 plus integrated A780 topology could not produce an unconfounded affected-versus-fixed comparison, so live hardware coverage remains open.
 
-Local container calibration on evaluator revision pending commit:
+Local container calibration used the worktree committed and merged as evaluator revision `ce9a6cb`:
 
 - Baseline: reward 0; both public and hidden tests reject non-null zero-count slices.
 - Oracle: reward 1; public and hidden tests pass.
 
 The Harbor 0.20.0 oracle job `harbor-jobs/uxl-oneccl-zero-count-oracle` completed 1/1 trial at reward 1 with zero exceptions on GLOW through WSL and Docker Desktop. Its `result.json` SHA-256 is `B3224A63FAEC5BC0EC1A9F5C4059FCB9113577111561128EA7F079AABB019B96`.
-
-The final evaluator revision will be added after the tracked task is committed.
