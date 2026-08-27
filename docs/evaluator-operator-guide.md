@@ -192,6 +192,21 @@ Qualification reference: access-controlled run `32846295857` passed with evaluat
 
 The importer refuses archive path traversal and conflicting same-named jobs. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
 
+### Trust a Windows HTTPS-inspection root in local builds
+
+Some Windows security or enterprise proxy products replace public HTTPS certificates with a locally trusted root. Windows clients continue to work, but package and source downloads inside Linux image builds fail because that root is not in the image trust store. Do not disable TLS verification or use package-manager `trusted-host` bypasses.
+
+The networked Harbor task images accept an optional public root through `UXL_EXTRA_CA_CERT_B64`. Configure it from an existing Windows root certificate by thumbprint:
+
+```powershell
+.\scripts\configure_windows_container_ca.ps1 `
+  -Thumbprint <40-character-root-thumbprint> `
+  -StoreLocation CurrentUser `
+  -Scope User
+```
+
+Restart the shell or set `-Scope Process` before invoking Harbor in the same PowerShell process. The script exports only the certificate's public data. GitHub-hosted and unaffected local builds leave the variable unset and continue to use the base image trust store.
+
 ## Common problems
 
 | Symptom | Action |
@@ -199,6 +214,7 @@ The importer refuses archive path traversal and conflicting same-named jobs. If 
 | Docker is unavailable | Start Docker Desktop or the Linux Docker daemon, then verify `docker version`. |
 | `harbor` is not found in PowerShell | Use the provided WSL-based scripts or install Harbor 0.20.0 in Python 3.12. |
 | Dashboard is empty | Confirm the selected folder contains job directories with `result.json`. |
+| `pip` or `git` reports an unknown local issuer only inside Linux containers | Confirm the presented issuer belongs to an approved Windows HTTPS-inspection root, then configure its public certificate with `scripts/configure_windows_container_ca.ps1`. Never disable verification. |
 | Candidate looks cheaper but fails more often | Reject the efficiency claim; quality is the gate. |
 | Every arm gets full reward | Keep the task as smoke coverage and seek a harder independently phrased task. |
 | A hardware task fails before the agent starts | Treat it as infrastructure failure, preserve the logs, repair the runner, and rerun unchanged. |

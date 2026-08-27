@@ -1,9 +1,14 @@
 FROM python:3.12-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316fffb4adc89908d79aacd58a2
 
+ARG UXL_EXTRA_CA_CERT_B64=""
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_ROOT_USER_ACTION=ignore
 
-RUN python -m pip install --no-cache-dir \
+RUN if [ -n "$UXL_EXTRA_CA_CERT_B64" ]; then \
+        printf '%s' "$UXL_EXTRA_CA_CERT_B64" | base64 -d > /usr/local/share/ca-certificates/uxl-extra-ca.crt; \
+        update-ca-certificates; \
+    fi \
+    && python -m pip install --no-cache-dir \
         packaging==25.0 \
         scikit-learn-intelex==2026.1.0
 

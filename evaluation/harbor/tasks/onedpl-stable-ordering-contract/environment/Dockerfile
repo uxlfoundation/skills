@@ -1,6 +1,7 @@
 FROM debian:bookworm-slim@sha256:abd67ffcfa541b485a3dff59865ab629aa048a6c613e639d36e7456b0b229241
 
 ARG ONEDPL_REF=7be7189277bf0d0992806edc080b153046e5c2ac
+ARG UXL_EXTRA_CA_CERT_B64=""
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -9,6 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libtbb-dev \
         python3 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN if [ -n "$UXL_EXTRA_CA_CERT_B64" ]; then \
+        printf '%s' "$UXL_EXTRA_CA_CERT_B64" | base64 -d > /usr/local/share/ca-certificates/uxl-extra-ca.crt; \
+        update-ca-certificates; \
+    fi
 
 RUN git init /opt/onedpl \
     && git -C /opt/onedpl remote add origin https://github.com/uxlfoundation/oneDPL.git \

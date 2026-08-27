@@ -24,8 +24,9 @@ The repository-resident work in the resumed plan is complete and reviewable. The
 - 122 external links plus all local links pass with the CI-matching Python 3.12 runtime.
 - Direct incident proof: mixed runtime failed 12/12; coherent OpenMP passed 20/20.
 - Harbor task proof: one trial, zero exceptions, reward 1.0.
+- GLOW local release proof after the container trust repair: 35 trials, zero errors, reward 1.0 on every standard smoke task.
 
-The local 35-task oracle smoke reached reward 1.0 on 31 tasks. Four pre-existing image builds were blocked by this machine's container HTTPS certificate chain. The clean GitHub-hosted pull-request run is the release authority for those network-dependent builds.
+The GLOW container trust repair imports only the approved Windows HTTPS-inspection root's public certificate into affected Linux image builds. TLS verification remains enabled; no `trusted-host` or verification bypass is used.
 
 ## Remaining external gates
 

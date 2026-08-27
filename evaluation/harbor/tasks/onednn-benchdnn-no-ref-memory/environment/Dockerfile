@@ -2,12 +2,18 @@ FROM python:3.12-slim-bookworm@sha256:4766d8b510c428e595d74b9cc5bbb2fae8e26316ff
 
 ARG ONEDNN_BASE_REF=edc887bb71e405404dff49f8e29de7721f1e1720
 ARG ONEDNN_FIX_REF=371711c6d09742d9a5a536c1ae54156ff33018bc
+ARG UXL_EXTRA_CA_CERT_B64=""
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends \
         build-essential ca-certificates cmake git \
     && rm -rf /var/lib/apt/lists/*
+
+RUN if [ -n "$UXL_EXTRA_CA_CERT_B64" ]; then \
+        printf '%s' "$UXL_EXTRA_CA_CERT_B64" | base64 -d > /usr/local/share/ca-certificates/uxl-extra-ca.crt; \
+        update-ca-certificates; \
+    fi
 
 WORKDIR /app
 RUN git init oneDNN \

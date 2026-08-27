@@ -1,0 +1,5 @@
+services:
+  main:
+    build:
+      args:
+        UXL_EXTRA_CA_CERT_B64: "${UXL_EXTRA_CA_CERT_B64:-}"
