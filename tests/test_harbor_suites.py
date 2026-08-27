@@ -76,6 +76,21 @@ class HarborSuiteManifestTests(unittest.TestCase):
             any("fixture evaluation cannot claim reproduce or verify" in error for error in errors)
         )
 
+    def test_executable_source_fixture_uses_hosted_cpu_without_claiming_live_reproduction(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        task = next(
+            task
+            for suite in manifest["suites"]
+            for task in suite["tasks"]
+            if task["name"] == "oneccl-zero-count-topo-alltoallv"
+        )
+
+        self.assertEqual(task["track"], "executable")
+        self.assertEqual(task["reproduction"], "fixture")
+        self.assertEqual(task["environment"], "hosted-cpu")
+        self.assertEqual(task["workflow"], ["investigate", "repair"])
+        self.assertEqual(VALIDATOR.validate_manifest(manifest), [])
+
     def test_debugging_capability_requires_planned_live_end_to_end_coverage(self) -> None:
         manifest = copy.deepcopy(self.manifest)
         suite = manifest["suites"][0]

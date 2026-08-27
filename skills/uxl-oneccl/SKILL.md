@@ -20,9 +20,10 @@ Help an agent diagnose and implement oneCCL communication safely, with special a
 
 1. Match the collective to the semantic need: allreduce, allgather, alltoall, reduce-scatter, broadcast, point-to-point, or grouped calls.
 2. Verify every rank enters the same collective sequence with compatible buffers, counts, datatypes, reductions, roots, and communicators.
-3. Preserve async semantics. Always wait or otherwise prove completion before consuming results.
-4. Start with a minimal example and one collective before layering framework integration.
-5. Tune worker count, affinity, plugin, and transport only after correctness and launch symmetry are confirmed.
+3. For variable-count collectives, represent every zero-count peer as an explicit null/empty segment; do not form one-past device pointers even when no bytes transfer.
+4. Preserve async semantics. Always wait or otherwise prove completion before consuming results.
+5. Start with a minimal example and one collective before layering framework integration.
+6. Tune worker count, affinity, plugin, and transport only after correctness and launch symmetry are confirmed.
 
 ## Hang Triage
 
@@ -40,6 +41,7 @@ Help an agent diagnose and implement oneCCL communication safely, with special a
 - Environment variables must be applied consistently across ranks.
 - Plugin selection can change behavior; record `CCL_PLUGIN` and related worker settings.
 - Framework wrappers can hide collectives; inspect both Python/framework and oneCCL logs.
+- In-place paths can allocate temporary segments; apply the same zero-count rule to those temporaries.
 
 ## Output Contract
 

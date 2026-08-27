@@ -27,3 +27,13 @@ oneCCL remains at zero real end-to-end tasks. The next promotion requires either
 2. A maintainer-supplied CPU/provider incident with a reproducible source revision and accepted repair.
 
 The planned hosted `oneccl-cpp-or-nccl-like-api` task can still improve API-selection coverage, but it must remain fixture/review evidence and must not be reported as real incident triage.
+
+## 2026-08-27 GLOW activation attempt
+
+GLOW proved that its current oneCCL 2022.1 stack can execute a four-rank, topology-selected, zero-count `alltoallv` on the Intel Arc A780 through Level Zero when the container uses pidfd IPC. This is a current-stack control, not an affected-version reproduction.
+
+Affected oneCCL 2021.15.6 and repaired 2021.17 were then compiled with compatible 2025 toolchains. Four ranks forced onto the A780 failed in the same Level Zero memory-manager path in both revisions, so GPU oversubscription confounded the comparison. With one rank on each GLOW GPU, both revisions failed during communicator setup because GLOW pairs a discrete Arc B580 with the integrated A780. Neither comparison isolates issue #174.
+
+The new `oneccl-zero-count-topo-alltoallv` task is therefore an executable source fixture. It preserves the incident's 4,096-float live neighbor and zero-count peer pattern and checks the accepted send, receive, and in-place temporary repair, but it is labeled `fixture` and does not close the live hardware gate.
+
+The remaining gate is a homogeneous multi-GPU Level Zero target matching the original topology class, or maintainer-supplied evidence from such a system.

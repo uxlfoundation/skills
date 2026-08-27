@@ -366,13 +366,24 @@ def validate_manifest(
                     errors.append(
                         f"{name}: {reproduction} evaluation cannot claim reproduce or verify stages"
                     )
-                if environment != "hosted-container" or hardware != "none":
+                if reproduction == "review" or task.get("track") == "answer-quality":
+                    expected_fixture_environment = "hosted-container"
+                    expected_fixture_hardware = "none"
+                else:
+                    expected_fixture_environment = "hosted-cpu"
+                    expected_fixture_hardware = "generic-cpu"
+                if (
+                    environment != expected_fixture_environment
+                    or hardware != expected_fixture_hardware
+                ):
                     errors.append(
-                        f"{name}: {reproduction} evaluation must use hosted-container with no hardware"
+                        f"{name}: {reproduction} evaluation on track {task.get('track')!r} "
+                        f"must use {expected_fixture_environment} with "
+                        f"{expected_fixture_hardware} hardware"
                     )
-                if task.get("track") != "answer-quality":
+                if reproduction == "review" and task.get("track") != "answer-quality":
                     errors.append(
-                        f"{name}: {reproduction} evaluation must use answer-quality track"
+                        f"{name}: review evaluation must use answer-quality track"
                     )
             if environment in TARGET_ENVIRONMENTS and reproduction != "live":
                 errors.append(f"{name}: target environment requires live reproduction")
