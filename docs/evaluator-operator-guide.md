@@ -170,6 +170,8 @@ Classify full-quality tasks as ceiling or smoke coverage when all arms pass. The
 - Copy the comparison summary into `evaluation/harbor/results/` after review.
 - Record the model, task revision, skill revision, Harbor version, attempts, environment, and excluded infrastructure failures.
 
+Use the [retained Harbor evidence index](../evaluation/harbor/results/README.md) as the active authority for which local jobs and remote artifacts must be preserved. It also defines when a superseded run is disposable.
+
 To view a downloaded remote result, extract its job folders under `harbor-jobs/` and restart the results dashboard. Harbor can then render the remote trajectories and artifacts locally.
 
 ### Run on specialized hardware

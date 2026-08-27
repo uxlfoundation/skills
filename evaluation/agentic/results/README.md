@@ -4,4 +4,6 @@ Files in this directory are correctness-passing summaries from the frozen `uxl-a
 
 The 2026-08-25 GLOW run used CPython 3.13.13 on Windows 11 with 28 logical CPUs, one warmup, five measured attempts, and four maximum workers. Every route, answer, cancellation control, and exception control passed.
 
+The four summaries were introduced to the reviewed repository by merge commit `e9f0835`. They use deterministic executors and retrievers with no external model calls; the agent/model field is therefore `reference workload / no model`.
+
 These are prototype-selection measurements, not portable performance claims. Compare raw values only within the same dated environment and contract. Setup and conversion costs must stay in scope for a candidate integration.
