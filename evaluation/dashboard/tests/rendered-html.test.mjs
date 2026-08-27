@@ -14,7 +14,7 @@ test("exports a vendor-neutral UXL Skills Evaluator overview", async () => {
   assert.match(html, /<title>UXL Skills Evaluator<\/title>/i);
   assert.match(html, /UXL Skills Evaluator home/);
   assert.match(html, /Continuous evidence/);
-  assert.match(html, /40 \/ 51/);
+  assert.match(html, /41 \/ 52/);
   assert.match(html, /9<\/strong><span>tasks with headroom/);
   assert.match(html, /0 \/ 8/);
   assert.match(html, /Hardware is a dimension/);
@@ -44,7 +44,7 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   assert.match(skillHtml, /oneCCL/);
   assert.match(skillHtml, /maintainer review needed/);
   assert.match(evaluationHtml, /Evaluation explorer/);
-  assert.match(evaluationHtml, /<strong>51<\/strong> of/);
+  assert.match(evaluationHtml, /<strong>52<\/strong> of/);
   assert.match(evaluationHtml, /onednn-matmul-memory-descriptors/);
   assert.match(platformHtml, /Evidence contract first/);
   assert.match(platformHtml, /Vendor neutral/);
@@ -75,7 +75,7 @@ test("keeps generated data, source, publishing, and privacy contracts reviewable
   assert.match(readme, /GitHub Pages/);
   const data = JSON.parse(generated);
   assert.equal(data.skills.length, 8);
-  assert.equal(data.skills.flatMap((skill) => skill.tasks).length, 51);
+  assert.equal(data.skills.flatMap((skill) => skill.tasks).length, 52);
   await access(new URL("public/og.png", dashboardRoot));
   await access(new URL("public/uxl-foundation-icon-color.svg", dashboardRoot));
 });

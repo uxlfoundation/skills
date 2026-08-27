@@ -27,7 +27,7 @@ A real end-to-end task is implemented, reproduces live, performs every triage st
 | `uxl-onedal` | 6 | 5 | 3 | 2 | 1 | 1 | 1 |
 | `uxl-onetbb` | 7 | 7 | 5 | 2 | 0 | 1 | 0 |
 | `uxl-onedpl` | 6 | 4 | 3 | 1 | 2 | 2 | 2 |
-| `uxl-oneccl` | 6 | 4 | 1 | 3 | 2 | 0 | 2 |
+| `uxl-oneccl` | 7 | 5 | 1 | 4 | 2 | 0 | 2 |
 | `uxl-sycl-build-debug` | 8 | 8 | 6 | 2 | 2 | 1 | 0 |
 | `uxl-performance-validation` | 6 | 4 | 3 | 1 | 2 | 1 | 2 |
 
@@ -48,7 +48,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `uxl-onedal` | 5 | 5 | 1 | 4 | 0 | 0 | 0 |
 | `uxl-onetbb` | 7 | 7 | 2 | 5 | 0 | 0 | 0 |
 | `uxl-onedpl` | 4 | 4 | 1 | 3 | 0 | 0 | 0 |
-| `uxl-oneccl` | 4 | 4 | 2 | 1 | 1 | 0 | 0 |
+| `uxl-oneccl` | 5 | 4 | 2 | 1 | 1 | 0 | 1 |
 | `uxl-sycl-build-debug` | 8 | 7 | 1 | 3 | 1 | 2 | 1 |
 | `uxl-performance-validation` | 4 | 4 | 0 | 3 | 1 | 0 | 0 |
 
@@ -176,6 +176,7 @@ Calibration states describe what the evaluator currently demonstrates about skil
 | `oneccl-divergent-collective-sequence` | implemented | discriminating | headroom | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-datatype-count-mismatch` | implemented | smoke | no-lift | answer-quality | hosted-container | fixture | constructed | investigate | none | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-cpp-or-nccl-like-api` | implemented | discriminating | headroom | answer-quality | hosted-container | review | not-applicable | investigate | none | `api-and-collective-choice`, `launcher-plugin-framework` |
+| `oneccl-zero-count-topo-alltoallv` | implemented | discriminating | uncalibrated | executable | hosted-cpu | fixture | maintainer-incident | investigate -> repair | generic-cpu | `collective-contracts`, `distributed-hang-triage` |
 | `oneccl-plugin-rank-visibility` | planned | discriminating | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `distributed-hang-triage` |
 | `oneccl-worker-affinity-regression` | planned | smoke | uncalibrated | executable | target-distributed | live | unassigned | reproduce -> investigate -> repair -> verify | target-distributed | `launcher-plugin-framework`, `topology-worker-benchmarking` |
 

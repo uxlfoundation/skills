@@ -52,6 +52,7 @@ jobs:
             --include-task-name oneccl-async-allreduce-wait \
             --include-task-name oneccl-datatype-count-mismatch \
             --include-task-name oneccl-divergent-collective-sequence \
+            --include-task-name oneccl-zero-count-topo-alltoallv \
             --include-task-name onedal-sklearn-or-native-kmeans \
             --include-task-name onednn-framework-blocked-layout \
             --include-task-name onedpl-missing-device-synchronization \
@@ -79,7 +80,7 @@ jobs:
         run: >-
           python scripts/check_harbor_job.py
           harbor-jobs/uxl-oracle-smoke/result.json
-          --expected-trials 22
+          --expected-trials 23
           --reward-floor 1.0
       - uses: actions/upload-artifact@v4
         if: always()

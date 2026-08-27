@@ -1,0 +1,27 @@
+schema_version = "1.3"
+artifacts = [
+  "/app/oneCCL/src/coll/algorithms/alltoallv.cpp",
+]
+
+[metadata]
+skill = "uxl-oneccl"
+track = "executable"
+category = "collective-buffer-contract"
+difficulty = "hard"
+origin = "maintainer-incident"
+source_url = "https://github.com/uxlfoundation/oneCCL/issues/174"
+fix_url = "https://github.com/uxlfoundation/oneCCL/commit/993878af0301b2cd8c9c1e56a45d1d5273938b0d"
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+workdir = "/app/oneCCL"
+network_mode = "public"
+build_timeout_sec = 600.0
+os = "linux"
+cpus = 2
+memory_mb = 1024

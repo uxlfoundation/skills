@@ -51,6 +51,7 @@ skills:
     status: "incubating"
     owner_project: "oneCCL"
     owner_repo: "https://github.com/uxlfoundation/oneCCL"
+    last_source_verification: "2026-08-27"
     catalog_path: "skills/uxl-oneccl"
     skill_card: "skill-cards/uxl-oneccl.md"
     source_of_truth_target: "project-repo-after-maintainer-review"

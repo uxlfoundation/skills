@@ -159,7 +159,7 @@
     {
       "skill": "uxl-oneccl",
       "owner_project": "oneCCL",
-      "target_task_count": 6,
+      "target_task_count": 7,
       "capabilities": [
         {"id": "collective-contracts", "class": "correctness", "description": "Preserve rank symmetry, sequence, buffers, counts, datatypes, roots, and waits."},
         {"id": "api-and-collective-choice", "class": "selection", "description": "Choose the API surface and collective matching the communication semantics."},
@@ -172,6 +172,7 @@
         {"name": "oneccl-divergent-collective-sequence", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-datatype-count-mismatch", "status": "implemented", "role": "smoke", "calibration": "no-lift", "track": "answer-quality", "environment": "hosted-container", "reproduction": "fixture", "origin": "constructed", "workflow": ["investigate"], "hardware": "none", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-cpp-or-nccl-like-api", "status": "implemented", "role": "discriminating", "calibration": "headroom", "track": "answer-quality", "environment": "hosted-container", "reproduction": "review", "origin": "not-applicable", "workflow": ["investigate"], "hardware": "none", "covers": ["api-and-collective-choice", "launcher-plugin-framework"]},
+        {"name": "oneccl-zero-count-topo-alltoallv", "status": "implemented", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "hosted-cpu", "reproduction": "fixture", "origin": "maintainer-incident", "workflow": ["investigate", "repair"], "hardware": "generic-cpu", "covers": ["collective-contracts", "distributed-hang-triage"]},
         {"name": "oneccl-plugin-rank-visibility", "status": "planned", "role": "discriminating", "calibration": "uncalibrated", "track": "executable", "environment": "target-distributed", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-distributed", "covers": ["launcher-plugin-framework", "distributed-hang-triage"]},
         {"name": "oneccl-worker-affinity-regression", "status": "planned", "role": "smoke", "calibration": "uncalibrated", "track": "executable", "environment": "target-distributed", "reproduction": "live", "origin": "unassigned", "workflow": ["reproduce", "investigate", "repair", "verify"], "hardware": "target-distributed", "covers": ["launcher-plugin-framework", "topology-worker-benchmarking"]}
       ]

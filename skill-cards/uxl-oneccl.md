@@ -16,6 +16,7 @@ Guide agents through oneCCL collective selection, communicator setup, launch sym
 - Triage distributed collectives that hang.
 - Review async collective completion semantics.
 - Choose API path with current documentation checks.
+- Diagnose variable-count topology collectives with zero-count buffer boundaries.
 - Separate correctness fixes from transport/plugin tuning.
 
 ## Limitations
@@ -23,9 +24,11 @@ Guide agents through oneCCL collective selection, communicator setup, launch sym
 - Does not encode every environment variable or plugin option.
 - Needs current upstream verification for C API, GPU, framework, and plugin behavior.
 - Needs maintainer review for distributed launch recommendations.
+- The issue #174 source fixture checks the accepted repair boundary, but does not reproduce the original Aurora/Level Zero failure; GLOW's mixed GPUs cannot qualify that hardware path.
 
 ## Evidence
 
 - Source ledger: `skills/uxl-oneccl/references/official-sources.md`
 - Evals: `skills/uxl-oneccl/evals/evals.json`
 - Validation: catalog validator and skill quick validation pass locally.
+- Incident evidence: `evaluation/harbor/results/2026-08-27-oneccl-zero-count-fixture.md`

@@ -27,6 +27,15 @@
         "must_include": ["async", "wait", "completion", "buffer", "correctness"],
         "must_not_include": ["safe immediately", "no wait"]
       }
+    },
+    {
+      "id": "oneccl-zero-count-alltoallv",
+      "prompt": "Use $uxl-oneccl to review a topology alltoallv implementation where the final peer has count zero and the code still derives its send, receive, and in-place temporary pointers from cumulative offsets.",
+      "expected_output": "Flags the one-past device-pointer boundary, preserves nonzero counts and the topology algorithm, canonicalizes zero-count send, receive, and temporary slices to null/empty, and validates leading, middle, trailing, all-zero, datatype-size, and in-place cases.",
+      "checks": {
+        "must_include": ["zero-count", "null", "send", "receive", "in-place", "correctness"],
+        "must_not_include": ["switch algorithms", "pad the buffer", "change counts"]
+      }
     }
   ]
 }

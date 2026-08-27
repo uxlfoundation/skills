@@ -907,10 +907,10 @@
       "ownerRepo": "https://github.com/uxlfoundation/oneCCL",
       "status": "incubating",
       "maintainerReview": "needed",
-      "lastSourceVerification": null,
+      "lastSourceVerification": "2026-08-27",
       "skillCard": "skill-cards/uxl-oneccl.md",
       "sourceOfTruthTarget": "project-repo-after-maintainer-review",
-      "targetTaskCount": 6,
+      "targetTaskCount": 7,
       "capabilities": [
         {
           "id": "collective-contracts",
@@ -1012,6 +1012,25 @@
           "covers": [
             "api-and-collective-choice",
             "launcher-plugin-framework"
+          ]
+        },
+        {
+          "name": "oneccl-zero-count-topo-alltoallv",
+          "status": "implemented",
+          "role": "discriminating",
+          "calibration": "uncalibrated",
+          "track": "executable",
+          "environment": "hosted-cpu",
+          "reproduction": "fixture",
+          "origin": "maintainer-incident",
+          "workflow": [
+            "investigate",
+            "repair"
+          ],
+          "hardware": "generic-cpu",
+          "covers": [
+            "collective-contracts",
+            "distributed-hang-triage"
           ]
         },
         {
