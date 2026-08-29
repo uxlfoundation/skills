@@ -1,6 +1,7 @@
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { directoryDigest } from "./directory-digest.mjs";
 
 const dashboardRoot = fileURLToPath(new URL("..", import.meta.url));
 const repositoryRoot = resolve(dashboardRoot, "../..");
@@ -50,6 +51,15 @@ const evaluationCells = await Promise.all(
     .sort()
     .map(async (name) => {
       const cell = JSON.parse(await readFile(resolve(cellsRoot, name), "utf8"));
+      const [taskDigest, verifierDigest, candidateSkillDigest] = await Promise.all([
+        directoryDigest(resolve(repositoryRoot, "evaluation/harbor/tasks", cell.scope.task)),
+        directoryDigest(resolve(repositoryRoot, "evaluation/harbor/tasks", cell.scope.task, "tests")),
+        directoryDigest(resolve(repositoryRoot, "skills", cell.scope.skill)),
+      ]);
+      const repositoryChanges = [];
+      if (taskDigest !== cell.scope.task_revision.content_sha256) repositoryChanges.push("task");
+      if (verifierDigest !== cell.scope.verifier_sha256) repositoryChanges.push("verifier");
+      if (candidateSkillDigest !== cell.treatment.candidate_skill.content_sha256) repositoryChanges.push("candidate skill");
       return {
         id: cell.cell_id,
         stage: cell.stage,
@@ -58,11 +68,18 @@ const evaluationCells = await Promise.all(
         task: cell.scope.task,
         model: cell.agent.model,
         agent: cell.agent.name,
+        harness: cell.agent.harness,
         harnessVersion: cell.agent.harness_version,
+        reasoningEffort: cell.agent.reasoning_effort,
         environment: cell.execution.environment,
+        os: cell.execution.os,
+        architecture: cell.execution.architecture,
         hardware: cell.execution.hardware.class,
+        toolchain: cell.execution.toolchain,
         attemptsPerArm: cell.execution.attempts_per_arm,
         maxAgeDays: cell.freshness.max_age_days,
+        repositoryStatus: repositoryChanges.length === 0 ? "matches" : "changed",
+        repositoryChanges,
         rewards: Object.fromEntries(
           Object.entries(cell.results.arms).map(([arm, result]) => [arm, result.mean_reward]),
         ),

@@ -14,6 +14,8 @@ This directory is the reviewable index for evaluator decisions. Raw `harbor-jobs
 
 The dated Markdown files below this index retain design, sourcing, calibration, activation, invalid-run, and go/no-go decisions. They are historical review records, not all current release authorities.
 
+The [2026-08-29 migration audit](2026-08-29-evaluation-cell-migration-audit.md) explains why historical Markdown comparisons were not synthesized into v1 cells without their complete raw jobs and provenance. The structured ledger begins with the next valid matched run.
+
 ## Retention policy
 
 Retain raw jobs when they are promotion evidence, paid/model-bearing comparisons, difficult hardware reproductions, or the current release oracle. Before removing a superseded raw job:

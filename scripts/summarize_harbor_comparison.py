@@ -631,13 +631,10 @@ def build_evaluation_cell(
         "freshness": {
             "max_age_days": max_age_days,
             "material_dimensions": [
-                "scope.task_revision.commit",
                 "scope.task_revision.content_sha256",
                 "scope.task_dirty",
                 "scope.verifier_sha256",
-                "treatment.previous_skill.commit",
                 "treatment.previous_skill.content_sha256",
-                "treatment.candidate_skill.commit",
                 "treatment.candidate_skill.content_sha256",
                 "agent.name",
                 "agent.harness",

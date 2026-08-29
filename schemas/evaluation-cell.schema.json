@@ -137,7 +137,7 @@
         "max_age_days": { "type": "integer", "minimum": 1 },
         "material_dimensions": {
           "type": "array",
-          "minItems": 24,
+          "minItems": 21,
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/material_dimension" }
         }
@@ -216,13 +216,10 @@
     },
     "material_dimension": {
       "enum": [
-        "scope.task_revision.commit",
         "scope.task_revision.content_sha256",
         "scope.task_dirty",
         "scope.verifier_sha256",
-        "treatment.previous_skill.commit",
         "treatment.previous_skill.content_sha256",
-        "treatment.candidate_skill.commit",
         "treatment.candidate_skill.content_sha256",
         "agent.name",
         "agent.harness",

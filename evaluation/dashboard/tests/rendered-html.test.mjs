@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
+import { directoryDigest } from "../scripts/directory-digest.mjs";
 
 const dashboardRoot = new URL("../", import.meta.url);
 const clientRoot = new URL("../dist/client/", import.meta.url);
@@ -8,6 +11,21 @@ const clientRoot = new URL("../dist/client/", import.meta.url);
 async function exportedPage(path = "index.html") {
   return readFile(new URL(path, clientRoot), "utf8");
 }
+
+test("uses the canonical cross-platform directory digest", async () => {
+  const root = await mkdtemp(join(tmpdir(), "uxl-dashboard-digest-"));
+  try {
+    await mkdir(join(root, "sub"));
+    await writeFile(join(root, "a.txt"), "alpha");
+    await writeFile(join(root, "sub", "b.txt"), "beta");
+    assert.equal(
+      await directoryDigest(root),
+      "e081ef401f7f57797868df34df60540cd9f6f033d8b3b862e9440fafafd33c57",
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 
 test("exports a vendor-neutral UXL Skills Evaluator overview", async () => {
   const html = await exportedPage();
@@ -47,6 +65,8 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   assert.match(evaluationHtml, /<strong>52<\/strong> of/);
   assert.match(evaluationHtml, /structured evidence records/);
   assert.match(evaluationHtml, /Not yet recorded in the v1 contract/);
+  assert.match(evaluationHtml, /Matched evidence health/);
+  assert.match(evaluationHtml, /No v1 cells retained yet/);
   assert.match(evaluationHtml, /onednn-matmul-memory-descriptors/);
   assert.match(platformHtml, /Evidence contract first/);
   assert.match(platformHtml, /Vendor neutral/);

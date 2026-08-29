@@ -29,11 +29,18 @@ export type EvaluationCell = {
   task: string;
   model: string;
   agent: string;
+  harness: string;
   harnessVersion: string;
+  reasoningEffort: string;
   environment: string;
+  os: string;
+  architecture: string;
   hardware: string;
+  toolchain: Record<string, string>;
   attemptsPerArm: number;
   maxAgeDays: number;
+  repositoryStatus: "matches" | "changed";
+  repositoryChanges: string[];
   rewards: Record<string, number>;
   source: string;
 };

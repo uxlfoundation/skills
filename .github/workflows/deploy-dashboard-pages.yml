@@ -5,6 +5,9 @@ on:
     paths:
       - evaluation/dashboard/**
       - evaluation/harbor/suites.json
+      - evaluation/harbor/results/cells/**
+      - evaluation/harbor/tasks/**
+      - skills/**
       - skills.yaml
       - .github/workflows/deploy-dashboard-pages.yml
   push:
@@ -12,6 +15,9 @@ on:
     paths:
       - evaluation/dashboard/**
       - evaluation/harbor/suites.json
+      - evaluation/harbor/results/cells/**
+      - evaluation/harbor/tasks/**
+      - skills/**
       - skills.yaml
       - .github/workflows/deploy-dashboard-pages.yml
   workflow_dispatch:

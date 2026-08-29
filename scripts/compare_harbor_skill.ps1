@@ -97,19 +97,12 @@ function Get-ArgumentDisplay {
 function Get-DirectoryDigest {
     param([string]$Directory)
 
-    $root = [IO.Path]::GetFullPath($Directory).TrimEnd('\', '/')
-    $entries = foreach ($file in Get-ChildItem -LiteralPath $root -File -Recurse | Sort-Object FullName) {
-        $relative = $file.FullName.Substring($root.Length + 1).Replace('\', '/')
-        $fileHash = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-        "$relative $fileHash"
+    $digestScript = Join-Path $PSScriptRoot 'digest_directory.py'
+    $output = & python $digestScript $Directory 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not digest directory $Directory`n$($output -join [Environment]::NewLine)"
     }
-    $bytes = [Text.Encoding]::UTF8.GetBytes(($entries -join "`n"))
-    $hasher = [Security.Cryptography.SHA256]::Create()
-    try {
-        return ([BitConverter]::ToString($hasher.ComputeHash($bytes))).Replace('-', '').ToLowerInvariant()
-    } finally {
-        $hasher.Dispose()
-    }
+    return @($output)[-1].Trim()
 }
 
 try {

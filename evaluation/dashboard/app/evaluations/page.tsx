@@ -1,5 +1,6 @@
 import { PageIntro, SiteFooter, SiteHeader } from "../components";
-import { allTasks, portfolio, skills } from "../data";
+import { allTasks, evaluationCells, portfolio, skills } from "../data";
+import { EvidenceHealth } from "./evidence-health";
 import { EvaluationExplorer } from "./evaluation-explorer";
 
 export const dynamic = "force-static";
@@ -22,6 +23,7 @@ export default function EvaluationsPage() {
       <section className="mini-summary section-pad" aria-label="Evaluation summary">
         {evaluationSummary.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
       </section>
+      <EvidenceHealth cells={evaluationCells} />
       <section className="explorer-section section-pad">
         <EvaluationExplorer tasks={allTasks} projects={skills.map((skill) => skill.displayName)} />
       </section>

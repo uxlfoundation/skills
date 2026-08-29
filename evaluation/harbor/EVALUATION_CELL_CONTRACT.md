@@ -28,7 +28,7 @@ python scripts/validate_evaluation_cell.py <evaluation-cell.json> `
 
 Each record declares its maximum age and material dimensions. A result becomes stale for current-proof purposes when the age limit is exceeded or a declared dimension changes. It remains historical evidence and is never silently rewritten.
 
-Every v1 cell declares task and verifier content, skill revisions, model, harness, reasoning effort, image, toolchain, OS, hardware qualification, attempts, timeout, and concurrency as material dimensions. Incompatible cells are reported separately; their rewards are not averaged into a universal score.
+Every v1 cell declares task and verifier content, skill content, model, harness, reasoning effort, image, toolchain, OS, hardware qualification, attempts, timeout, and concurrency as material dimensions. Git commits remain immutable provenance identifiers, while content digests decide whether a task or skill changed; an unrelated repository commit does not invalidate evidence. Incompatible cells are reported separately, and their rewards are not averaged into a universal score.
 
 ## Retained ledger and dashboard
 
