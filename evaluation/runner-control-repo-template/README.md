@@ -4,10 +4,13 @@ This directory demonstrates the reusable private-control-repository pattern with
 
 These copy-ready examples control personal or laboratory Intel GPU runners. Do not enable them unchanged in the public skills repository or claim that either device contract applies to other platforms.
 
+For a new vendor or laboratory target, start with `specialized-target-oracle.yml` and copy `target-adapter.example.json` to `target-adapter.json`. Follow the exact [specialized target adapter guide](../../docs/target-device-adapter.md). The generic runner executes reviewed host probes, validates the declared task and hardware class, runs one Harbor oracle, and returns a common evidence layout.
+
 Both workflows accept only a full 40-character commit SHA, check out `uxlfoundation/skills` at that immutable revision, run a hardware oracle, and upload the complete job directory. They do not run a model experiment or accept pull-request triggers.
 
 - `intel-gpu-oracle.yml` contains the native-Linux `/dev/dri` implementation.
 - `windows-wsl-intel-gpu-oracle.yml` is the thin dispatcher used for the private Windows/WSL machine. The hardware-specific implementation lives in the reviewed `skills` checkout at `scripts/runner/run-windows-wsl-intel-gpu-oracle.sh`.
+- `specialized-target-oracle.yml` is the vendor-neutral dispatcher. Machine-specific settings live in the private `target-adapter.json`, not in the public evaluator implementation.
 
 ## Create the control repository
 

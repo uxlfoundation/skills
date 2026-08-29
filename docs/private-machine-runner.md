@@ -68,3 +68,5 @@ Pin every third-party action to a reviewed full commit SHA. The evaluator script
 ## UXL example
 
 UXL's private dispatcher is `uxlfoundation/uxl-skills-runner-control`. The reusable launcher and Windows/WSL Intel GPU oracle are in this repository under [`scripts/runner/`](../scripts/runner/), and the copy-ready dispatcher is [`evaluation/runner-control-repo-template/.github/workflows/windows-wsl-intel-gpu-oracle.yml`](../evaluation/runner-control-repo-template/.github/workflows/windows-wsl-intel-gpu-oracle.yml). The current runner uses `/dev/dxg`, the read-only WSL runtime libraries at `/usr/lib/wsl`, and the `sycl-device-discovery-windows-wsl` oracle.
+
+For a new vendor or laboratory target, use the [specialized target adapter](target-device-adapter.md) and [`specialized-target-oracle.yml`](../evaluation/runner-control-repo-template/.github/workflows/specialized-target-oracle.yml). It keeps the workflow fixed, records probe hashes, rejects secret-like configuration fields, verifies task ownership and hardware class, and accepts only a public-main revision or an explicitly approved candidate SHA.

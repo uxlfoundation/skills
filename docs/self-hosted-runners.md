@@ -35,4 +35,4 @@ Inspect the task instruction, verifier source, trial trajectory, verifier output
 
 ## Platform adapters
 
-The current [Intel GPU guide](intel-gpu-runner.md) and access-controlled `uxlfoundation/uxl-skills-runner-control` repository provide one concrete adapter. Additional platforms should add their own narrowly scoped guide, qualification task, runner labels, device mapping, and provenance checks while preserving this shared contract.
+Start with the vendor-neutral [specialized target adapter guide](target-device-adapter.md), schema, runner, and private-workflow template. The current [Intel GPU guide](intel-gpu-runner.md) and access-controlled `uxlfoundation/uxl-skills-runner-control` repository remain one concrete adapter. Additional platforms supply only their task, labels, probes, device mapping, and vendor runtime while preserving the shared contract.

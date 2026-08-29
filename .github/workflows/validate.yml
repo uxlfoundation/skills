@@ -27,6 +27,15 @@ jobs:
       - run: python scripts/validate_catalog.py
       - run: python scripts/run_evals.py --validate
       - run: python scripts/validate_harbor_suites.py
+      - run: python scripts/validate_evaluation_cells.py
+      - name: Validate specialized target adapter template
+        run: >-
+          python scripts/runner/run_target_adapter.py
+          --config evaluation/runner-control-repo-template/target-adapter.example.json
+          --source-root .
+          --expected-commit 0000000000000000000000000000000000000000
+          --output /tmp/uxl-target-adapter-validation
+          --validate-only
       - run: python scripts/render_harbor_suites.py --check
       - run: python scripts/sync_harbor_answer_checkers.py --check
       - run: python -m unittest discover -s tests -p "test_*.py"

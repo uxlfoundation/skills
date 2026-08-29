@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "adapter_id": "example-target-gpu",
+  "task": {
+    "skill": "uxl-sycl-build-debug",
+    "name": "sycl-device-discovery",
+    "hardware_class": "target-gpu"
+  },
+  "runner": {
+    "required_labels": ["self-hosted", "linux", "x64", "uxl", "target-gpu", "trusted-lab"]
+  },
+  "probes": [
+    {
+      "id": "device-interface",
+      "command": ["sh", "-lc", "test -e /dev/dri/renderD128 && echo device-ready"],
+      "timeout_seconds": 30,
+      "required_patterns": ["device-ready"],
+      "publish_output": false
+    },
+    {
+      "id": "runtime-enumeration",
+      "command": ["vendor-runtime-info", "--list-devices"],
+      "timeout_seconds": 60,
+      "required_patterns": ["GPU"],
+      "publish_output": false
+    }
+  ],
+  "harbor": {
+    "command": ["harbor"],
+    "timeout_seconds": 3600,
+    "environment": {
+      "UXL_TARGET_ADAPTER": "example-target-gpu"
+    }
+  }
+}
