@@ -10,6 +10,10 @@ Please review `uxl-onetbb` for technical accuracy, useful scope, honest limitati
 
 The current skill covers pattern selection, shared-state and ordering analysis, grainsize and affinity, flow graphs, cancellation, arenas, global controls, and oversubscription triage. It explicitly routes GPU offload to SYCL or oneDPL guidance.
 
+Why this helps: agents get oneTBB-specific decision and debugging discipline at the moment they edit a oneTBB codebase, while maintainers retain control over the guidance and its tests.
+
+The initial ask is a 30–45 minute accuracy review and a decision on periodic ownership—not a commitment to support the evaluator infrastructure.
+
 ## Evidence to inspect
 
 - Instructions: `skills/uxl-onetbb/SKILL.md`

@@ -7,7 +7,7 @@ The repository-resident work in the resumed plan is complete and reviewable. The
 ## Delivered
 
 - Release baseline and ranked evaluation backlog.
-- Current release/ownership source checks for oneTBB, oneDNN, and oneDAL.
+- Current release/ownership source checks for oneTBB, oneDNN, and oneDAL, plus review packets for all eight skills.
 - Maintainer review packets for the three strongest promotion candidates.
 - Deterministic short-turn, tool-fan-out, and retrieval-heavy agentic workloads.
 - LangGraph framework adapter with correctness, cancellation, exception, identity, and stage-timing checks.

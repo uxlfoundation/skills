@@ -26,7 +26,7 @@ Repository work completed in the resumed plan:
 
 - recorded the known-good release-candidate baseline;
 - refreshed official release and ownership sources for oneTBB, oneDNN, and oneDAL;
-- prepared maintainer review packets for those three projects;
+- prepared maintainer review packets for all eight skills, with oneTBB, oneDNN, and oneDAL still prioritized for the first meetings;
 - ranked the remaining evaluator work by promotion value;
 - implemented and retained the deterministic agentic workload, LangGraph integration, and oneDAL go/no-go result;
 - reproduced oneDNN issue 2959 on the GLOW machine and activated a real runtime-composition evaluator; and
@@ -45,7 +45,7 @@ External gates remain external: named maintainers must accept and perform review
    - target-device tasks for oneMath and oneDPL;
    - remaining performance-validation discriminating coverage;
    - lower-priority incremental smoke coverage.
-4. Prepare one-page maintainer review packets for oneTBB, oneDNN, and oneDAL, which currently have the strongest implemented coverage.
+4. Use the prepared one-page packets for all eight skills; schedule oneTBB, oneDNN, and oneDAL first because they currently have the strongest promotion readiness.
 5. Assign an owner and review date for every `maintainer_review: needed` entry.
 
 ### Agentic track

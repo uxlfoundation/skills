@@ -10,6 +10,10 @@ Please review `uxl-onednn` for technical accuracy, useful scope, honest limitati
 
 The current skill covers primitive and graph choices, memory descriptors, layout boundaries, post-ops, backend assumptions, numerical parity, verbose evidence, and `benchdnn` validation. It requires current upstream verification for hardware and primitive support rather than encoding a static support table.
 
+Why this helps: agents are directed toward oneDNN's actual layout, primitive, verbose, and `benchdnn` workflows instead of generic deep-learning advice or stale backend claims.
+
+The initial ask is a 30–45 minute accuracy review and a decision on periodic ownership—not a commitment to support the evaluator infrastructure.
+
 ## Evidence to inspect
 
 - Instructions: `skills/uxl-onednn/SKILL.md`
