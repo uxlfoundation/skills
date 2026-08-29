@@ -20,6 +20,8 @@ Both workflows accept only a full 40-character commit SHA, check out `uxlfoundat
 4. Keep Actions disabled for forks and do not add `pull_request`, `pull_request_target`, or public `repository_dispatch` triggers.
 5. If organization administration is available, place the runner in a runner group restricted to this repository.
 
+All templates accept commits already reachable from public `uxlfoundation/skills` main. To run an unmerged candidate, copy `approved-commits.example.txt` to `approved-commits.txt`, add the reviewed full SHA, and commit that approval in the private control repository first. A workflow input alone cannot authorize arbitrary public-repository code on the private machine.
+
 The workflow pins its GitHub-authored actions to the full commits for `actions/checkout` v6.0.2 and `actions/upload-artifact` v7.0.1 as published on August 18, 2026. Use Dependabot or a reviewed manual change to update those pins. These action releases require a recent GitHub Actions runner; install the exact current runner offered by the control repository's settings page.
 
 ## Register one reviewed job

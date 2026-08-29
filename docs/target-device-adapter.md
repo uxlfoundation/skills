@@ -65,6 +65,7 @@ The private artifact contains:
 
 - `qualification-summary.md`;
 - `runner-provenance.json`, with configuration and probe-output hashes;
+- `probe-logs/`, with access-controlled raw probe output for diagnosis;
 - `oracle.log`;
 - the complete `harbor-jobs/<job>/` directory.
 
@@ -75,7 +76,7 @@ python scripts/import_harbor_artifact.py <artifact.zip>
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser
 ```
 
-A pass qualifies the lane; it does not prove that a skill helps. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep raw trajectories and machine details access-controlled.
+A pass qualifies the lane; it does not prove that a skill helps. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep `probe-logs/`, raw trajectories, and machine details access-controlled.
 
 For that later comparison, use `scripts/compare_harbor_skill.ps1` and pass the qualification file with `-HardwareProbePath <artifact>/runner-provenance.json`. The evaluation cell stores its SHA-256 digest, not the private probe contents.
 

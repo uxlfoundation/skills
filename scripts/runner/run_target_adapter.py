@@ -139,7 +139,12 @@ def sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def run_probe(probe: dict[str, Any], cwd: Path, environment: dict[str, str]) -> dict[str, Any]:
+def run_probe(
+    probe: dict[str, Any],
+    cwd: Path,
+    environment: dict[str, str],
+    private_log: Path | None = None,
+) -> dict[str, Any]:
     started = datetime.now(timezone.utc)
     try:
         completed = subprocess.run(
@@ -155,6 +160,9 @@ def run_probe(probe: dict[str, Any], cwd: Path, environment: dict[str, str]) -> 
             check=False,
         )
         output = completed.stdout
+        if private_log is not None:
+            private_log.parent.mkdir(parents=True, exist_ok=True)
+            private_log.write_text(output, encoding="utf-8")
         missing = [pattern for pattern in probe["required_patterns"] if pattern not in output]
         record: dict[str, Any] = {
             "id": probe["id"],
@@ -172,6 +180,9 @@ def run_probe(probe: dict[str, Any], cwd: Path, environment: dict[str, str]) -> 
         return record
     except subprocess.TimeoutExpired as exc:
         output = exc.stdout if isinstance(exc.stdout, str) else ""
+        if private_log is not None:
+            private_log.parent.mkdir(parents=True, exist_ok=True)
+            private_log.write_text(output, encoding="utf-8")
         return {
             "id": probe["id"],
             "command": probe["command"],
@@ -180,6 +191,43 @@ def run_probe(probe: dict[str, Any], cwd: Path, environment: dict[str, str]) -> 
             "timed_out": True,
             "passed": False,
         }
+    except OSError as exc:
+        message = f"{type(exc).__name__}: {exc}"
+        if private_log is not None:
+            private_log.parent.mkdir(parents=True, exist_ok=True)
+            private_log.write_text(message + "\n", encoding="utf-8")
+        return {
+            "id": probe["id"],
+            "command": probe["command"],
+            "duration_seconds": round((datetime.now(timezone.utc) - started).total_seconds(), 3),
+            "output_sha256": sha256_bytes(message.encode("utf-8")),
+            "error": message,
+            "passed": False,
+        }
+
+
+def command_version(command: list[str], cwd: Path, environment: dict[str, str]) -> dict[str, Any]:
+    try:
+        completed = subprocess.run(
+            [*command, "--version"],
+            cwd=cwd,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=30,
+            check=False,
+        )
+        output = completed.stdout.strip()
+        return {
+            "command": command,
+            "return_code": completed.returncode,
+            "version": output[:1000] if output else "unreported",
+        }
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return {"command": command, "error": f"{type(exc).__name__}: {exc}"}
 
 
 def declared_task(source_root: Path, task_name: str) -> tuple[str, dict[str, Any]] | None:
@@ -311,11 +359,20 @@ def main(argv: list[str] | None = None) -> int:
                 "architecture": platform.machine(),
                 "required_labels": config["runner"]["required_labels"],
             },
+            "toolchain": {
+                "python": platform.python_version(),
+                "harbor": command_version(config["harbor"]["command"], source_root, environment),
+            },
             "probes": [],
             "oracle": {"status": "not-run"},
         }
         for probe in config["probes"]:
-            record = run_probe(probe, source_root, environment)
+            record = run_probe(
+                probe,
+                source_root,
+                environment,
+                output / "probe-logs" / f"{probe['id']}.log",
+            )
             provenance["probes"].append(record)
             write_json(provenance_path, provenance)
             if not record["passed"]:

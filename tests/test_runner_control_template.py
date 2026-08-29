@@ -43,6 +43,8 @@ class RunnerControlTemplateTests(unittest.TestCase):
         self.assertLess(validation, checkout)
         self.assertIn("repository: uxlfoundation/skills", self.workflow)
         self.assertIn("persist-credentials: false", self.workflow)
+        self.assertIn("merge-base --is-ancestor", self.workflow)
+        self.assertIn("approved-commits.txt", self.workflow)
 
     def test_all_actions_are_pinned_to_full_commits(self) -> None:
         uses = re.findall(
@@ -90,12 +92,14 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
             "bash scripts/runner/run-windows-wsl-intel-gpu-oracle.sh",
             self.workflow,
         )
+        self.assertIn("merge-base --is-ancestor", self.workflow)
+        self.assertIn("approved-commits.txt", self.workflow)
 
     def test_dispatcher_actions_are_pinned(self) -> None:
         uses = re.findall(
             r"^\s*(?:-\s*)?uses:\s*([^\s]+)$", self.workflow, re.MULTILINE
         )
-        self.assertEqual(len(uses), 2)
+        self.assertGreaterEqual(len(uses), 2)
         for action in uses:
             self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
 

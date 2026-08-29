@@ -32,15 +32,35 @@ jobs:
             exit 2
           fi
 
+      - name: Check out reviewed control configuration
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          path: control
+          persist-credentials: false
+          clean: true
+
       - name: Check out the reviewed evaluator revision
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           repository: uxlfoundation/skills
           ref: ${{ inputs.skills_commit }}
           path: evaluator
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
           clean: true
+
+      - name: Require a public-main or explicitly approved revision
+        shell: bash
+        run: |
+          git -C evaluator fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          if git -C evaluator merge-base --is-ancestor "$SKILLS_COMMIT" origin/main; then
+            exit 0
+          fi
+          if [[ -f control/approved-commits.txt ]] && grep -Fxiq "$SKILLS_COMMIT" control/approved-commits.txt; then
+            exit 0
+          fi
+          echo "Commit is neither on public main nor listed in reviewed control/approved-commits.txt" >&2
+          exit 2
 
       - name: Verify checkout and host prerequisites
         working-directory: evaluator

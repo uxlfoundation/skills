@@ -78,11 +78,37 @@ class TargetAdapterTests(unittest.TestCase):
         probe = config["probes"][0]
         assert isinstance(probe, dict)
         with tempfile.TemporaryDirectory() as directory:
-            result = adapter.run_probe(probe, Path(directory), {})
+            private_log = Path(directory) / "private" / "probe.log"
+            result = adapter.run_probe(probe, Path(directory), {}, private_log)
+            private_output = private_log.read_text(encoding="utf-8")
 
         self.assertTrue(result["passed"])
         self.assertNotIn("output", result)
         self.assertRegex(str(result["output_sha256"]), r"^[0-9a-f]{64}$")
+        self.assertEqual(private_output, "target ready\n")
+
+    def test_missing_probe_command_is_a_recorded_failure(self) -> None:
+        config = valid_config()
+        probe = config["probes"][0]
+        assert isinstance(probe, dict)
+        probe["command"] = ["command-that-does-not-exist-uxl"]
+        with tempfile.TemporaryDirectory() as directory:
+            private_log = Path(directory) / "probe.log"
+            result = adapter.run_probe(probe, Path(directory), {}, private_log)
+            private_log_created = private_log.is_file()
+
+        self.assertFalse(result["passed"])
+        self.assertIn("error", result)
+        self.assertTrue(private_log_created)
+
+    def test_records_harbor_version_without_shell_execution(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            version = adapter.command_version(
+                [sys.executable], Path(directory), {}
+            )
+
+        self.assertEqual(version["return_code"], 0)
+        self.assertIn("Python", version["version"])
 
     def test_builds_fixed_oracle_command(self) -> None:
         config = valid_config()
