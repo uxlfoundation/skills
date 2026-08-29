@@ -1,6 +1,6 @@
 # UXL Skills weekend checkpoint — 2026-08-29
 
-The initial planned repository work and the first weekend continuation are complete on `weekend/evaluation-cells-target-adapters`.
+The initial planned repository work and the first weekend continuation are complete on `weekend/evaluation-cells-target-adapters`. The exact local candidate, validation, evidence boundaries, and open gates are recorded in the [weekend release-candidate ledger](releases/2026-08-29-weekend-candidate.md).
 
 ## Delivered
 
@@ -37,7 +37,7 @@ The initial planned repository work and the first weekend continuation are compl
 
 ## Recommended next actions
 
-1. Review and push the checkpoint commits, then open one PR.
+1. Review the weekend release-candidate ledger and checkpoint commits, then push and open one PR.
 2. Run the first calibration cell on a hosted task and retain its sanitized JSON.
 3. Configure a second specialized target from `docs/target-device-adapter.md`, then retain its generated sanitized qualification record to prove portability beyond GLOW.
 4. Assign human owners and send the prepared oneTBB, oneDNN, and oneDAL review packets first.
