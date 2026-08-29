@@ -18,8 +18,16 @@ import run_target_adapter as adapter  # noqa: E402
 
 def valid_config() -> dict[str, object]:
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "adapter_id": "example-target-gpu",
+        "publication": {
+            "display_name": "Example Linux GPU",
+            "vendor": "Example Vendor",
+            "device": "Example Accelerator",
+            "interface": "Native Linux device interface",
+            "max_age_days": 90,
+            "limitations": ["Qualification only; no skill-benefit claim."],
+        },
         "task": {
             "skill": "uxl-sycl-build-debug",
             "name": "sycl-device-discovery",
@@ -58,6 +66,12 @@ class TargetAdapterTests(unittest.TestCase):
 
     def test_validates_portable_adapter(self) -> None:
         self.assertEqual(adapter.validate_adapter(valid_config()), [])
+
+    def test_accepts_legacy_adapter_without_publication(self) -> None:
+        config = valid_config()
+        config["schema_version"] = "1.0"
+        del config["publication"]
+        self.assertEqual(adapter.validate_adapter(config), [])
 
     def test_rejects_secret_environment_and_duplicate_probe(self) -> None:
         config = valid_config()
@@ -119,6 +133,28 @@ class TargetAdapterTests(unittest.TestCase):
         self.assertIn("oracle", command)
         self.assertIn("sycl-device-discovery", command)
         self.assertEqual(command[command.index("--n-attempts") + 1], "1")
+
+    def test_builds_sanitized_public_qualification(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            result = root / "result.json"
+            provenance = root / "runner-provenance.json"
+            result.write_text("{}\n", encoding="utf-8")
+            provenance.write_text("{}\n", encoding="utf-8")
+            record = adapter.build_public_qualification(
+                valid_config(),
+                ROOT,
+                "1" * 40,
+                "2026-08-29T12:00:00Z",
+                {"environment": "manual-gpu"},
+                result,
+                provenance,
+                {"GITHUB_ACTIONS": "true", "GITHUB_RUN_ID": "12345"},
+            )
+
+        self.assertEqual(record["status"], "passed")
+        self.assertNotIn("runner_name", json.dumps(record))
+        self.assertEqual(record["evidence"]["workflow"]["visibility"], "access-controlled")
 
     def test_cli_validate_only(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

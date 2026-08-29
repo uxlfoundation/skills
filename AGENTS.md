@@ -58,6 +58,8 @@ Run:
 python scripts/validate_catalog.py
 python scripts/run_evals.py --validate
 python scripts/validate_harbor_suites.py
+python scripts/validate_evaluation_cells.py
+python scripts/validate_target_qualifications.py
 python scripts/render_harbor_suites.py --check
 python scripts/sync_harbor_answer_checkers.py --check
 python -m unittest discover -s tests -p "test_*.py"

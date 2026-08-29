@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "qualification_id": "glow-windows-wsl-intel-gpu-884bc80bff12",
+  "recorded_at": "2026-08-25T12:12:34.640727Z",
+  "status": "passed",
+  "scope": {
+    "skill": "uxl-sycl-build-debug",
+    "task": "sycl-device-discovery-windows-wsl",
+    "task_revision": {
+      "repository": "https://github.com/uxlfoundation/skills.git",
+      "commit": "884bc80bff12c4a61adb5c7e2127338a55e6e1fc",
+      "content_sha256": "5047e36ae3a49808f0c70999bdbee5bda870229d562b1bcd1da96befb492b494"
+    },
+    "verifier_sha256": "5cf32082496278e528d3be409ea25baefebd73abb1959ba1d5bbc5af47f5c298"
+  },
+  "lane": {
+    "lane_id": "glow-windows-wsl-target-gpu",
+    "adapter_id": "windows-wsl-intel-gpu",
+    "display_name": "Windows / WSL GPU",
+    "environment": "manual-gpu",
+    "hardware_class": "target-gpu",
+    "vendor": "Intel",
+    "device": "Arc B580",
+    "interface": "WSL /dev/dxg",
+    "os": "Ubuntu 24.04 LTS on WSL2",
+    "architecture": "x86_64",
+    "control": "access-controlled"
+  },
+  "evidence": {
+    "agent": "oracle",
+    "attempts": 1,
+    "completed_attempts": 1,
+    "errored_attempts": 0,
+    "reward": 1.0,
+    "result_sha256": "3d41e1b1d1ccd60c965dbd72909887af490f957b94833f5d987635fad224b94e",
+    "provenance_sha256": "36a0abe0b2a0d22fe1e5c450e563757087efb253c9bb1ea6a4a1e88bdaa1de82",
+    "workflow": {
+      "visibility": "access-controlled",
+      "run_id": "32846295857"
+    }
+  },
+  "freshness": {
+    "max_age_days": 90
+  },
+  "limitations": [
+    "Qualifies only the Windows/WSL /dev/dxg execution lane represented by this record.",
+    "Does not establish skill benefit, cross-vendor portability, or a performance claim."
+  ]
+}

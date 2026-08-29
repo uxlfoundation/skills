@@ -326,6 +326,10 @@ a.platform-matrix-row:hover { background: rgba(255,255,255,.04); }
 .adapter-card dl { margin: 0 0 30px; }
 .adapter-card dl div { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
 .adapter-card dd { margin: 0; font-weight: 650; }
+.adapter-card.stale { border-color: var(--amber); }
+.lane-record h3 { margin-top: 38px; }
+.lane-record dl { margin-bottom: 18px; }
+.lane-limitation { margin: 0 0 24px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .adapter-card.open p { color: var(--muted); font-size: 14px; line-height: 1.6; }
 .adapter-card ul { margin: auto 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .adapter-card li { border-top: 1px solid #b9c3ed; padding-top: 9px; color: #35405e; font-size: 11px; }

@@ -12,6 +12,8 @@ $env:HARBOR_TELEMETRY = "off"
 
 [`suites.json`](suites.json) is the machine-readable evaluator portfolio, governed by [`schemas/harbor-suites.schema.json`](../../schemas/harbor-suites.schema.json). It maps every catalog skill to capability classes, implemented tasks, planned tasks, task roles, execution environments, calibration status, reproduction mode, scenario origin, workflow stages, hardware requirements, attempt counts, and promotion guardrails. The generated [capability matrix](CAPABILITY_MATRIX.md) is the human-readable audit.
 
+Matched model evidence follows the [evaluation-cell contract](EVALUATION_CELL_CONTRACT.md). Specialized machines follow the separate [target-qualification contract](TARGET_QUALIFICATION_CONTRACT.md), which publishes only reviewed lane labels and hashes while raw machine evidence remains access-controlled.
+
 The [evaluator policy](EVALUATOR_POLICY.md) defines what counts as real end-to-end triage, when target hardware is required, how fixture and review tasks are reported, and why cost per verified success is the primary efficiency metric.
 
 Use the [maintainer failure intake](MAINTAINER_FAILURE_INTAKE.md) before converting a project incident into a task. The evidence baseline is recorded in the [2026-08-10 reproducibility audit](results/2026-08-10-reproducibility-audit.md). Candidate decisions are recorded in [maintainer incident sourcing wave 1](results/2026-08-10-incident-sourcing-wave-1.md), [wave 2](results/2026-08-11-incident-sourcing-wave-2.md), and [wave 3](results/2026-08-11-incident-sourcing-wave-3.md).

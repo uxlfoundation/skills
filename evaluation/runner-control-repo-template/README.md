@@ -4,7 +4,7 @@ This directory demonstrates the reusable private-control-repository pattern with
 
 These copy-ready examples control personal or laboratory Intel GPU runners. Do not enable them unchanged in the public skills repository or claim that either device contract applies to other platforms.
 
-For a new vendor or laboratory target, start with `specialized-target-oracle.yml` and copy `target-adapter.example.json` to `target-adapter.json`. Follow the exact [specialized target adapter guide](../../docs/target-device-adapter.md). The generic runner executes reviewed host probes, validates the declared task and hardware class, runs one Harbor oracle, and returns a common evidence layout.
+For a new vendor or laboratory target, start with `specialized-target-oracle.yml` and copy `target-adapter.example.json` to `target-adapter.json`. Follow the exact [specialized target adapter guide](../../docs/target-device-adapter.md). The generic runner executes reviewed host probes, validates the declared task and hardware class, runs one Harbor oracle, and returns a common evidence layout. A passing run also emits `qualification-record.json`; review that sanitized file before copying it into the public qualification ledger.
 
 Both workflows accept only a full 40-character commit SHA, check out `uxlfoundation/skills` at that immutable revision, run a hardware oracle, and upload the complete job directory. They do not run a model experiment or accept pull-request triggers.
 

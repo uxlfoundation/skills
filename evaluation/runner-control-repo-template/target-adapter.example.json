@@ -1,6 +1,17 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "adapter_id": "example-target-gpu",
+  "publication": {
+    "display_name": "Example Linux GPU",
+    "vendor": "Example Vendor",
+    "device": "Example Accelerator",
+    "interface": "Native Linux device interface",
+    "max_age_days": 90,
+    "limitations": [
+      "Qualifies only the execution lane represented by this adapter.",
+      "Does not establish skill benefit or a performance claim."
+    ]
+  },
   "task": {
     "skill": "uxl-sycl-build-debug",
     "name": "sycl-device-discovery",

@@ -19,7 +19,7 @@ In `uxlfoundation/skills`:
 4. Replace the example workflow `runs-on` labels and the JSON fields with this machine's contract.
 5. Keep only `workflow_dispatch` or a tightly controlled schedule. Never add public pull-request triggers.
 
-The adapter JSON names one fixed skill/task pair, the required routing labels, host probe commands, required probe output patterns, and the Harbor executable. Probe output is hashed by default. Set `publish_output` only after confirming that the command cannot expose serial numbers, paths, usernames, or secrets.
+The adapter JSON names one fixed skill/task pair, reviewed public display labels, an expiry period, the required routing labels, host probe commands, required probe output patterns, and the Harbor executable. The `publication` block is the only machine description copied into the generated sanitized record; keep it concise and free of names, serial numbers, local paths, or network details. Probe output is hashed by default. Set `publish_output` only after confirming that the command cannot expose sensitive machine data.
 
 Validate the file before registering a runner:
 
@@ -65,6 +65,7 @@ The private artifact contains:
 
 - `qualification-summary.md`;
 - `runner-provenance.json`, with configuration and probe-output hashes;
+- `qualification-record.json`, emitted only after a passing oracle and ready for privacy review;
 - `probe-logs/`, with access-controlled raw probe output for diagnosis;
 - `oracle.log`;
 - the complete `harbor-jobs/<job>/` directory.
@@ -76,7 +77,7 @@ python scripts/import_harbor_artifact.py <artifact.zip>
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser
 ```
 
-A pass qualifies the lane; it does not prove that a skill helps. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep `probe-logs/`, raw trajectories, and machine details access-controlled.
+A pass qualifies the lane; it does not prove that a skill helps. Review `qualification-record.json`, then retain it under `evaluation/harbor/results/qualifications/` so the public platform dashboard can show its exact scope and freshness. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep `probe-logs/`, raw trajectories, and machine details access-controlled.
 
 For that later comparison, use `scripts/compare_harbor_skill.ps1` and pass the qualification file with `-HardwareProbePath <artifact>/runner-provenance.json`. The evaluation cell stores its SHA-256 digest, not the private probe contents.
 

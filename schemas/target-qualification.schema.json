@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-target-qualification.schema.json",
+  "title": "UXL Specialized Target Qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_id", "recorded_at", "status", "scope", "lane", "evidence", "freshness", "limitations"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "qualification_id": { "$ref": "#/$defs/name" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "status": { "const": "passed" },
+    "scope": {
+      "type": "object",
+      "required": ["skill", "task", "task_revision", "verifier_sha256"],
+      "properties": {
+        "skill": { "$ref": "#/$defs/name" },
+        "task": { "$ref": "#/$defs/name" },
+        "task_revision": { "$ref": "#/$defs/revision" },
+        "verifier_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "lane": {
+      "type": "object",
+      "required": ["lane_id", "adapter_id", "display_name", "environment", "hardware_class", "vendor", "device", "interface", "os", "architecture", "control"],
+      "properties": {
+        "lane_id": { "$ref": "#/$defs/name" },
+        "adapter_id": { "$ref": "#/$defs/name" },
+        "display_name": { "$ref": "#/$defs/text" },
+        "environment": { "enum": ["manual-gpu", "target-cpu", "target-gpu", "target-device", "target-distributed"] },
+        "hardware_class": { "enum": ["target-cpu", "target-gpu", "target-device", "target-distributed"] },
+        "vendor": { "$ref": "#/$defs/text" },
+        "device": { "$ref": "#/$defs/text" },
+        "interface": { "$ref": "#/$defs/text" },
+        "os": { "$ref": "#/$defs/text" },
+        "architecture": { "$ref": "#/$defs/text" },
+        "control": { "enum": ["access-controlled", "public"] }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["agent", "attempts", "completed_attempts", "errored_attempts", "reward", "result_sha256", "provenance_sha256", "workflow"],
+      "properties": {
+        "agent": { "const": "oracle" },
+        "attempts": { "type": "integer", "minimum": 1 },
+        "completed_attempts": { "type": "integer", "minimum": 1 },
+        "errored_attempts": { "const": 0 },
+        "reward": { "const": 1.0 },
+        "result_sha256": { "$ref": "#/$defs/sha256" },
+        "provenance_sha256": { "$ref": "#/$defs/sha256" },
+        "workflow": {
+          "type": "object",
+          "required": ["visibility", "run_id"],
+          "properties": {
+            "visibility": { "enum": ["public", "access-controlled", "local"] },
+            "run_id": { "type": ["string", "null"], "pattern": "^[0-9]+$" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["max_age_days"],
+      "properties": { "max_age_days": { "type": "integer", "minimum": 1, "maximum": 365 } },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/text" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "revision": {
+      "type": "object",
+      "required": ["repository", "commit", "content_sha256"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "content_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

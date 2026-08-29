@@ -8,6 +8,7 @@ const repositoryRoot = resolve(dashboardRoot, "../..");
 const catalogPath = resolve(repositoryRoot, "skills.yaml");
 const suitesPath = resolve(repositoryRoot, "evaluation/harbor/suites.json");
 const cellsRoot = resolve(repositoryRoot, "evaluation/harbor/results/cells");
+const qualificationsRoot = resolve(repositoryRoot, "evaluation/harbor/results/qualifications");
 const outputPath = resolve(dashboardRoot, "app/dashboard-data.json");
 
 function parseCatalog(source) {
@@ -37,10 +38,11 @@ function parseCatalog(source) {
   return { catalogStatus, skills };
 }
 
-const [catalogSource, suitesSource, cellNames] = await Promise.all([
+const [catalogSource, suitesSource, cellNames, qualificationNames] = await Promise.all([
   readFile(catalogPath, "utf8"),
   readFile(suitesPath, "utf8"),
   readdir(cellsRoot).catch(() => []),
+  readdir(qualificationsRoot).catch(() => []),
 ]);
 const catalog = parseCatalog(catalogSource);
 const suites = JSON.parse(suitesSource);
@@ -88,12 +90,53 @@ const evaluationCells = await Promise.all(
     }),
 );
 evaluationCells.sort((left, right) => left.recordedAt.localeCompare(right.recordedAt) || left.id.localeCompare(right.id));
+const targetQualifications = await Promise.all(
+  qualificationNames
+    .filter((name) => name.endsWith(".json"))
+    .sort()
+    .map(async (name) => {
+      const record = JSON.parse(await readFile(resolve(qualificationsRoot, name), "utf8"));
+      const [taskDigest, verifierDigest] = await Promise.all([
+        directoryDigest(resolve(repositoryRoot, "evaluation/harbor/tasks", record.scope.task)),
+        directoryDigest(resolve(repositoryRoot, "evaluation/harbor/tasks", record.scope.task, "tests")),
+      ]);
+      const repositoryChanges = [];
+      if (taskDigest !== record.scope.task_revision.content_sha256) repositoryChanges.push("task");
+      if (verifierDigest !== record.scope.verifier_sha256) repositoryChanges.push("verifier");
+      return {
+        id: record.qualification_id,
+        recordedAt: record.recorded_at,
+        skill: record.scope.skill,
+        task: record.scope.task,
+        taskCommit: record.scope.task_revision.commit,
+        laneId: record.lane.lane_id,
+        adapterId: record.lane.adapter_id,
+        displayName: record.lane.display_name,
+        environment: record.lane.environment,
+        hardwareClass: record.lane.hardware_class,
+        vendor: record.lane.vendor,
+        device: record.lane.device,
+        interface: record.lane.interface,
+        os: record.lane.os,
+        architecture: record.lane.architecture,
+        control: record.lane.control,
+        maxAgeDays: record.freshness.max_age_days,
+        workflowVisibility: record.evidence.workflow.visibility,
+        repositoryStatus: repositoryChanges.length === 0 ? "matches" : "changed",
+        repositoryChanges,
+        limitations: record.limitations,
+        source: `evaluation/harbor/results/qualifications/${name}`,
+      };
+    }),
+);
+targetQualifications.sort((left, right) => left.recordedAt.localeCompare(right.recordedAt) || left.id.localeCompare(right.id));
 
 const dashboardData = {
   schemaVersion: "1.0",
   catalogStatus: catalog.catalogStatus,
   policy: suites.policy,
   evaluationCells,
+  targetQualifications,
   skills: catalog.skills.map((catalogSkill) => {
     const suite = suitesBySkill.get(catalogSkill.name);
     if (!suite) throw new Error(`No Harbor suite found for ${catalogSkill.name}`);

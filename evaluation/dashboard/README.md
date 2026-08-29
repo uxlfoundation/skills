@@ -10,6 +10,8 @@ Dashboard data is generated from the repository’s canonical manifests:
 
 - `skills.yaml` supplies skill maturity, ownership, source freshness, and maintainer-review state.
 - `evaluation/harbor/suites.json` supplies capability and evaluation coverage.
+- `evaluation/harbor/results/cells/` supplies sanitized matched-comparison evidence.
+- `evaluation/harbor/results/qualifications/` supplies reviewed specialized-lane health records without raw machine output.
 - `app/dashboard-data.json` is the deterministic generated snapshot consumed by the static site.
 
 Run `npm run data:generate` after changing either source manifest. Lint checks that the snapshot remains synchronized.

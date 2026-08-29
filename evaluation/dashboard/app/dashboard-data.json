@@ -56,6 +56,35 @@
     }
   },
   "evaluationCells": [],
+  "targetQualifications": [
+    {
+      "id": "glow-windows-wsl-intel-gpu-884bc80bff12",
+      "recordedAt": "2026-08-25T12:12:34.640727Z",
+      "skill": "uxl-sycl-build-debug",
+      "task": "sycl-device-discovery-windows-wsl",
+      "taskCommit": "884bc80bff12c4a61adb5c7e2127338a55e6e1fc",
+      "laneId": "glow-windows-wsl-target-gpu",
+      "adapterId": "windows-wsl-intel-gpu",
+      "displayName": "Windows / WSL GPU",
+      "environment": "manual-gpu",
+      "hardwareClass": "target-gpu",
+      "vendor": "Intel",
+      "device": "Arc B580",
+      "interface": "WSL /dev/dxg",
+      "os": "Ubuntu 24.04 LTS on WSL2",
+      "architecture": "x86_64",
+      "control": "access-controlled",
+      "maxAgeDays": 90,
+      "workflowVisibility": "access-controlled",
+      "repositoryStatus": "matches",
+      "repositoryChanges": [],
+      "limitations": [
+        "Qualifies only the Windows/WSL /dev/dxg execution lane represented by this record.",
+        "Does not establish skill benefit, cross-vendor portability, or a performance claim."
+      ],
+      "source": "evaluation/harbor/results/qualifications/glow-windows-wsl-intel-gpu-884bc80bff12.json"
+    }
+  ],
   "skills": [
     {
       "name": "uxl-onednn",

@@ -6,6 +6,7 @@ on:
       - evaluation/dashboard/**
       - evaluation/harbor/suites.json
       - evaluation/harbor/results/cells/**
+      - evaluation/harbor/results/qualifications/**
       - evaluation/harbor/tasks/**
       - skills/**
       - skills.yaml
@@ -16,6 +17,7 @@ on:
       - evaluation/dashboard/**
       - evaluation/harbor/suites.json
       - evaluation/harbor/results/cells/**
+      - evaluation/harbor/results/qualifications/**
       - evaluation/harbor/tasks/**
       - skills/**
       - skills.yaml

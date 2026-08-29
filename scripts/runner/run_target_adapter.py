@@ -18,6 +18,8 @@ from typing import Any
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SCRIPTS_ROOT))
 import check_harbor_job  # noqa: E402
+from digest_directory import directory_digest  # noqa: E402
+import validate_target_qualification as public_qualification  # noqa: E402
 
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -58,13 +60,40 @@ def _string_list(value: Any, path: str, errors: list[str], *, allow_empty: bool)
 def validate_adapter(config: Any) -> list[str]:
     errors: list[str] = []
     root = _object(config, "adapter", errors)
-    root_keys = {"schema_version", "adapter_id", "task", "runner", "probes", "harbor"}
-    _exact_keys(root, root_keys, "adapter", errors)
-    if root.get("schema_version") != "1.0":
-        errors.append("adapter.schema_version must be '1.0'")
+    root_required = {"schema_version", "adapter_id", "task", "runner", "probes", "harbor"}
+    root_allowed = root_required | {"publication"}
+    missing = sorted(root_required - set(root))
+    extra = sorted(set(root) - root_allowed)
+    if missing:
+        errors.append(f"adapter missing: {', '.join(missing)}")
+    if extra:
+        errors.append(f"adapter has unknown fields: {', '.join(extra)}")
+    version = root.get("schema_version")
+    if version not in {"1.0", "1.1"}:
+        errors.append("adapter.schema_version must be '1.0' or '1.1'")
+    if version == "1.1" and "publication" not in root:
+        errors.append("adapter.publication is required for schema_version 1.1")
     adapter_id = root.get("adapter_id")
     if not isinstance(adapter_id, str) or not NAME_RE.fullmatch(adapter_id):
         errors.append("adapter.adapter_id must be lowercase kebab-case")
+
+    if "publication" in root:
+        publication = _object(root.get("publication"), "adapter.publication", errors)
+        publication_keys = {"display_name", "vendor", "device", "interface", "max_age_days", "limitations"}
+        _exact_keys(publication, publication_keys, "adapter.publication", errors)
+        for key in ("display_name", "vendor", "device", "interface"):
+            value = publication.get(key)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(f"adapter.publication.{key} must be a non-empty string")
+        max_age = publication.get("max_age_days")
+        if not isinstance(max_age, int) or isinstance(max_age, bool) or not 1 <= max_age <= 365:
+            errors.append("adapter.publication.max_age_days must be an integer from 1 through 365")
+        _string_list(
+            publication.get("limitations"),
+            "adapter.publication.limitations",
+            errors,
+            allow_empty=False,
+        )
 
     task = _object(root.get("task"), "adapter.task", errors)
     task_keys = {"skill", "name", "hardware_class"}
@@ -269,6 +298,72 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def build_public_qualification(
+    config: dict[str, Any],
+    source_root: Path,
+    commit: str,
+    recorded_at: str,
+    task: dict[str, Any],
+    result_path: Path,
+    provenance_path: Path,
+    environment: dict[str, str],
+) -> dict[str, Any]:
+    task_root = source_root / "evaluation" / "harbor" / "tasks" / config["task"]["name"]
+    run_id = environment.get("GITHUB_RUN_ID")
+    if not isinstance(run_id, str) or not run_id.isdigit():
+        run_id = None
+    publication = config["publication"]
+    timestamp = datetime.fromisoformat(recorded_at.replace("Z", "+00:00")).astimezone(timezone.utc)
+    record = {
+        "schema_version": "1.0",
+        "qualification_id": f"{config['adapter_id']}-{timestamp.strftime('%Y%m%dt%H%M%Sz')}-{commit[:12]}",
+        "recorded_at": recorded_at,
+        "status": "passed",
+        "scope": {
+            "skill": config["task"]["skill"],
+            "task": config["task"]["name"],
+            "task_revision": {
+                "repository": "https://github.com/uxlfoundation/skills.git",
+                "commit": commit,
+                "content_sha256": directory_digest(task_root),
+            },
+            "verifier_sha256": directory_digest(task_root / "tests"),
+        },
+        "lane": {
+            "lane_id": config["adapter_id"],
+            "adapter_id": config["adapter_id"],
+            "display_name": publication["display_name"],
+            "environment": task["environment"],
+            "hardware_class": config["task"]["hardware_class"],
+            "vendor": publication["vendor"],
+            "device": publication["device"],
+            "interface": publication["interface"],
+            "os": platform.platform(),
+            "architecture": platform.machine(),
+            "control": "access-controlled",
+        },
+        "evidence": {
+            "agent": "oracle",
+            "attempts": 1,
+            "completed_attempts": 1,
+            "errored_attempts": 0,
+            "reward": 1.0,
+            "result_sha256": hashlib.sha256(result_path.read_bytes()).hexdigest(),
+            "provenance_sha256": hashlib.sha256(provenance_path.read_bytes()).hexdigest(),
+            "workflow": {
+                "visibility": "access-controlled" if environment.get("GITHUB_ACTIONS") == "true" else "local",
+                "run_id": run_id,
+            },
+        },
+        "freshness": {"max_age_days": publication["max_age_days"]},
+        "limitations": publication["limitations"],
+    }
+    errors = public_qualification.validate_record(record)
+    if errors:
+        raise ValueError("generated public qualification is invalid: " + "; ".join(errors))
+    return record
+
+
 def write_summary(path: Path, *, adapter_id: str, commit: str, task: str, status: str, detail: str) -> None:
     path.write_text(
         "\n".join(
@@ -339,10 +434,22 @@ def main(argv: list[str] | None = None) -> int:
         declared_skill, task = task_entry
         if declared_skill != config["task"]["skill"]:
             raise ValueError(f"task belongs to {declared_skill}, not {config['task']['skill']}")
+        if task.get("status") != "implemented":
+            raise ValueError(f"task is not implemented: {config['task']['name']}")
         if task.get("hardware") != config["task"]["hardware_class"]:
             raise ValueError(
                 f"task hardware is {task.get('hardware')}, not {config['task']['hardware_class']}"
             )
+        task_relative = f"evaluation/harbor/tasks/{config['task']['name']}"
+        task_changes = subprocess.run(
+            ["git", "-C", str(source_root), "status", "--porcelain", "--", task_relative],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        ).stdout.strip()
+        if task_changes:
+            raise ValueError("qualification requires a clean task checkout")
 
         environment = os.environ.copy()
         environment.update(config["harbor"]["environment"])
@@ -428,6 +535,18 @@ def main(argv: list[str] | None = None) -> int:
             status=status,
             detail=detail,
         )
+        if not oracle_errors and "publication" in config:
+            qualification = build_public_qualification(
+                config,
+                source_root,
+                actual_commit,
+                provenance["recorded_at"],
+                task,
+                result_path,
+                provenance_path,
+                environment,
+            )
+            write_json(output / "qualification-record.json", qualification)
         print(detail)
         return 1 if oracle_errors else 0
     except (OSError, ValueError, subprocess.SubprocessError, json.JSONDecodeError) as exc:
