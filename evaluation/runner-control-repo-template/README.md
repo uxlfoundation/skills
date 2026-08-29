@@ -64,6 +64,8 @@ For the Windows/WSL lane, install the GitHub runner inside WSL once, then start 
   -Labels 'uxl,sycl,gpu,intel-gpu,windows-wsl,personal-lab'
 ```
 
+After a host reboot, rerun the same command. A matching offline registration is resumed safely; mismatched local and GitHub state is rejected for manual review.
+
 See [Private Machine Runner](../../docs/private-machine-runner.md) for the same pattern in project-independent terms.
 
 ## Promotion beyond the oracle

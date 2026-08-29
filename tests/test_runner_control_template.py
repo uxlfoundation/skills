@@ -120,6 +120,13 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
         self.assertIn("--ephemeral", self.launcher)
         self.assertIn("tmp\\runner", self.launcher)
 
+    def test_launcher_resumes_a_registered_offline_runner_after_reboot(self) -> None:
+        self.assertIn("$registrationMode = 'resumed'", self.launcher)
+        self.assertIn("Resuming existing offline ephemeral registration", self.launcher)
+        self.assertIn("Ephemeral runner already online", self.launcher)
+        self.assertIn("$localConfig.agentName -ne $RunnerName", self.launcher)
+        self.assertIn("$localConfig.gitHubUrl.TrimEnd('/') -ne $repoUrl", self.launcher)
+
 
 if __name__ == "__main__":
     unittest.main()

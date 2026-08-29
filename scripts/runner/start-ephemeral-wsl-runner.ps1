@@ -33,32 +33,60 @@ if ($repo.visibility -ne 'PRIVATE') {
 }
 
 & wsl.exe -d $WslDistribution -- bash -lc "test -f '$RunnerRoot/.runner'" | Out-Null
-if ($LASTEXITCODE -eq 0) {
-    throw "A runner is already configured at $RunnerRoot. Inspect it before registering another."
-}
+$configured = $LASTEXITCODE -eq 0
+$runners = gh api "repos/$Repository/actions/runners" | ConvertFrom-Json
+$match = $runners.runners | Where-Object name -EQ $RunnerName | Select-Object -First 1
+$registrationMode = 'new'
 
-$registrationToken = gh api --method POST "repos/$Repository/actions/runners/registration-token" --jq .token
-if (-not $registrationToken) {
-    throw 'GitHub did not return a runner registration token.'
-}
+if ($configured) {
+    $localConfigText = (& wsl.exe -d $WslDistribution --exec cat "$RunnerRoot/.runner" | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0 -or -not $localConfigText) {
+        throw "Could not read the existing runner configuration at $RunnerRoot."
+    }
+    $localConfig = $localConfigText.TrimStart([char]0xFEFF) | ConvertFrom-Json
+    if ($localConfig.agentName -ne $RunnerName) {
+        throw "Local runner name $($localConfig.agentName) does not match requested name $RunnerName."
+    }
+    if ($localConfig.gitHubUrl.TrimEnd('/') -ne $repoUrl) {
+        throw "Local runner repository $($localConfig.gitHubUrl) does not match requested repository $repoUrl."
+    }
+    if (-not $match) {
+        throw "Local runner configuration exists at $RunnerRoot but GitHub has no registration named $RunnerName. Remove the stale configuration with a fresh removal token before retrying."
+    }
+    if ($match.status -eq 'online') {
+        Write-Output "Ephemeral runner already online: $RunnerName"
+        Write-Output "Repository: $repoUrl"
+        exit 0
+    }
+    $registrationMode = 'resumed'
+    Write-Output "Resuming existing offline ephemeral registration: $RunnerName"
+} else {
+    if ($match) {
+        throw "GitHub already has a runner named $RunnerName but $RunnerRoot is not configured. Remove the stale GitHub registration before retrying."
+    }
+    $registrationToken = gh api --method POST "repos/$Repository/actions/runners/registration-token" --jq .token
+    if (-not $registrationToken) {
+        throw 'GitHub did not return a runner registration token.'
+    }
 
-$configure = @'
+    $configure = @'
 ./config.sh --unattended --ephemeral --url "$PRIVATE_RUNNER_REPOSITORY_URL" --token "$PRIVATE_RUNNER_REGISTRATION_TOKEN" --name "$PRIVATE_RUNNER_NAME" --labels "$PRIVATE_RUNNER_LABELS" --work _work
 configure_status=$?
 unset PRIVATE_RUNNER_REGISTRATION_TOKEN
 exit $configure_status
 '@
 
-try {
-    & wsl.exe -d $WslDistribution --cd $RunnerRoot --exec `
-        env "PRIVATE_RUNNER_REGISTRATION_TOKEN=$registrationToken" `
-        "PRIVATE_RUNNER_REPOSITORY_URL=$repoUrl" "PRIVATE_RUNNER_NAME=$RunnerName" `
-        "PRIVATE_RUNNER_LABELS=$Labels" bash -lc $configure
-    if ($LASTEXITCODE -ne 0) {
-        throw 'Runner configuration failed.'
+    try {
+        & wsl.exe -d $WslDistribution --cd $RunnerRoot --exec `
+            env "PRIVATE_RUNNER_REGISTRATION_TOKEN=$registrationToken" `
+            "PRIVATE_RUNNER_REPOSITORY_URL=$repoUrl" "PRIVATE_RUNNER_NAME=$RunnerName" `
+            "PRIVATE_RUNNER_LABELS=$Labels" bash -lc $configure
+        if ($LASTEXITCODE -ne 0) {
+            throw 'Runner configuration failed.'
+        }
+    } finally {
+        $registrationToken = $null
     }
-} finally {
-    $registrationToken = $null
 }
 
 & wsl.exe -d $WslDistribution -- bash -lc "test -f '$RunnerRoot/.runner'" | Out-Null
@@ -94,6 +122,7 @@ if (-not $online) {
     labels = $Labels
     wsl_distribution = $WslDistribution
     runner_root = $RunnerRoot
+    registration_mode = $registrationMode
     windows_process_id = $process.Id
     started_at = (Get-Date).ToUniversalTime().ToString('o')
 } | ConvertTo-Json | Set-Content -LiteralPath $statePath -Encoding utf8

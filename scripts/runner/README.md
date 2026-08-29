@@ -2,7 +2,7 @@
 
 These scripts support the Windows/WSL Intel GPU qualification packet in [`docs/runner/`](../../docs/runner/README.md).
 
-- `start-ephemeral-wsl-runner.ps1` safely attaches an already-installed WSL runner to one private repository for one job.
+- `start-ephemeral-wsl-runner.ps1` safely attaches an already-installed WSL runner to one private repository for one job. Rerunning the same command after a host reboot resumes an existing offline registration; it does not create a duplicate runner.
 - `run-windows-wsl-intel-gpu-oracle.sh` is the public implementation invoked by the thin private GitHub Actions dispatcher.
 - `uxl-runner-post-reboot.ps1` installs and configures WSL, Intel GPU/oneAPI packages, and Docker prerequisites, then records qualification evidence.
 - `uxl-wsl-oneapi-device-check.sh` probes the pinned oneAPI container and device path.

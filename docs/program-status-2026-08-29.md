@@ -16,11 +16,12 @@ The initial planned repository work and the first weekend continuation are compl
 - The generic target adapter emits the same sanitized record only after a clean immutable task passes its reward-1.0 oracle.
 - Repository content digests now use Git-filtered content, excluding ignored build artifacts and normalizing line endings across Windows and Linux runners.
 - Artifact import now validates proposed qualification records against their exact Harbor result and runner-provenance hashes, then stages only the sanitized candidate for manual publication review.
+- The WSL ephemeral-runner launcher now resumes a matching offline registration after a host reboot and refuses mismatched local or GitHub state.
 
 ## Validation
 
 - Catalog, 33 prompt evals, 8 Harbor suites, 52 declared tasks, generated matrix, structured checkers, and retained-cell ledger passed.
-- 98 repository tests passed; 2 optional dependency tests were skipped.
+- 99 repository tests passed; 2 optional dependency tests were skipped.
 - The public dashboard passed generated-data drift checks, lint, static build, and rendered-page tests.
 - Desktop and mobile browser review passed for evidence-cell and specialized-lane health with no console warnings.
 - The comparison wrapper passed PowerShell parsing and an end-to-end three-arm dry run.

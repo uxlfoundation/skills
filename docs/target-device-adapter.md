@@ -48,6 +48,8 @@ For a Windows host using WSL, the reusable launcher is:
   -Labels 'uxl,target-gpu,windows-wsl,trusted-lab'
 ```
 
+Rerun the same command after a host reboot. The launcher resumes a matching offline ephemeral registration and refuses ambiguous local/GitHub state instead of silently creating a duplicate.
+
 Other environments may start `./run.sh --ephemeral` directly or use their laboratory scheduler, provided the same contract and artifact layout are preserved.
 
 ## 4. Approve and dispatch one job
