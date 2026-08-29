@@ -52,6 +52,8 @@ python scripts/import_harbor_artifact.py <downloaded-artifact.zip>
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser
 ```
 
+If the artifact contains a passing `qualification-record.json`, the importer validates its evidence hashes and stages the sanitized record under `harbor-jobs/qualification-review/`. It does not publish anything. Review that candidate before copying it into the public qualification ledger.
+
 An ephemeral runner deregisters after one job. It does not erase its `_work` directory or Docker layers. Preserve the artifact first, then inspect and clean the dedicated runner workspace according to the host owner's policy.
 
 For the Windows/WSL lane, install the GitHub runner inside WSL once, then start a waiting one-job runner from a `skills` checkout:

@@ -190,12 +190,13 @@ After the job finishes:
 3. Run `python scripts/import_harbor_artifact.py <downloaded-artifact.zip>`.
 4. Restart the dashboard with the launcher appropriate to the operator host. On the qualified workstation, stop the existing WSL viewer once and relaunch with `.\scripts\start_harbor_dashboards.ps1 -WslDistribution Ubuntu-24.04`.
 5. Inspect the trial, verifier output, `runner-provenance.json`, `sycl-probe.json`, and diagnosis exactly like a local result.
+6. If present, review the validated candidate under `harbor-jobs/qualification-review/` before copying that one sanitized JSON file into `evaluation/harbor/results/qualifications/`.
 
 Treat a passed oracle as runner qualification, not skill-benefit evidence. Add a three-arm model experiment only after the oracle passes and a maintainer-backed target-dependent task provides meaningful headroom.
 
 Qualification reference: access-controlled run `32846295857` passed with evaluator commit `884bc80bff12c4a61adb5c7e2127338a55e6e1fc` and reward `1.0`. This run exercised the thin private dispatcher and the reusable implementation in `skills`. The sanitized public [evaluator control room](https://uxlfoundation.github.io/skills/) is deployed from [`evaluation/dashboard`](../evaluation/dashboard/) by GitHub Pages; raw trajectories and machine evidence remain access-controlled.
 
-The importer refuses archive path traversal and conflicting same-named jobs. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
+The importer refuses archive path traversal, qualifications whose hashes do not bind to the imported result and provenance, and conflicting same-named jobs. It never publishes qualification records automatically. If a job name already exists with a different `result.json`, review both copies before explicitly using `--replace`.
 
 ### Trust a Windows HTTPS-inspection root in local builds
 

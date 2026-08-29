@@ -12,9 +12,18 @@ import stat
 import sys
 import tempfile
 import zipfile
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Any
+
+from validate_target_qualification import validate_record
+
+
+@dataclass(frozen=True)
+class ImportOutcome:
+    jobs: list[tuple[str, Path]]
+    qualification_candidates: list[tuple[str, Path]]
 
 
 def sha256(path: Path) -> str:
@@ -99,6 +108,107 @@ def ensure_within(path: Path, parent: Path) -> None:
         raise ValueError(f"destination escapes jobs directory: {path}") from exc
 
 
+def qualification_evidence_errors(record: dict[str, Any], artifact_root: Path) -> list[str]:
+    evidence = record["evidence"]
+    scope = record["scope"]
+    lane = record["lane"]
+    matching_results = [
+        path
+        for path in artifact_root.rglob("result.json")
+        if is_harbor_job_result(path) and sha256(path) == evidence["result_sha256"]
+    ]
+    if not matching_results:
+        return ["record.evidence.result_sha256 does not match a Harbor result in the artifact"]
+
+    provenance_matches: list[Path] = []
+    for path in artifact_root.rglob("runner-provenance.json"):
+        if sha256(path) == evidence["provenance_sha256"]:
+            provenance_matches.append(path)
+    if not provenance_matches:
+        return ["record.evidence.provenance_sha256 does not match provenance in the artifact"]
+
+    binding_errors: list[str] = []
+    for provenance_path in provenance_matches:
+        provenance = load_json(provenance_path)
+        if not provenance:
+            continue
+        task = provenance.get("task")
+        oracle = provenance.get("oracle")
+        if not isinstance(task, dict) or not isinstance(oracle, dict):
+            continue
+        if provenance.get("source_commit") != scope["task_revision"]["commit"]:
+            continue
+        if provenance.get("adapter_id") != lane["adapter_id"]:
+            continue
+        if (
+            task.get("skill") != scope["skill"]
+            or task.get("name") != scope["task"]
+            or task.get("hardware_class") != lane["hardware_class"]
+        ):
+            continue
+        if oracle.get("status") != "passed" or not isinstance(oracle.get("result_path"), str):
+            continue
+        try:
+            relative_result = safe_zip_path(oracle["result_path"])
+            declared_result = provenance_path.parent.joinpath(*relative_result.parts).resolve()
+            declared_result.relative_to(provenance_path.parent.resolve())
+        except ValueError:
+            continue
+        if declared_result in {path.resolve() for path in matching_results}:
+            return []
+    binding_errors.append(
+        "qualification does not match the adapter, task, commit, hardware class, and passed oracle "
+        "declared by its hashed provenance"
+    )
+    return binding_errors
+
+
+def find_qualification_candidates(
+    artifact_root: Path,
+) -> list[tuple[Path, dict[str, Any]]]:
+    candidates: list[tuple[Path, dict[str, Any]]] = []
+    ids: set[str] = set()
+    for path in sorted(artifact_root.rglob("qualification-record.json")):
+        record = load_json(path)
+        if record is None:
+            raise ValueError(f"qualification candidate is not a JSON object: {path}")
+        errors = validate_record(record)
+        if not errors:
+            errors.extend(qualification_evidence_errors(record, artifact_root))
+        if errors:
+            detail = "; ".join(errors)
+            raise ValueError(f"qualification candidate failed validation ({path}): {detail}")
+        qualification_id = record["qualification_id"]
+        if qualification_id in ids:
+            raise ValueError(f"artifact contains duplicate qualification id: {qualification_id}")
+        ids.add(qualification_id)
+        candidates.append((path, record))
+    return candidates
+
+
+def stage_qualification_candidates(
+    candidates: list[tuple[Path, dict[str, Any]]], review_dir: Path
+) -> list[tuple[str, Path]]:
+    if not candidates:
+        return []
+    review_dir.mkdir(parents=True, exist_ok=True)
+    staged: list[tuple[str, Path]] = []
+    for _, record in candidates:
+        destination = review_dir / f"{record['qualification_id']}.json"
+        ensure_within(destination, review_dir)
+        content = json.dumps(record, indent=2) + "\n"
+        if destination.exists():
+            if destination.read_text(encoding="utf-8") != content:
+                raise FileExistsError(
+                    f"{destination} already exists with different contents; review the conflict manually"
+                )
+            staged.append(("unchanged", destination))
+            continue
+        destination.write_text(content, encoding="utf-8")
+        staged.append(("staged", destination))
+    return staged
+
+
 def import_job(
     job_root: Path,
     destination_name: str,
@@ -140,12 +250,11 @@ def import_job(
     return "imported", destination
 
 
-def run(artifact: Path, jobs_dir: Path, replace: bool) -> list[tuple[str, Path]]:
+def run_with_review(artifact: Path, jobs_dir: Path, replace: bool) -> ImportOutcome:
     artifact = artifact.resolve()
     jobs_dir = jobs_dir.resolve()
     if not artifact.exists():
         raise FileNotFoundError(f"artifact does not exist: {artifact}")
-    jobs_dir.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory(prefix="uxl-harbor-import-") as temporary:
         if artifact.is_dir():
@@ -161,6 +270,7 @@ def run(artifact: Path, jobs_dir: Path, replace: bool) -> list[tuple[str, Path]]
         roots = find_job_roots(extracted)
         if not roots:
             raise ValueError("artifact contains no Harbor job-level result.json")
+        qualification_candidates = find_qualification_candidates(extracted)
 
         names: set[str] = set()
         entries: list[tuple[Path, str]] = []
@@ -173,7 +283,8 @@ def run(artifact: Path, jobs_dir: Path, replace: bool) -> list[tuple[str, Path]]
 
         provenance_files = sorted(extracted.rglob("runner-provenance.json"))
         shared_provenance = provenance_files[0] if len(provenance_files) == 1 else None
-        return [
+        jobs_dir.mkdir(parents=True, exist_ok=True)
+        jobs = [
             import_job(
                 root,
                 name,
@@ -184,6 +295,15 @@ def run(artifact: Path, jobs_dir: Path, replace: bool) -> list[tuple[str, Path]]
             )
             for root, name in entries
         ]
+        staged = stage_qualification_candidates(
+            qualification_candidates, jobs_dir / "qualification-review"
+        )
+        return ImportOutcome(jobs=jobs, qualification_candidates=staged)
+
+
+def run(artifact: Path, jobs_dir: Path, replace: bool) -> list[tuple[str, Path]]:
+    """Import jobs while preserving the original job-only return value for callers."""
+    return run_with_review(artifact, jobs_dir, replace).jobs
 
 
 def main(argv: list[str]) -> int:
@@ -202,13 +322,20 @@ def main(argv: list[str]) -> int:
     )
     args = parser.parse_args(argv)
     try:
-        imported = run(args.artifact, args.jobs_dir, args.replace)
+        outcome = run_with_review(args.artifact, args.jobs_dir, args.replace)
     except (FileExistsError, FileNotFoundError, OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f"Artifact import failed: {exc}", file=sys.stderr)
         return 1
 
-    for status, destination in imported:
+    for status, destination in outcome.jobs:
         print(f"{status}: {destination}")
+    for status, destination in outcome.qualification_candidates:
+        print(f"qualification {status} for review: {destination}")
+    if outcome.qualification_candidates:
+        print(
+            "Review public labels and limitations, then copy the candidate into "
+            "evaluation/harbor/results/qualifications/."
+        )
     print("Restart the Harbor results dashboard to index imported jobs.")
     return 0
 

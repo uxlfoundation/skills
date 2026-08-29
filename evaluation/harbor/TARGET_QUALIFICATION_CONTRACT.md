@@ -19,8 +19,9 @@ The public record deliberately excludes raw probe output, runner names, local pa
 1. A private control repository dispatches a reviewed immutable evaluator revision.
 2. The target adapter runs fixed host probes and the declared Harbor oracle.
 3. Only a passing run emits `qualification-record.json` alongside the private artifacts.
-4. A reviewer checks the labels and limitations, then copies the sanitized record into the public ledger.
-5. CI validates the schema and task contract. The dashboard reports the latest record for each lane as current, age-expired, or repository-changed.
+4. The artifact importer validates the schema and evidence hashes, then stages the sanitized record under ignored local storage.
+5. A reviewer checks the public labels and limitations, then copies only that record into the public ledger.
+6. CI validates the schema and task contract. The dashboard reports the latest record for each lane as current, age-expired, or repository-changed.
 
 A changed task or verifier invalidates current status without deleting the historical record. Age expiry requires the same lane to rerun its oracle. Failed qualifications remain private diagnostic evidence and are not committed as passing records.
 

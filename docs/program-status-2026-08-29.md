@@ -15,15 +15,16 @@ The initial planned repository work and the first weekend continuation are compl
 - Specialized-lane health now has its own strict public contract and ledger. The existing GLOW Windows/WSL oracle is represented by one sanitized, expiring qualification record; raw probes and private runner identity remain access-controlled.
 - The generic target adapter emits the same sanitized record only after a clean immutable task passes its reward-1.0 oracle.
 - Repository content digests now use Git-filtered content, excluding ignored build artifacts and normalizing line endings across Windows and Linux runners.
+- Artifact import now validates proposed qualification records against their exact Harbor result and runner-provenance hashes, then stages only the sanitized candidate for manual publication review.
 
 ## Validation
 
 - Catalog, 33 prompt evals, 8 Harbor suites, 52 declared tasks, generated matrix, structured checkers, and retained-cell ledger passed.
-- 95 repository tests passed; 2 optional dependency tests were skipped.
+- 98 repository tests passed; 2 optional dependency tests were skipped.
 - The public dashboard passed generated-data drift checks, lint, static build, and rendered-page tests.
 - Desktop and mobile browser review passed for evidence-cell and specialized-lane health with no console warnings.
 - The comparison wrapper passed PowerShell parsing and an end-to-end three-arm dry run.
-- Internal links passed. External HTTP validation was deferred to CI because this workstation's Python certificate chain rejected all HTTPS hosts during the local check.
+- Local links and 125 external links passed validation.
 
 ## Remaining human or external gates
 

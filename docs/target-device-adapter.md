@@ -77,7 +77,9 @@ python scripts/import_harbor_artifact.py <artifact.zip>
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser
 ```
 
-A pass qualifies the lane; it does not prove that a skill helps. Review `qualification-record.json`, then retain it under `evaluation/harbor/results/qualifications/` so the public platform dashboard can show its exact scope and freshness. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep `probe-logs/`, raw trajectories, and machine details access-controlled.
+The importer verifies that the candidate is schema-valid and that its result and provenance hashes match the downloaded artifact. It stages only the sanitized candidate under `harbor-jobs/qualification-review/`; it never publishes it. Review its public labels and limitations, then copy that one JSON file into `evaluation/harbor/results/qualifications/` and run the repository validators.
+
+A pass qualifies the lane; it does not prove that a skill helps. Run matched no-skill, previous-skill, and candidate-skill trials only after a target-dependent task has meaningful headroom. Retain the sanitized evaluation-cell JSON in the public ledger; keep `probe-logs/`, raw trajectories, and machine details access-controlled.
 
 For that later comparison, use `scripts/compare_harbor_skill.ps1` and pass the qualification file with `-HardwareProbePath <artifact>/runner-provenance.json`. The evaluation cell stores its SHA-256 digest, not the private probe contents.
 

@@ -33,6 +33,8 @@ python scripts/import_harbor_artifact.py <downloaded-artifact.zip>
 
 Inspect the task instruction, verifier source, trial trajectory, verifier output, submitted artifacts, and runner provenance exactly as you would for a hosted run.
 
+When a passing artifact includes `qualification-record.json`, the importer validates its schema and binds its result and provenance hashes to the downloaded evidence. The sanitized record is staged under `harbor-jobs/qualification-review/` for human review; import never publishes it to the tracked ledger.
+
 ## Platform adapters
 
 Start with the vendor-neutral [specialized target adapter guide](target-device-adapter.md), schema, runner, and private-workflow template. The current [Intel GPU guide](intel-gpu-runner.md) and access-controlled `uxlfoundation/uxl-skills-runner-control` repository remain one concrete adapter. Additional platforms supply only their task, labels, probes, device mapping, and vendor runtime while preserving the shared contract.
