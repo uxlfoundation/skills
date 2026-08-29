@@ -18,6 +18,24 @@ export type EvaluationTask = {
   workflow: string[];
   hardware: string;
   covers: string[];
+  evaluationCells: EvaluationCell[];
+};
+
+export type EvaluationCell = {
+  id: string;
+  stage: string;
+  recordedAt: string;
+  skill: string;
+  task: string;
+  model: string;
+  agent: string;
+  harnessVersion: string;
+  environment: string;
+  hardware: string;
+  attemptsPerArm: number;
+  maxAgeDays: number;
+  rewards: Record<string, number>;
+  source: string;
 };
 
 export type Skill = {
@@ -38,6 +56,7 @@ export type Skill = {
 export const skills = dashboardData.skills as Skill[];
 export const policy = dashboardData.policy;
 export const catalogStatus = dashboardData.catalogStatus;
+export const evaluationCells = dashboardData.evaluationCells as EvaluationCell[];
 
 export const allTasks = skills.flatMap((skill) =>
   skill.tasks.map((task) => ({ ...task, skill: skill.name, project: skill.displayName })),
@@ -52,6 +71,7 @@ export const portfolio = {
   ceiling: allTasks.filter((task) => task.calibration === "ceiling").length,
   maintainerReviewed: skills.filter((skill) => skill.maintainerReview !== "needed").length,
   maintainerIncidents: allTasks.filter((task) => task.origin === "maintainer-incident").length,
+  evaluationCells: evaluationCells.length,
 };
 
 export const capabilityClasses = policy.required_capability_classes as string[];

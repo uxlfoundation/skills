@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-evaluation-cell.schema.json",
+  "title": "UXL Matched Evaluation Cell",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "cell_id",
+    "stage",
+    "recorded_at",
+    "scope",
+    "treatment",
+    "agent",
+    "execution",
+    "results",
+    "freshness"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "cell_id": { "$ref": "#/$defs/name" },
+    "stage": { "enum": ["development", "calibration", "promotion"] },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "scope": {
+      "type": "object",
+      "required": ["skill", "task", "task_revision", "task_dirty", "verifier_sha256"],
+      "properties": {
+        "skill": { "$ref": "#/$defs/name" },
+        "task": { "$ref": "#/$defs/name" },
+        "task_revision": { "$ref": "#/$defs/revision" },
+        "task_dirty": { "type": "boolean" },
+        "verifier_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "treatment": {
+      "type": "object",
+      "required": ["comparison_arms", "previous_skill", "candidate_skill", "candidate_dirty"],
+      "properties": {
+        "comparison_arms": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "no-skill" },
+            { "const": "previous-skill" },
+            { "const": "candidate-skill" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "previous_skill": { "$ref": "#/$defs/revision" },
+        "candidate_skill": { "$ref": "#/$defs/revision" },
+        "candidate_dirty": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "agent": {
+      "type": "object",
+      "required": ["name", "harness", "harness_version", "model", "reasoning_effort"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "harness": { "type": "string", "minLength": 1 },
+        "harness_version": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "reasoning_effort": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "environment",
+        "os",
+        "architecture",
+        "container_image",
+        "container_digest",
+        "toolchain",
+        "hardware",
+        "attempts_per_arm",
+        "timeout_seconds",
+        "concurrency"
+      ],
+      "properties": {
+        "environment": { "$ref": "#/$defs/environment" },
+        "os": { "type": "string", "minLength": 1 },
+        "architecture": { "type": "string", "minLength": 1 },
+        "container_image": { "type": ["string", "null"] },
+        "container_digest": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+          ]
+        },
+        "toolchain": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "hardware": {
+          "type": "object",
+          "required": ["class", "probe_sha256"],
+          "properties": {
+            "class": { "$ref": "#/$defs/hardware" },
+            "probe_sha256": {
+              "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/sha256" }]
+            }
+          },
+          "additionalProperties": false
+        },
+        "attempts_per_arm": { "type": "integer", "minimum": 1 },
+        "timeout_seconds": { "type": "integer", "minimum": 1 },
+        "concurrency": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "results": {
+      "type": "object",
+      "required": ["reward_floor", "arms"],
+      "properties": {
+        "reward_floor": { "type": "number", "minimum": 0, "maximum": 1 },
+        "arms": {
+          "type": "object",
+          "required": ["no-skill", "previous-skill", "candidate-skill"],
+          "properties": {
+            "no-skill": { "$ref": "#/$defs/arm_result" },
+            "previous-skill": { "$ref": "#/$defs/arm_result" },
+            "candidate-skill": { "$ref": "#/$defs/arm_result" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["max_age_days", "material_dimensions"],
+      "properties": {
+        "max_age_days": { "type": "integer", "minimum": 1 },
+        "material_dimensions": {
+          "type": "array",
+          "minItems": 24,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/material_dimension" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "revision": {
+      "type": "object",
+      "required": ["repository", "commit", "content_sha256"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "commit": { "$ref": "#/$defs/commit" },
+        "content_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "enum": [
+        "hosted-cpu",
+        "hosted-container",
+        "hosted-distributed",
+        "hosted-toolchain",
+        "manual-gpu",
+        "target-cpu",
+        "target-gpu",
+        "target-device",
+        "target-distributed"
+      ]
+    },
+    "hardware": {
+      "enum": [
+        "none",
+        "generic-cpu",
+        "target-cpu",
+        "target-gpu",
+        "target-device",
+        "target-distributed"
+      ]
+    },
+    "arm_result": {
+      "type": "object",
+      "required": [
+        "result_path",
+        "accepted_attempts",
+        "completed_attempts",
+        "errored_attempts",
+        "excluded_infrastructure_failures",
+        "mean_reward",
+        "verified_successes"
+      ],
+      "properties": {
+        "result_path": { "type": "string", "minLength": 1 },
+        "accepted_attempts": { "type": "integer", "minimum": 1 },
+        "completed_attempts": { "type": "integer", "minimum": 0 },
+        "errored_attempts": { "type": "integer", "minimum": 0 },
+        "excluded_infrastructure_failures": { "type": "integer", "minimum": 0 },
+        "mean_reward": { "type": "number", "minimum": 0, "maximum": 1 },
+        "verified_successes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "material_dimension": {
+      "enum": [
+        "scope.task_revision.commit",
+        "scope.task_revision.content_sha256",
+        "scope.task_dirty",
+        "scope.verifier_sha256",
+        "treatment.previous_skill.commit",
+        "treatment.previous_skill.content_sha256",
+        "treatment.candidate_skill.commit",
+        "treatment.candidate_skill.content_sha256",
+        "agent.name",
+        "agent.harness",
+        "agent.harness_version",
+        "agent.model",
+        "agent.reasoning_effort",
+        "execution.environment",
+        "execution.os",
+        "execution.architecture",
+        "execution.container_image",
+        "execution.container_digest",
+        "execution.toolchain",
+        "execution.hardware.class",
+        "execution.hardware.probe_sha256",
+        "execution.attempts_per_arm",
+        "execution.timeout_seconds",
+        "execution.concurrency"
+      ]
+    }
+  }
+}

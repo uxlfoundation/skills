@@ -9,6 +9,7 @@ const evaluationSummary = [
   [portfolio.headroom, "headroom"],
   [portfolio.ceiling, "ceiling / smoke"],
   [portfolio.planned, "planned"],
+  [portfolio.evaluationCells, "structured evidence records"],
 ] as const;
 
 export default function EvaluationsPage() {

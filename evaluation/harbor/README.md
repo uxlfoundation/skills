@@ -26,10 +26,11 @@ Validate and regenerate the portfolio with:
 
 ```powershell
 python scripts/validate_harbor_suites.py
+python scripts/validate_evaluation_cells.py
 python scripts/render_harbor_suites.py
 ```
 
-CI uses `python scripts/render_harbor_suites.py --check` to prevent the generated matrix from drifting from the manifest.
+CI validates every retained matched-comparison record under [`results/cells/`](results/cells/) and uses `python scripts/render_harbor_suites.py --check` to prevent the generated matrix from drifting from the manifest.
 
 New grouped answer-quality tasks can use [`shared/structured_answer.py`](shared/structured_answer.py) with a task-local `tests/rubric.json`. Run `python scripts/sync_harbor_answer_checkers.py` after adding or changing these tasks; CI checks that every vendored verifier matches the shared source.
 

@@ -45,6 +45,8 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   assert.match(skillHtml, /maintainer review needed/);
   assert.match(evaluationHtml, /Evaluation explorer/);
   assert.match(evaluationHtml, /<strong>52<\/strong> of/);
+  assert.match(evaluationHtml, /structured evidence records/);
+  assert.match(evaluationHtml, /Not yet recorded in the v1 contract/);
   assert.match(evaluationHtml, /onednn-matmul-memory-descriptors/);
   assert.match(platformHtml, /Evidence contract first/);
   assert.match(platformHtml, /Vendor neutral/);
@@ -53,6 +55,7 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   assert.match(platformHtml, /Skill comparison<\/dt><dd>Not yet run/);
   assert.match(methodologyHtml, /Correctness first/);
   assert.match(methodologyHtml, /No-skill, previous-skill, candidate-skill/i);
+  assert.match(methodologyHtml, /Invalidate honestly/);
 });
 
 test("keeps generated data, source, publishing, and privacy contracts reviewable", async () => {
@@ -76,6 +79,7 @@ test("keeps generated data, source, publishing, and privacy contracts reviewable
   const data = JSON.parse(generated);
   assert.equal(data.skills.length, 8);
   assert.equal(data.skills.flatMap((skill) => skill.tasks).length, 52);
+  assert.ok(Array.isArray(data.evaluationCells));
   await access(new URL("public/og.png", dashboardRoot));
   await access(new URL("public/uxl-foundation-icon-color.svg", dashboardRoot));
 });

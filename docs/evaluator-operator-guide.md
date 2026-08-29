@@ -113,7 +113,7 @@ The three arms are:
 
 Start with `-Attempts 1` for a development screen. Use three attempts per arm for calibration and five for promotion evidence. Add `-FailOnRegression` in automation. Lower token use never compensates for fewer verified successes.
 
-The wrapper writes `harbor-jobs/<prefix>-comparison.md`, including reward, completed trials, errors, tokens, cost, runtime, verified successes, tokens per verified success, and links into the dashboard.
+The wrapper writes both `harbor-jobs/<prefix>-comparison.md` and `harbor-jobs/<prefix>-evaluation-cell.json`. The JSON cell fixes the task, verifier, skill revisions, agent, model, harness, environment, software, hardware class, attempt count, and result summaries needed to decide whether the evidence is matched and current.
 
 ## 6. Open the dashboards
 
@@ -168,7 +168,8 @@ Classify full-quality tasks as ceiling or smoke coverage when all arms pass. The
 
 - Upload the complete job directories as a private CI artifact.
 - Copy the comparison summary into `evaluation/harbor/results/` after review.
-- Record the model, task revision, skill revision, Harbor version, attempts, environment, and excluded infrastructure failures.
+- Copy an accepted, sanitized cell into `evaluation/harbor/results/cells/<cell_id>.json`; do not copy raw trajectories or private-machine details.
+- Run `python scripts/validate_evaluation_cells.py` before committing.
 
 Use the [retained Harbor evidence index](../evaluation/harbor/results/README.md) as the active authority for which local jobs and remote artifacts must be preserved. It also defines when a superseded run is disposable.
 
@@ -177,6 +178,8 @@ To view a downloaded remote result, extract its job folders under `harbor-jobs/`
 ### Run on specialized hardware
 
 Follow the [self-hosted runner contract](self-hosted-runners.md) whenever faithful reproduction requires a device, backend, topology, driver, or instruction set that hosted runners do not provide. An approved runner checks out a reviewed immutable evaluator revision, qualifies the environment with an oracle, and returns the complete `harbor-jobs/` evidence. It must not accept untrusted pull-request triggers.
+
+When running a matched comparison on that qualified lane, pass the retained qualification record to the wrapper with `-HardwareProbePath <path>/runner-provenance.json`. Its digest becomes part of the evaluation cell, so a changed target qualification invalidates the old current-proof claim.
 
 The access-controlled `uxlfoundation/uxl-skills-runner-control` repository implements this pattern with an Intel GPU adapter. Its workflow requires a reviewed 40-character evaluator commit SHA, runs only the `sycl-device-discovery-windows-wsl` oracle, and uploads the full job directory without model credentials.
 
