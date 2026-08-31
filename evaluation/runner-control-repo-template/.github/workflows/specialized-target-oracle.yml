@@ -1,0 +1,82 @@
+name: UXL specialized target oracle
+
+on:
+  workflow_dispatch:
+    inputs:
+      skills_commit:
+        description: Full reviewed commit SHA from uxlfoundation/skills
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uxl-specialized-target
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    # Replace these example labels with the exact labels in target-adapter.json.
+    runs-on: [self-hosted, linux, x64, uxl, target-gpu, trusted-lab]
+    timeout-minutes: 90
+    env:
+      HARBOR_TELEMETRY: "off"
+      PYTHONUTF8: "1"
+      SKILLS_COMMIT: ${{ inputs.skills_commit }}
+    steps:
+      - name: Require an immutable evaluator commit
+        shell: bash
+        run: |
+          if [[ ! "$SKILLS_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "skills_commit must be a full 40-character Git commit SHA" >&2
+            exit 2
+          fi
+
+      - name: Check out reviewed control configuration
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          path: control
+          persist-credentials: false
+          clean: true
+
+      - name: Check out reviewed evaluator revision
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          repository: uxlfoundation/skills
+          ref: ${{ inputs.skills_commit }}
+          path: evaluator
+          fetch-depth: 0
+          persist-credentials: false
+          clean: true
+
+      - name: Require a public-main or explicitly approved revision
+        shell: bash
+        run: |
+          git -C evaluator fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          if git -C evaluator merge-base --is-ancestor "$SKILLS_COMMIT" origin/main; then
+            exit 0
+          fi
+          if [[ -f control/approved-commits.txt ]] && grep -Fxiq "$SKILLS_COMMIT" control/approved-commits.txt; then
+            exit 0
+          fi
+          echo "Commit is neither on public main nor listed in reviewed control/approved-commits.txt" >&2
+          exit 2
+
+      - name: Qualify target and run oracle
+        shell: bash
+        run: >-
+          python3 evaluator/scripts/runner/run_target_adapter.py
+          --config control/target-adapter.json
+          --source-root evaluator
+          --expected-commit "$SKILLS_COMMIT"
+          --output results
+
+      - name: Upload complete qualification evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: uxl-specialized-target-${{ inputs.skills_commit }}
+          path: results
+          if-no-files-found: warn
+          retention-days: 30

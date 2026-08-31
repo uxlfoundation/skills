@@ -238,6 +238,59 @@ class HarborComparisonTests(unittest.TestCase):
             self.assertEqual(exit_code, 2)
             self.assertIn("REGRESSION", output.read_text(encoding="utf-8"))
 
+    def test_builds_machine_readable_evaluation_cell(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            jobs = [
+                summary.load_job(
+                    self.write_job(root, name, result_data(reward)), label
+                )
+                for name, label, reward in (
+                    ("no-skill", "No skill", 0.7),
+                    ("previous", "Previous", 0.8),
+                    ("candidate", "Candidate", 1.0),
+                )
+            ]
+            cell = summary.build_evaluation_cell(
+                cell_id="uxl-onetbb-example-calibration",
+                stage="calibration",
+                skill_name="uxl-onetbb",
+                task_name="onetbb-join-node-ordering",
+                no_skill=jobs[0],
+                previous=jobs[1],
+                candidate=jobs[2],
+                repository="https://github.com/uxlfoundation/skills.git",
+                task_commit="1" * 40,
+                task_content_sha256="a" * 64,
+                task_dirty=False,
+                verifier_sha256="b" * 64,
+                previous_commit="2" * 40,
+                previous_content_sha256="c" * 64,
+                candidate_commit="3" * 40,
+                candidate_content_sha256="d" * 64,
+                candidate_dirty=False,
+                agent="codex",
+                harness_version="0.20.0",
+                model="example-model",
+                reasoning_effort="medium",
+                environment="hosted-container",
+                os_name="ubuntu-24.04",
+                architecture="x86_64",
+                container_image=None,
+                container_digest=None,
+                toolchain={"python": "3.12.8", "harbor": "0.20.0"},
+                hardware_class="generic-cpu",
+                hardware_probe_sha256=None,
+                attempts=3,
+                timeout_seconds=900,
+                concurrency=1,
+                verified_reward_floor=1.0,
+                max_age_days=90,
+            )
+
+        self.assertEqual(cell["schema_version"], "1.0")
+        self.assertEqual(cell["results"]["arms"]["candidate-skill"]["verified_successes"], 3)
+
 
 if __name__ == "__main__":
     unittest.main()

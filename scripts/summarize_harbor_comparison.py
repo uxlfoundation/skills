@@ -8,10 +8,12 @@ import json
 import math
 import sys
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
+
+import validate_evaluation_cell as evaluation_cells
 
 
 @dataclass(frozen=True)
@@ -515,6 +517,150 @@ def render_report(
     return "\n".join(lines), failed
 
 
+def build_evaluation_cell(
+    *,
+    cell_id: str,
+    stage: str,
+    skill_name: str,
+    task_name: str,
+    no_skill: JobSummary,
+    previous: JobSummary,
+    candidate: JobSummary,
+    repository: str,
+    task_commit: str,
+    task_content_sha256: str,
+    task_dirty: bool,
+    verifier_sha256: str,
+    previous_commit: str,
+    previous_content_sha256: str,
+    candidate_commit: str,
+    candidate_content_sha256: str,
+    candidate_dirty: bool,
+    agent: str,
+    harness_version: str,
+    model: str,
+    reasoning_effort: str,
+    environment: str,
+    os_name: str,
+    architecture: str,
+    container_image: str | None,
+    container_digest: str | None,
+    toolchain: dict[str, str],
+    hardware_class: str,
+    hardware_probe_sha256: str | None,
+    attempts: int,
+    timeout_seconds: int,
+    concurrency: int,
+    verified_reward_floor: float,
+    max_age_days: int,
+) -> dict[str, Any]:
+    jobs = {
+        "no-skill": no_skill,
+        "previous-skill": previous,
+        "candidate-skill": candidate,
+    }
+    arms: dict[str, dict[str, Any]] = {}
+    for name, job in jobs.items():
+        if job.mean_reward is None:
+            raise ValueError(f"{name} has no aggregate reward")
+        arms[name] = {
+            "result_path": _display_path(job.path),
+            "accepted_attempts": job.total_trials,
+            "completed_attempts": job.completed_trials,
+            "errored_attempts": job.errored_trials + job.unfinished_trials,
+            "excluded_infrastructure_failures": 0,
+            "mean_reward": job.mean_reward,
+            "verified_successes": job.verified_successes(verified_reward_floor),
+        }
+    record: dict[str, Any] = {
+        "schema_version": "1.0",
+        "cell_id": cell_id,
+        "stage": stage,
+        "recorded_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "scope": {
+            "skill": skill_name,
+            "task": task_name,
+            "task_revision": {
+                "repository": repository,
+                "commit": task_commit,
+                "content_sha256": task_content_sha256,
+            },
+            "task_dirty": task_dirty,
+            "verifier_sha256": verifier_sha256,
+        },
+        "treatment": {
+            "comparison_arms": list(evaluation_cells.ARMS),
+            "previous_skill": {
+                "repository": repository,
+                "commit": previous_commit,
+                "content_sha256": previous_content_sha256,
+            },
+            "candidate_skill": {
+                "repository": repository,
+                "commit": candidate_commit,
+                "content_sha256": candidate_content_sha256,
+            },
+            "candidate_dirty": candidate_dirty,
+        },
+        "agent": {
+            "name": agent,
+            "harness": "harbor",
+            "harness_version": harness_version,
+            "model": model,
+            "reasoning_effort": reasoning_effort,
+        },
+        "execution": {
+            "environment": environment,
+            "os": os_name,
+            "architecture": architecture,
+            "container_image": container_image,
+            "container_digest": container_digest,
+            "toolchain": toolchain,
+            "hardware": {
+                "class": hardware_class,
+                "probe_sha256": hardware_probe_sha256,
+            },
+            "attempts_per_arm": attempts,
+            "timeout_seconds": timeout_seconds,
+            "concurrency": concurrency,
+        },
+        "results": {
+            "reward_floor": verified_reward_floor,
+            "arms": arms,
+        },
+        "freshness": {
+            "max_age_days": max_age_days,
+            "material_dimensions": [
+                "scope.task_revision.content_sha256",
+                "scope.task_dirty",
+                "scope.verifier_sha256",
+                "treatment.previous_skill.content_sha256",
+                "treatment.candidate_skill.content_sha256",
+                "agent.name",
+                "agent.harness",
+                "agent.harness_version",
+                "agent.model",
+                "agent.reasoning_effort",
+                "execution.environment",
+                "execution.os",
+                "execution.architecture",
+                "execution.container_image",
+                "execution.container_digest",
+                "execution.toolchain",
+                "execution.hardware.class",
+                "execution.hardware.probe_sha256",
+                "execution.attempts_per_arm",
+                "execution.timeout_seconds",
+                "execution.concurrency",
+            ],
+        },
+    }
+    errors = evaluation_cells.validate_record(record)
+    if errors:
+        raise ValueError("invalid evaluation cell: " + "; ".join(errors))
+    return record
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-skill", type=Path, required=True)
@@ -533,6 +679,34 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--reward-tolerance", type=float, default=1e-6)
     parser.add_argument("--verified-reward-floor", type=float, default=1.0)
     parser.add_argument("--fail-on-regression", action="store_true")
+    parser.add_argument("--cell-output", type=Path)
+    parser.add_argument("--cell-id")
+    parser.add_argument(
+        "--cell-stage", choices=("development", "calibration", "promotion")
+    )
+    parser.add_argument("--repository")
+    parser.add_argument("--task-commit")
+    parser.add_argument("--task-content-sha256")
+    parser.add_argument("--task-dirty", action="store_true")
+    parser.add_argument("--verifier-sha256")
+    parser.add_argument("--previous-commit")
+    parser.add_argument("--previous-content-sha256")
+    parser.add_argument("--candidate-commit")
+    parser.add_argument("--candidate-content-sha256")
+    parser.add_argument("--candidate-dirty", action="store_true")
+    parser.add_argument("--harness-version")
+    parser.add_argument("--reasoning-effort", default="unknown")
+    parser.add_argument("--environment")
+    parser.add_argument("--os-name")
+    parser.add_argument("--architecture")
+    parser.add_argument("--container-image")
+    parser.add_argument("--container-digest")
+    parser.add_argument("--toolchain-json")
+    parser.add_argument("--hardware-class")
+    parser.add_argument("--hardware-probe-sha256")
+    parser.add_argument("--timeout-seconds", type=int)
+    parser.add_argument("--concurrency", type=int, default=1)
+    parser.add_argument("--cell-max-age-days", type=int, default=90)
     args = parser.parse_args(argv)
 
     if args.reward_tolerance < 0:
@@ -567,6 +741,84 @@ def main(argv: list[str]) -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report, encoding="utf-8")
     print(f"Wrote Harbor comparison: {args.output}")
+    if args.cell_output:
+        required = {
+            "cell-id": args.cell_id,
+            "cell-stage": args.cell_stage,
+            "repository": args.repository,
+            "task-commit": args.task_commit,
+            "task-content-sha256": args.task_content_sha256,
+            "verifier-sha256": args.verifier_sha256,
+            "previous-commit": args.previous_commit,
+            "previous-content-sha256": args.previous_content_sha256,
+            "candidate-commit": args.candidate_commit,
+            "candidate-content-sha256": args.candidate_content_sha256,
+            "harness-version": args.harness_version,
+            "environment": args.environment,
+            "os-name": args.os_name,
+            "architecture": args.architecture,
+            "toolchain-json": args.toolchain_json,
+            "hardware-class": args.hardware_class,
+            "timeout-seconds": args.timeout_seconds,
+        }
+        missing = [name for name, value in required.items() if value in (None, "")]
+        if missing:
+            print(
+                "Evaluation cell output requires: " + ", ".join(missing),
+                file=sys.stderr,
+            )
+            return 1
+        try:
+            raw_toolchain = json.loads(args.toolchain_json)
+            if not isinstance(raw_toolchain, dict) or not all(
+                isinstance(name, str) and isinstance(value, str)
+                for name, value in raw_toolchain.items()
+            ):
+                raise ValueError("--toolchain-json must be an object of string values")
+            cell = build_evaluation_cell(
+                cell_id=args.cell_id,
+                stage=args.cell_stage,
+                skill_name=args.skill_name,
+                task_name=args.task_name,
+                no_skill=no_skill,
+                previous=previous,
+                candidate=candidate,
+                repository=args.repository,
+                task_commit=args.task_commit,
+                task_content_sha256=args.task_content_sha256,
+                task_dirty=args.task_dirty,
+                verifier_sha256=args.verifier_sha256,
+                previous_commit=args.previous_commit,
+                previous_content_sha256=args.previous_content_sha256,
+                candidate_commit=args.candidate_commit,
+                candidate_content_sha256=args.candidate_content_sha256,
+                candidate_dirty=args.candidate_dirty,
+                agent=args.agent,
+                harness_version=args.harness_version,
+                model=args.model,
+                reasoning_effort=args.reasoning_effort,
+                environment=args.environment,
+                os_name=args.os_name,
+                architecture=args.architecture,
+                container_image=args.container_image,
+                container_digest=args.container_digest,
+                toolchain=raw_toolchain,
+                hardware_class=args.hardware_class,
+                hardware_probe_sha256=args.hardware_probe_sha256,
+                attempts=args.attempts,
+                timeout_seconds=args.timeout_seconds,
+                concurrency=args.concurrency,
+                verified_reward_floor=args.verified_reward_floor,
+                max_age_days=args.cell_max_age_days,
+            )
+        except (json.JSONDecodeError, ValueError) as exc:
+            print(f"Evaluation cell generation failed: {exc}", file=sys.stderr)
+            return 1
+        args.cell_output.parent.mkdir(parents=True, exist_ok=True)
+        args.cell_output.write_text(
+            json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(f"Wrote evaluation cell: {args.cell_output}")
     if failed and args.fail_on_regression:
         print("Candidate comparison failed the regression policy.", file=sys.stderr)
         return 2

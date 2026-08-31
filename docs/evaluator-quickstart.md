@@ -92,7 +92,7 @@ python scripts/import_harbor_artifact.py <downloaded-artifact.zip>
 .\scripts\start_harbor_dashboards.ps1 -NoWsl -Restart -OpenBrowser
 ```
 
-The importer rejects path traversal and conflicting same-named jobs, attaches shared runner provenance to the imported job, and records an import manifest. A reward-1.0 hardware oracle qualifies the runner; it does not by itself prove that a skill is beneficial.
+The importer rejects path traversal and conflicting same-named jobs, attaches shared runner provenance to the imported job, and records an import manifest. If a passing artifact proposes a public qualification, the importer verifies its schema and evidence hashes and stages it under `harbor-jobs/qualification-review/`; publication remains a manual review step. A reward-1.0 hardware oracle qualifies the runner; it does not by itself prove that a skill is beneficial.
 
 ## Preserve evidence
 

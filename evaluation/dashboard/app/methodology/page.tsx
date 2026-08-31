@@ -24,6 +24,7 @@ export default function MethodologyPage() {
         <article><span>02</span><h2>Match the arms</h2><p>{policy.comparison_arms.map((arm) => arm).join(", ")} receive the same task, revision, model, effort, and environment.</p></article>
         <article><span>03</span><h2>Verify quality</h2><p>Correctness and task reward gate all efficiency comparisons. Infrastructure failures are excluded and rerun unchanged.</p></article>
         <article><span>04</span><h2>Promote carefully</h2><p>Promotion requires five attempts per arm, current sources, clear limitations, and owning-project maintainer review.</p></article>
+        <article><span>05</span><h2>Invalidate honestly</h2><p>Every accepted cell records the model, harness, software, task, skill, environment, and hardware dimensions that make its claim current. A material change marks the result stale; it does not rewrite history.</p></article>
       </section>
 
       <section className="definitions section-pad">
@@ -45,7 +46,7 @@ export default function MethodologyPage() {
 
       <section className="method-cta section-pad">
         <div><p className="section-label">Reviewable by design</p><h2>Every public status should lead back to source.</h2><p>Skill guidance, task instructions, verifier code, coverage metadata, and accepted summaries live in the public repository. Raw trajectories and private-machine provenance remain access-controlled.</p></div>
-        <div><a href="https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md">Read evaluator policy ↗</a><a href="https://github.com/uxlfoundation/skills/blob/main/docs/release-and-promotion-policy.md">Read promotion policy ↗</a></div>
+        <div><a href="https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md">Read evaluator policy ↗</a><a href="https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATION_CELL_CONTRACT.md">Read evidence-cell contract ↗</a><a href="https://github.com/uxlfoundation/skills/blob/main/docs/release-and-promotion-policy.md">Read promotion policy ↗</a></div>
       </section>
       <SiteFooter prefix="../" />
     </main>

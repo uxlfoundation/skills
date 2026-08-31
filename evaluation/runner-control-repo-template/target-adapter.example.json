@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.1",
+  "adapter_id": "example-target-gpu",
+  "publication": {
+    "display_name": "Example Linux GPU",
+    "vendor": "Example Vendor",
+    "device": "Example Accelerator",
+    "interface": "Native Linux device interface",
+    "max_age_days": 90,
+    "limitations": [
+      "Qualifies only the execution lane represented by this adapter.",
+      "Does not establish skill benefit or a performance claim."
+    ]
+  },
+  "task": {
+    "skill": "uxl-sycl-build-debug",
+    "name": "sycl-device-discovery",
+    "hardware_class": "target-gpu"
+  },
+  "runner": {
+    "required_labels": ["self-hosted", "linux", "x64", "uxl", "target-gpu", "trusted-lab"]
+  },
+  "probes": [
+    {
+      "id": "device-interface",
+      "command": ["sh", "-lc", "test -e /dev/dri/renderD128 && echo device-ready"],
+      "timeout_seconds": 30,
+      "required_patterns": ["device-ready"],
+      "publish_output": false
+    },
+    {
+      "id": "runtime-enumeration",
+      "command": ["vendor-runtime-info", "--list-devices"],
+      "timeout_seconds": 60,
+      "required_patterns": ["GPU"],
+      "publish_output": false
+    }
+  ],
+  "harbor": {
+    "command": ["harbor"],
+    "timeout_seconds": 3600,
+    "environment": {
+      "UXL_TARGET_ADAPTER": "example-target-gpu"
+    }
+  }
+}

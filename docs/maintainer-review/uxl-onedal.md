@@ -10,6 +10,10 @@ Please review `uxl-onedal` for technical accuracy, useful scope, honest limitati
 
 The current skill covers native oneDAL versus Extension for Scikit-learn, batch/online/distributed mode choice, table layout, analytics parity, conversion costs, and quality-regression triage. It requires algorithm-, interface-, version-, and device-specific support checks.
 
+Why this helps: agents get oneDAL-specific interface, table, mode, and quality checks before proposing code, reducing generic scikit-learn or device assumptions that maintainers must correct later.
+
+The initial ask is a 30–45 minute accuracy review and a decision on periodic ownership—not a commitment to support the evaluator infrastructure.
+
 ## Evidence to inspect
 
 - Instructions: `skills/uxl-onedal/SKILL.md`

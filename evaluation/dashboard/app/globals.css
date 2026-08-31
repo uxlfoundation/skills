@@ -231,7 +231,7 @@ a.heatmap-row:hover { background: rgba(255,255,255,.04); }
 .task-list-row small { color: var(--muted); margin-top: 4px; }
 .back-link { display: inline-block; margin-top: 26px; color: var(--blue); font-size: 11px; }
 
-.mini-summary { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--ink); padding-top: 0; padding-bottom: 0; color: white; }
+.mini-summary { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--ink); padding-top: 0; padding-bottom: 0; color: white; }
 .mini-summary > div { padding: 29px 22px; border-left: 1px solid rgba(255,255,255,.16); }
 .mini-summary > div:last-child { border-right: 1px solid rgba(255,255,255,.16); }
 .mini-summary strong, .mini-summary span { display: block; }
@@ -266,6 +266,20 @@ a.heatmap-row:hover { background: rgba(255,255,255,.04); }
 .evaluation-body dt { color: var(--muted); }
 .evaluation-body dd { margin: 0; text-align: right; }
 .evaluation-body > a { color: var(--blue); font-size: 11px; grid-column: 1 / -1; }
+.evidence-health { background: #f8f9ff; }
+.evidence-health-summary { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #cbd1ec; }
+.evidence-health-summary > div { padding: 24px; border-right: 1px solid #cbd1ec; }
+.evidence-health-summary > div:last-child { border-right: 0; }
+.evidence-health-summary strong, .evidence-health-summary span { display: block; }
+.evidence-health-summary strong { font-size: 34px; letter-spacing: -.05em; }
+.evidence-health-summary span { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+.evidence-empty { margin-top: 22px; padding: 26px; background: var(--blue-soft); border-left: 4px solid var(--blue); }
+.evidence-empty h3 { margin: 0 0 7px; font-size: 20px; }
+.evidence-empty p { margin: 0; color: var(--muted); max-width: 760px; line-height: 1.6; }
+.evidence-table-wrap { margin-top: 22px; overflow-x: auto; }
+.evidence-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.evidence-table th, .evidence-table td { padding: 12px 10px; border-bottom: 1px solid #cbd1ec; text-align: left; vertical-align: top; }
+.evidence-table th { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
 
 .platform-principles { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
 .platform-principles > div { min-height: 220px; padding: 22px 28px 20px 0; border-top: 3px solid var(--ink); border-right: 1px solid var(--line); }
@@ -312,6 +326,10 @@ a.platform-matrix-row:hover { background: rgba(255,255,255,.04); }
 .adapter-card dl { margin: 0 0 30px; }
 .adapter-card dl div { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
 .adapter-card dd { margin: 0; font-weight: 650; }
+.adapter-card.stale { border-color: var(--amber); }
+.lane-record h3 { margin-top: 38px; }
+.lane-record dl { margin-bottom: 18px; }
+.lane-limitation { margin: 0 0 24px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .adapter-card.open p { color: var(--muted); font-size: 14px; line-height: 1.6; }
 .adapter-card ul { margin: auto 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .adapter-card li { border-top: 1px solid #b9c3ed; padding-top: 9px; color: #35405e; font-size: 11px; }
@@ -386,7 +404,7 @@ footer > a { text-align: right; color: var(--blue); font-size: 12px; }
   .environment-grid { grid-template-columns: repeat(2, 1fr); }
   .platform-matrix { overflow-x: auto; }
   .platform-matrix-row { min-width: 780px; }
-  .method-steps, .policy-grid { grid-template-columns: repeat(2, 1fr); }
+  .method-steps, .policy-grid, .evidence-health-summary { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
@@ -397,7 +415,7 @@ footer > a { text-align: right; color: var(--blue); font-size: 12px; }
   .hero, .page-intro { padding-left: 22px; padding-right: 22px; }
   .hero h1, .page-intro h1 { font-size: clamp(43px, 13vw, 67px); }
   .hero::after, .page-intro::after { width: 220px; height: 220px; border-width: 40px; right: -140px; top: -140px; }
-  .summary, .mini-summary, .skill-index, .path-steps, .environment-grid, .method-steps, .policy-grid { grid-template-columns: 1fr; }
+  .summary, .mini-summary, .skill-index, .path-steps, .environment-grid, .method-steps, .policy-grid, .evidence-health-summary { grid-template-columns: 1fr; }
   .metric, .metric:last-child, .mini-summary > div, .mini-summary > div:last-child { border-right: 1px solid rgba(255,255,255,.16); }
   .portfolio-table { overflow-x: auto; }
   .portfolio-row { min-width: 620px; }

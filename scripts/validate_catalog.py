@@ -15,6 +15,7 @@ SKILL_CARDS = ROOT / "skill-cards"
 MANIFEST = ROOT / "skills.yaml"
 SCHEMAS = ROOT / "schemas"
 RELEASES = ROOT / "docs" / "releases"
+MAINTAINER_REVIEWS = ROOT / "docs" / "maintainer-review"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LINK_RE = re.compile(r"\]\((references/[^)]+|scripts/[^)]+|evals/[^)]+)\)")
 ALLOWED_CATALOG_STATUSES = {"incubating", "pilot", "released"}
@@ -32,6 +33,8 @@ REQUIRED_MANIFEST_KEYS = {
 REQUIRED_SCHEMA_FILES = [
     "skills.schema.json",
     "evals.schema.json",
+    "evaluation-cell.schema.json",
+    "target-adapter.schema.json",
 ]
 REQUIRED_AGENT_FILES = [
     "AGENTS.md",
@@ -171,6 +174,9 @@ def validate_manifest(skill_names: list[str]) -> list[str]:
             errors.append(f"{MANIFEST}: {name} status {status!r} requires last_source_verification")
         if status in {"reviewed", "project-owned"} and entry.get("maintainer_review") == "needed":
             errors.append(f"{MANIFEST}: {name} status {status!r} requires maintainer_review evidence")
+        review_packet = MAINTAINER_REVIEWS / f"{name}.md"
+        if not review_packet.is_file():
+            errors.append(f"{MANIFEST}: {name} requires maintainer review packet {review_packet}")
         owner_repo = entry.get("owner_repo", "")
         if owner_repo and not owner_repo.startswith("https://github.com/uxlfoundation/"):
             errors.append(f"{MANIFEST}: {name} owner_repo should point at uxlfoundation GitHub")

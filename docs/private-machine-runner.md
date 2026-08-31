@@ -29,7 +29,7 @@ Start a one-job runner from a public checkout with:
   -Labels 'project,gpu,windows-wsl,personal-lab'
 ```
 
-The launcher refuses public repositories, requests a short-lived registration token through GitHub CLI, starts the WSL runner in a hidden process, and confirms that GitHub reports it online. It writes only non-secret local state under `tmp/runner/`. The Actions runner software must already be installed at `/home/uxlrunner/uxl-runner`, or the path must be supplied with `-RunnerRoot`.
+The launcher refuses public repositories, requests a short-lived registration token through GitHub CLI, starts the WSL runner in a hidden process, and confirms that GitHub reports it online. After a host reboot, rerun the same command: if the local ephemeral configuration and its offline GitHub registration still agree, the launcher resumes them without requesting a new registration or creating a duplicate. It writes only non-secret local state under `tmp/runner/`. The Actions runner software must already be installed at `/home/uxlrunner/uxl-runner`, or the path must be supplied with `-RunnerRoot`.
 
 The private workflow should stay small:
 
@@ -68,3 +68,5 @@ Pin every third-party action to a reviewed full commit SHA. The evaluator script
 ## UXL example
 
 UXL's private dispatcher is `uxlfoundation/uxl-skills-runner-control`. The reusable launcher and Windows/WSL Intel GPU oracle are in this repository under [`scripts/runner/`](../scripts/runner/), and the copy-ready dispatcher is [`evaluation/runner-control-repo-template/.github/workflows/windows-wsl-intel-gpu-oracle.yml`](../evaluation/runner-control-repo-template/.github/workflows/windows-wsl-intel-gpu-oracle.yml). The current runner uses `/dev/dxg`, the read-only WSL runtime libraries at `/usr/lib/wsl`, and the `sycl-device-discovery-windows-wsl` oracle.
+
+For a new vendor or laboratory target, use the [specialized target adapter](target-device-adapter.md) and [`specialized-target-oracle.yml`](../evaluation/runner-control-repo-template/.github/workflows/specialized-target-oracle.yml). It keeps the workflow fixed, records probe hashes, rejects secret-like configuration fields, verifies task ownership and hardware class, and accepts only a public-main revision or an explicitly approved candidate SHA.

@@ -1,0 +1,2 @@
+# One reviewed, full 40-character uxlfoundation/skills commit SHA per line.
+# Rename this file to approved-commits.txt only when an unmerged candidate must run.

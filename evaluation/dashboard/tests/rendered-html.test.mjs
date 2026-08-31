@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { execFile as execFileCallback } from "node:child_process";
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
+import { promisify } from "node:util";
+import { directoryDigest } from "../scripts/directory-digest.mjs";
+
+const execFile = promisify(execFileCallback);
 
 const dashboardRoot = new URL("../", import.meta.url);
 const clientRoot = new URL("../dist/client/", import.meta.url);
@@ -8,6 +15,42 @@ const clientRoot = new URL("../dist/client/", import.meta.url);
 async function exportedPage(path = "index.html") {
   return readFile(new URL(path, clientRoot), "utf8");
 }
+
+test("uses the canonical cross-platform directory digest", async () => {
+  const root = await mkdtemp(join(tmpdir(), "uxl-dashboard-digest-"));
+  try {
+    await mkdir(join(root, "sub"));
+    await writeFile(join(root, "a.txt"), "alpha");
+    await writeFile(join(root, "sub", "b.txt"), "beta");
+    assert.equal(
+      await directoryDigest(root),
+      "e081ef401f7f57797868df34df60540cd9f6f033d8b3b862e9440fafafd33c57",
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("ignores generated files and Git-normalizes line endings", async () => {
+  const root = await mkdtemp(join(tmpdir(), "uxl-dashboard-git-digest-"));
+  try {
+    await execFile("git", ["init", "-q", root]);
+    await execFile("git", ["-C", root, "config", "core.autocrlf", "true"]);
+    await writeFile(join(root, ".gitattributes"), "*.txt text eol=lf\n");
+    await writeFile(join(root, ".gitignore"), "__pycache__/\n");
+    await mkdir(join(root, "content"));
+    await writeFile(join(root, "content", "a.txt"), "alpha\r\nbeta\r\n");
+    await execFile("git", ["-C", root, "add", "."]);
+    const original = await directoryDigest(join(root, "content"));
+    await mkdir(join(root, "content", "__pycache__"));
+    await writeFile(join(root, "content", "__pycache__", "generated.pyc"), "generated");
+    await writeFile(join(root, "content", "a.txt"), "alpha\nbeta\n");
+    assert.equal(await directoryDigest(join(root, "content")), original);
+    assert.equal(original, "406cf35b51a60c1dad89af88729d4c8109866076bea2318521024bb0675d411d");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 
 test("exports a vendor-neutral UXL Skills Evaluator overview", async () => {
   const html = await exportedPage();
@@ -45,14 +88,21 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   assert.match(skillHtml, /maintainer review needed/);
   assert.match(evaluationHtml, /Evaluation explorer/);
   assert.match(evaluationHtml, /<strong>52<\/strong> of/);
+  assert.match(evaluationHtml, /structured evidence records/);
+  assert.match(evaluationHtml, /Not yet recorded in the v1 contract/);
+  assert.match(evaluationHtml, /Matched evidence health/);
+  assert.match(evaluationHtml, /No v1 cells retained yet/);
   assert.match(evaluationHtml, /onednn-matmul-memory-descriptors/);
   assert.match(platformHtml, /Evidence contract first/);
   assert.match(platformHtml, /Vendor neutral/);
   assert.match(platformHtml, /Environment evidence by skill/);
   assert.match(platformHtml, /Project skill<\/span><span>Hosted CPU/);
-  assert.match(platformHtml, /Skill comparison<\/dt><dd>Not yet run/);
+  assert.match(platformHtml, /Windows \/ WSL GPU/);
+  assert.match(platformHtml, /Inspect sanitized record/);
+  assert.doesNotMatch(platformHtml, /private-wsl-GLOW/);
   assert.match(methodologyHtml, /Correctness first/);
   assert.match(methodologyHtml, /No-skill, previous-skill, candidate-skill/i);
+  assert.match(methodologyHtml, /Invalidate honestly/);
 });
 
 test("keeps generated data, source, publishing, and privacy contracts reviewable", async () => {
@@ -76,6 +126,8 @@ test("keeps generated data, source, publishing, and privacy contracts reviewable
   const data = JSON.parse(generated);
   assert.equal(data.skills.length, 8);
   assert.equal(data.skills.flatMap((skill) => skill.tasks).length, 52);
+  assert.ok(Array.isArray(data.evaluationCells));
+  assert.equal(data.targetQualifications.length, 1);
   await access(new URL("public/og.png", dashboardRoot));
   await access(new URL("public/uxl-foundation-icon-color.svg", dashboardRoot));
 });

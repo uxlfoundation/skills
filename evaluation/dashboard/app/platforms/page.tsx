@@ -1,5 +1,6 @@
 import { PageIntro, SiteFooter, SiteHeader, StatusPill } from "../components";
-import { allTasks, skills, titleCase } from "../data";
+import { allTasks, skills, targetQualifications, titleCase } from "../data";
+import { LaneHealth } from "./lane-health";
 
 export const dynamic = "force-static";
 
@@ -8,7 +9,7 @@ const environmentCopy: Record<string, { title: string; description: string; grou
   "hosted-cpu": { title: "Hosted CPU", description: "Portable correctness, integration, and executable smoke coverage.", group: "Available now" },
   "hosted-container": { title: "Hosted container", description: "Pinned fixtures for discriminating reasoning and answer-quality checks.", group: "Available now" },
   "hosted-toolchain": { title: "Hosted toolchain", description: "Compiler, loader, and cross-project SYCL environment checks.", group: "Available now" },
-  "manual-gpu": { title: "Specialized GPU", description: "Manually approved device-dependent evaluation through a controlled runner.", group: "Adapter qualified" },
+  "manual-gpu": { title: "Specialized GPU", description: "Manually approved device-dependent evaluation through a controlled runner.", group: "Qualification required" },
   "target-device": { title: "Target device", description: "Portable accelerator tasks awaiting representative machine evidence.", group: "Planned coverage" },
   "target-gpu": { title: "Target GPU", description: "Project-specific GPU paths that cannot be represented faithfully on hosted compute.", group: "Planned coverage" },
   "target-distributed": { title: "Distributed system", description: "Topology, rank, worker, and communication evidence across controlled systems.", group: "Planned coverage" },
@@ -90,12 +91,7 @@ export default function PlatformsPage() {
           <p>An adapter qualifies dispatch and evidence collection. It does not prove that a skill helps, and it does not give its hardware vendor priority in the portfolio.</p>
         </div>
         <div className="adapter-grid">
-          <article className="adapter-card proven">
-            <div><StatusPill tone="good">Runner qualified</StatusPill><span>Proof of concept</span></div>
-            <h3>Windows / WSL GPU adapter</h3>
-            <dl><div><dt>Vendor</dt><dd>Intel</dd></div><div><dt>Device</dt><dd>Arc B580</dd></div><div><dt>Qualification</dt><dd>Oracle passed</dd></div><div><dt>Skill comparison</dt><dd>Not yet run</dd></div></dl>
-            <a href="https://github.com/uxlfoundation/skills/blob/main/docs/self-hosted-runners.md">Review shared runner contract ↗</a>
-          </article>
+          <LaneHealth qualifications={targetQualifications} />
           <article className="adapter-card open">
             <div><StatusPill tone="planned">Open adapter slots</StatusPill><span>Member contribution</span></div>
             <h3>Bring another environment</h3>
@@ -103,7 +99,7 @@ export default function PlatformsPage() {
             <ul><li>Declare the required capability</li><li>Run only reviewed evaluator revisions</li><li>Qualify with a reward-1.0 oracle</li><li>Return complete, sanitized evidence</li></ul>
           </article>
         </div>
-        <p className="platform-footnote">The portfolio currently spans {skills.length} skills. Vendor or device names appear only where accepted environment evidence exists.</p>
+        <p className="platform-footnote">The portfolio currently spans {skills.length} skills and {targetQualifications.length} retained specialized-lane qualification record{targetQualifications.length === 1 ? "" : "s"}. Vendor or device names appear only where accepted environment evidence exists.</p>
       </section>
       <SiteFooter prefix="../" />
     </main>

@@ -48,6 +48,8 @@ On that workstation, start a waiting one-job runner with the reusable helper in 
   -Repository uxlfoundation/uxl-skills-runner-control
 ```
 
+After rebooting GLOW, rerun the same command. The launcher resumes only when the surviving local configuration matches this repository and runner name; it refuses ambiguous state.
+
 ## 1. Qualify the Linux host
 
 Run these commands on the remote host:

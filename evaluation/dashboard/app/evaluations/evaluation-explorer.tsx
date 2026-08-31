@@ -66,8 +66,18 @@ export function EvaluationExplorer({ tasks, projects }: { tasks: TaskRecord[]; p
                 <div><dt>Origin</dt><dd>{titleCase(task.origin)}</dd></div>
                 <div><dt>Hardware contract</dt><dd>{titleCase(task.hardware)}</dd></div>
                 <div><dt>Workflow</dt><dd>{task.workflow.map(titleCase).join(" → ")}</dd></div>
+                <div><dt>Matched evidence</dt><dd>{task.evaluationCells.length > 0 ? `${task.evaluationCells.length} retained cell${task.evaluationCells.length === 1 ? "" : "s"}` : "Not yet recorded in the v1 contract"}</dd></div>
               </dl>
+              {task.evaluationCells.slice(-1).map((cell) => (
+                <dl key={cell.id} aria-label="Latest matched evaluation evidence">
+                  <div><dt>Latest cell</dt><dd>{cell.stage} · {cell.attemptsPerArm} attempts per arm</dd></div>
+                  <div><dt>Agent / model</dt><dd>{cell.agent} · {cell.model}</dd></div>
+                  <div><dt>Environment</dt><dd>{titleCase(cell.environment)} · {titleCase(cell.hardware)}</dd></div>
+                  <div><dt>Recorded</dt><dd>{cell.recordedAt.slice(0, 10)} · max age {cell.maxAgeDays} days</dd></div>
+                </dl>
+              ))}
               <a href={`https://github.com/uxlfoundation/skills/tree/main/evaluation/harbor/tasks/${task.name}`}>Inspect task and verifier ↗</a>
+              {task.evaluationCells.slice(-1).map((cell) => <a key={cell.id} href={`https://github.com/uxlfoundation/skills/blob/main/${cell.source}`}>Inspect matched evidence ↗</a>)}
             </div>
           </details>
         ))}

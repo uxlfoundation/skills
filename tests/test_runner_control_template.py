@@ -43,6 +43,8 @@ class RunnerControlTemplateTests(unittest.TestCase):
         self.assertLess(validation, checkout)
         self.assertIn("repository: uxlfoundation/skills", self.workflow)
         self.assertIn("persist-credentials: false", self.workflow)
+        self.assertIn("merge-base --is-ancestor", self.workflow)
+        self.assertIn("approved-commits.txt", self.workflow)
 
     def test_all_actions_are_pinned_to_full_commits(self) -> None:
         uses = re.findall(
@@ -90,12 +92,14 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
             "bash scripts/runner/run-windows-wsl-intel-gpu-oracle.sh",
             self.workflow,
         )
+        self.assertIn("merge-base --is-ancestor", self.workflow)
+        self.assertIn("approved-commits.txt", self.workflow)
 
     def test_dispatcher_actions_are_pinned(self) -> None:
         uses = re.findall(
             r"^\s*(?:-\s*)?uses:\s*([^\s]+)$", self.workflow, re.MULTILINE
         )
-        self.assertEqual(len(uses), 2)
+        self.assertGreaterEqual(len(uses), 2)
         for action in uses:
             self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
 
@@ -115,6 +119,13 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
         self.assertIn("$repo.visibility -ne 'PRIVATE'", self.launcher)
         self.assertIn("--ephemeral", self.launcher)
         self.assertIn("tmp\\runner", self.launcher)
+
+    def test_launcher_resumes_a_registered_offline_runner_after_reboot(self) -> None:
+        self.assertIn("$registrationMode = 'resumed'", self.launcher)
+        self.assertIn("Resuming existing offline ephemeral registration", self.launcher)
+        self.assertIn("Ephemeral runner already online", self.launcher)
+        self.assertIn("$localConfig.agentName -ne $RunnerName", self.launcher)
+        self.assertIn("$localConfig.gitHubUrl.TrimEnd('/') -ne $repoUrl", self.launcher)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Evaluation priorities — 2026-08-25
 
-Update on 2026-08-26: priorities 3 and 4 are implemented. The LangGraph reference workload and oneDAL adapter retain a correctness-passing no-go result for the tiny corpus, while `sycl-onednn-threading-runtime-composition` now reproduces a pinned maintainer incident and passes its Harbor oracle. Priorities 1 and 2 have review packets ready but still require human owners and maintainer decisions.
+Update on 2026-08-29: priorities 3 and 4 are implemented. The LangGraph reference workload and oneDAL adapter retain a correctness-passing no-go result for the tiny corpus, while `sycl-onednn-threading-runtime-composition` reproduces a pinned maintainer incident and passes its Harbor oracle. Review packets now exist for all eight skills; priorities 1 and 2 still require human owners and maintainer decisions.
 
 This backlog ranks work by promotion value and evidence quality. It distinguishes work we can execute on GitHub-hosted infrastructure from work that first needs a maintainer incident, a target machine, or a human review.
 

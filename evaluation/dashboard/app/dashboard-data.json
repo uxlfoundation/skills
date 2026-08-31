@@ -55,6 +55,36 @@
       "maximum_suite_mean_regression": 0.03
     }
   },
+  "evaluationCells": [],
+  "targetQualifications": [
+    {
+      "id": "glow-windows-wsl-intel-gpu-884bc80bff12",
+      "recordedAt": "2026-08-25T12:12:34.640727Z",
+      "skill": "uxl-sycl-build-debug",
+      "task": "sycl-device-discovery-windows-wsl",
+      "taskCommit": "884bc80bff12c4a61adb5c7e2127338a55e6e1fc",
+      "laneId": "glow-windows-wsl-target-gpu",
+      "adapterId": "windows-wsl-intel-gpu",
+      "displayName": "Windows / WSL GPU",
+      "environment": "manual-gpu",
+      "hardwareClass": "target-gpu",
+      "vendor": "Intel",
+      "device": "Arc B580",
+      "interface": "WSL /dev/dxg",
+      "os": "Ubuntu 24.04 LTS on WSL2",
+      "architecture": "x86_64",
+      "control": "access-controlled",
+      "maxAgeDays": 90,
+      "workflowVisibility": "access-controlled",
+      "repositoryStatus": "matches",
+      "repositoryChanges": [],
+      "limitations": [
+        "Qualifies only the Windows/WSL /dev/dxg execution lane represented by this record.",
+        "Does not establish skill benefit, cross-vendor portability, or a performance claim."
+      ],
+      "source": "evaluation/harbor/results/qualifications/glow-windows-wsl-intel-gpu-884bc80bff12.json"
+    }
+  ],
   "skills": [
     {
       "name": "uxl-onednn",
@@ -114,7 +144,8 @@
           "covers": [
             "primitive-contracts",
             "primitive-or-graph"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onednn-convolution-fusion-parity",
@@ -136,7 +167,8 @@
             "primitive-contracts",
             "primitive-or-graph",
             "backend-and-parity-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onednn-extra-reorder-regression",
@@ -157,7 +189,8 @@
           "covers": [
             "framework-layout-boundaries",
             "benchdnn-and-reorders"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onednn-framework-blocked-layout",
@@ -176,7 +209,8 @@
             "primitive-contracts",
             "framework-layout-boundaries",
             "backend-and-parity-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onednn-backend-unimplemented-primitive",
@@ -197,7 +231,8 @@
           "covers": [
             "primitive-or-graph",
             "backend-and-parity-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onednn-benchdnn-no-ref-memory",
@@ -218,7 +253,8 @@
           "covers": [
             "backend-and-parity-triage",
             "benchdnn-and-reorders"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -279,7 +315,8 @@
             "backend-build-and-link",
             "runtime-backend-triage",
             "representative-math-validation"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onemath-packed-band-storage-fixtures",
@@ -300,7 +337,8 @@
           "covers": [
             "math-contracts",
             "representative-math-validation"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onemath-deprecated-header-include",
@@ -320,7 +358,8 @@
           "hardware": "generic-cpu",
           "covers": [
             "backend-build-and-link"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onemath-rng-device-event-chain",
@@ -342,7 +381,8 @@
             "math-contracts",
             "domain-and-dispatch",
             "runtime-backend-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onemath-third-party-backend-wrapper",
@@ -363,7 +403,8 @@
           "covers": [
             "backend-build-and-link",
             "runtime-backend-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onemath-dispatch-overhead-benchmark",
@@ -384,7 +425,8 @@
           "covers": [
             "math-contracts",
             "representative-math-validation"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -443,7 +485,8 @@
           "covers": [
             "analytics-parity",
             "interface-and-mode"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedal-table-orientation-regression",
@@ -465,7 +508,8 @@
             "analytics-parity",
             "tables-and-frameworks",
             "quality-regression-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedal-batch-online-distributed-choice",
@@ -483,7 +527,8 @@
           "covers": [
             "analytics-parity",
             "interface-and-mode"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedal-unavailable-gpu-path",
@@ -504,7 +549,8 @@
           "covers": [
             "interface-and-mode",
             "quality-regression-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedal-conversion-cost-benchmark",
@@ -525,7 +571,8 @@
           "covers": [
             "tables-and-frameworks",
             "conversion-aware-benchmarking"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedal-extra-trees-random-split",
@@ -546,7 +593,8 @@
           "covers": [
             "analytics-parity",
             "quality-regression-triage"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -608,7 +656,8 @@
           "covers": [
             "race-order-and-exception-safety",
             "parallel-pattern-selection"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-stable-compaction-scan",
@@ -629,7 +678,8 @@
           "covers": [
             "race-order-and-exception-safety",
             "parallel-pattern-selection"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-bounded-image-flow-graph",
@@ -647,7 +697,8 @@
           "covers": [
             "parallel-pattern-selection",
             "scheduler-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-nested-thread-pool-arena",
@@ -669,7 +720,8 @@
             "runtime-composition",
             "scheduler-triage",
             "grain-affinity-benchmarking"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-cancellation-exception-propagation",
@@ -690,7 +742,8 @@
           "covers": [
             "race-order-and-exception-safety",
             "runtime-composition"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-grainsize-affinity-regression",
@@ -708,7 +761,8 @@
           "covers": [
             "scheduler-triage",
             "grain-affinity-benchmarking"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onetbb-join-node-ordering",
@@ -730,7 +784,8 @@
             "race-order-and-exception-safety",
             "parallel-pattern-selection",
             "scheduler-triage"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -792,7 +847,8 @@
           "covers": [
             "algorithm-contracts",
             "execution-policy-choice"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedpl-missing-device-synchronization",
@@ -811,7 +867,8 @@
             "algorithm-contracts",
             "queue-data-and-iterators",
             "device-result-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedpl-iterator-category-failure",
@@ -832,7 +889,8 @@
           "covers": [
             "queue-data-and-iterators",
             "device-result-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedpl-stable-ordering-contract",
@@ -853,7 +911,8 @@
           "covers": [
             "algorithm-contracts",
             "execution-policy-choice"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedpl-move-only-numeric-accumulator",
@@ -875,7 +934,8 @@
             "algorithm-contracts",
             "execution-policy-choice",
             "queue-data-and-iterators"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "onedpl-transfer-inclusive-benchmark",
@@ -896,7 +956,8 @@
           "covers": [
             "algorithm-contracts",
             "transfer-aware-benchmarking"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -958,7 +1019,8 @@
           "covers": [
             "collective-contracts",
             "api-and-collective-choice"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-divergent-collective-sequence",
@@ -976,7 +1038,8 @@
           "covers": [
             "collective-contracts",
             "distributed-hang-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-datatype-count-mismatch",
@@ -994,7 +1057,8 @@
           "covers": [
             "collective-contracts",
             "distributed-hang-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-cpp-or-nccl-like-api",
@@ -1012,7 +1076,8 @@
           "covers": [
             "api-and-collective-choice",
             "launcher-plugin-framework"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-zero-count-topo-alltoallv",
@@ -1031,7 +1096,8 @@
           "covers": [
             "collective-contracts",
             "distributed-hang-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-plugin-rank-visibility",
@@ -1052,7 +1118,8 @@
           "covers": [
             "launcher-plugin-framework",
             "distributed-hang-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "oneccl-worker-affinity-regression",
@@ -1073,7 +1140,8 @@
           "covers": [
             "launcher-plugin-framework",
             "topology-worker-benchmarking"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -1135,7 +1203,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-device-discovery-windows-wsl",
@@ -1156,7 +1225,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-cmake-compiler-cache",
@@ -1175,7 +1245,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-compile-time-backend-link",
@@ -1197,7 +1268,8 @@
             "reproducible-smoke-contract",
             "failure-phase-classification",
             "toolchain-package-runtime"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-loader-plugin-mismatch",
@@ -1216,7 +1288,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-selector-silent-cpu-fallback",
@@ -1238,7 +1311,8 @@
             "reproducible-smoke-contract",
             "evidence-driven-triage",
             "build-runtime-cost-boundaries"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-transitive-target-link-contract",
@@ -1261,7 +1335,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "sycl-onednn-threading-runtime-composition",
@@ -1284,7 +1359,8 @@
             "failure-phase-classification",
             "toolchain-package-runtime",
             "evidence-driven-triage"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     },
@@ -1344,7 +1420,8 @@
             "correctness-gated-measurement",
             "benchmark-scope-selection",
             "invalid-claim-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "performance-benchmark-report-repair",
@@ -1365,7 +1442,8 @@
           "covers": [
             "benchmark-scope-selection",
             "repeatable-performance-evidence"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "performance-floating-reduction-tolerance",
@@ -1386,7 +1464,8 @@
           "covers": [
             "correctness-gated-measurement",
             "invalid-claim-triage"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "performance-transfer-scope-comparison",
@@ -1408,7 +1487,8 @@
             "benchmark-scope-selection",
             "library-and-hardware-context",
             "repeatable-performance-evidence"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "performance-cgroup-concurrency-quota",
@@ -1430,7 +1510,8 @@
             "library-and-hardware-context",
             "invalid-claim-triage",
             "repeatable-performance-evidence"
-          ]
+          ],
+          "evaluationCells": []
         },
         {
           "name": "performance-profile-after-regression",
@@ -1452,7 +1533,8 @@
             "library-and-hardware-context",
             "invalid-claim-triage",
             "repeatable-performance-evidence"
-          ]
+          ],
+          "evaluationCells": []
         }
       ]
     }

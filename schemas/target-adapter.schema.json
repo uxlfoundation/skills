@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uxlfoundation.org/schemas/uxl-target-adapter.schema.json",
+  "title": "UXL Specialized Target Adapter",
+  "type": "object",
+  "required": ["schema_version", "adapter_id", "task", "runner", "probes", "harbor"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "adapter_id": { "$ref": "#/$defs/name" },
+    "task": {
+      "type": "object",
+      "required": ["skill", "name", "hardware_class"],
+      "properties": {
+        "skill": { "$ref": "#/$defs/name" },
+        "name": { "$ref": "#/$defs/name" },
+        "hardware_class": { "$ref": "#/$defs/hardware" }
+      },
+      "additionalProperties": false
+    },
+    "runner": {
+      "type": "object",
+      "required": ["required_labels"],
+      "properties": {
+        "required_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/name" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "command", "timeout_seconds", "required_patterns", "publish_output"],
+        "properties": {
+          "id": { "$ref": "#/$defs/name" },
+          "command": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 600 },
+          "required_patterns": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "publish_output": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "harbor": {
+      "type": "object",
+      "required": ["command", "timeout_seconds", "environment"],
+      "properties": {
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+        "environment": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+          "additionalProperties": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "hardware": {
+      "enum": ["target-cpu", "target-gpu", "target-device", "target-distributed"]
+    }
+  }
+}

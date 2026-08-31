@@ -137,9 +137,9 @@ export default function Home() {
           <p>Most evaluations run on hosted infrastructure. When a task genuinely depends on a device, backend, topology, or driver, any approved machine can plug into the same evidence contract.</p>
         </div>
         <div className="platform-preview-card">
-          <StatusPill tone="good">Adapter contract proven</StatusPill>
-          <strong>1 specialized runner adapter</strong>
-          <p>The first GPU proof of concept qualified the dispatch and evidence path. It does not establish vendor preference or skill benefit.</p>
+          <StatusPill tone="good">Qualification evidence retained</StatusPill>
+          <strong>{portfolio.targetQualifications} specialized lane record{portfolio.targetQualifications === 1 ? "" : "s"}</strong>
+          <p>Each retained record is tied to one task, revision, lane, and expiry policy. It does not establish vendor preference or skill benefit.</p>
           <a href="platforms/">Review the neutral platform matrix →</a>
         </div>
       </section>
