@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneDPL. It helps coding agents choose e
 Start here:
 
 - [oneDPL skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-onedpl/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onedpl-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onedpl-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-onedpl)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneDPL or its hardware support.

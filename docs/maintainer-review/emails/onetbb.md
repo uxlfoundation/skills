@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneTBB. It helps coding agents choose p
 Start here:
 
 - [oneTBB skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-onetbb/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onetbb-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onetbb-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-onetbb)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneTBB or its hardware support.

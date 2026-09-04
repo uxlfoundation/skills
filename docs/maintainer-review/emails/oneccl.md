@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneCCL. It helps coding agents choose c
 Start here:
 
 - [oneCCL skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-oneccl/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-oneccl-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-oneccl-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-oneccl)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneCCL or its hardware support.

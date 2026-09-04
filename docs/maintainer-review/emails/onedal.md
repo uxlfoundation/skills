@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneDAL. It helps coding agents choose i
 Start here:
 
 - [oneDAL skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-onedal/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onedal-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onedal-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-onedal)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneDAL or its hardware support.
