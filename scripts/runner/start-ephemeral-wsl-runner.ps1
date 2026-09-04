@@ -51,16 +51,24 @@ if ($configured) {
         throw "Local runner repository $($localConfig.gitHubUrl) does not match requested repository $repoUrl."
     }
     if (-not $match) {
-        throw "Local runner configuration exists at $RunnerRoot but GitHub has no registration named $RunnerName. Remove the stale configuration with a fresh removal token before retrying."
-    }
-    if ($match.status -eq 'online') {
+        Write-Output "Clearing the completed ephemeral registration before creating the next one: $RunnerName"
+        & wsl.exe -d $WslDistribution --cd $RunnerRoot --exec ./config.sh remove --local
+        if ($LASTEXITCODE -ne 0) {
+            throw "Could not clear the completed local registration at $RunnerRoot."
+        }
+        $configured = $false
+        $registrationMode = 'renewed-after-ephemeral-job'
+    } elseif ($match.status -eq 'online') {
         Write-Output "Ephemeral runner already online: $RunnerName"
         Write-Output "Repository: $repoUrl"
         exit 0
+    } else {
+        $registrationMode = 'resumed'
+        Write-Output "Resuming existing offline ephemeral registration: $RunnerName"
     }
-    $registrationMode = 'resumed'
-    Write-Output "Resuming existing offline ephemeral registration: $RunnerName"
-} else {
+}
+
+if (-not $configured) {
     if ($match) {
         throw "GitHub already has a runner named $RunnerName but $RunnerRoot is not configured. Remove the stale GitHub registration before retrying."
     }

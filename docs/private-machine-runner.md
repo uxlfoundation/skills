@@ -29,7 +29,7 @@ Start a one-job runner from a public checkout with:
   -Labels 'project,gpu,windows-wsl,personal-lab'
 ```
 
-The launcher refuses public repositories, requests a short-lived registration token through GitHub CLI, starts the WSL runner in a hidden process, and confirms that GitHub reports it online. After a host reboot, rerun the same command: if the local ephemeral configuration and its offline GitHub registration still agree, the launcher resumes them without requesting a new registration or creating a duplicate. It writes only non-secret local state under `tmp/runner/`. The Actions runner software must already be installed at `/home/uxlrunner/uxl-runner`, or the path must be supplied with `-RunnerRoot`.
+The launcher refuses public repositories, requests a short-lived registration token through GitHub CLI, starts the WSL runner in a hidden process, and confirms that GitHub reports it online. After a host reboot, rerun the same command: if the local ephemeral configuration and its offline GitHub registration still agree, the launcher resumes them. After a completed one-job runner has deregistered from GitHub, the launcher clears that matching local registration and creates the next one. It writes only non-secret local state under `tmp/runner/`. The Actions runner software must already be installed at `/home/uxlrunner/uxl-runner`, or the path must be supplied with `-RunnerRoot`.
 
 The private workflow should stay small:
 
