@@ -6,6 +6,7 @@
 - Owner project: oneDPL
 - Target source of truth: `uxlfoundation/oneDPL` after maintainer review
 - Maintainer review: needed
+- Last source verification: 2026-09-04
 
 ## Purpose
 

@@ -23,7 +23,7 @@ The initial ask is a 30–45 minute accuracy and source-refresh review plus a de
 - Public card: `skill-cards/uxl-onemath.md`
 - Harbor matrix: `evaluation/harbor/suites.json` (`uxl-onemath`)
 
-Coverage state: 3 of 6 declared tasks implemented; 1 task retains measured headroom; 2 implemented tasks are sourced from maintainer incidents. Planned coverage includes RNG event chaining, third-party backend integration, and dispatch-overhead measurement. Sources were last checked on 2026-06-26 and need a current release check before promotion.
+Coverage state: 3 of 6 declared tasks implemented; 1 task retains measured headroom; 2 implemented tasks are sourced from maintainer incidents. Planned coverage includes RNG event chaining, third-party backend integration, and dispatch-overhead measurement. Sources were rechecked on 2026-09-04; release-specific backend claims still require an upstream check before use.
 
 ## Suggested reviewers
 

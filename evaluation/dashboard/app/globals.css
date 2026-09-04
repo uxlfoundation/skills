@@ -359,6 +359,7 @@ a.platform-matrix-row:hover { background: rgba(255,255,255,.04); }
 footer { min-height: 132px; padding: 34px clamp(28px, 7vw, 112px); display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; background: var(--paper); border-top: 1px solid var(--line); }
 footer .brand img { width: 27px; height: 29px; }
 footer p { color: var(--muted); font-size: 11px; text-align: center; }
+footer p a { color: var(--blue); border-bottom: 1px solid var(--blue); }
 footer > a { text-align: right; color: var(--blue); font-size: 12px; }
 
 @media (max-width: 1100px) {

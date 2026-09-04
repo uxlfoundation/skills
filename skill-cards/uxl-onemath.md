@@ -6,7 +6,7 @@
 - Owner project: oneMath
 - Target source of truth: `uxlfoundation/oneMath` after maintainer review
 - Maintainer review: needed
-- Last source verification: 2026-06-26
+- Last source verification: 2026-09-04
 
 ## Purpose
 
@@ -25,7 +25,7 @@ Guide agents through oneMath domain selection, runtime versus compile-time dispa
 - Does not mirror full backend support matrices.
 - Needs focused maintainer input for backend-specific gotchas.
 - Performance guidance relies on cross-project validation skill.
-- Official docs still need to be re-checked for release-specific backend and compiler claims.
+- Release-specific backend and compiler claims still require an upstream check at answer time.
 
 ## Evidence
 

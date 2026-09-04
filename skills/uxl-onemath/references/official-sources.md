@@ -2,8 +2,8 @@
 
 Use these first when answering oneMath questions.
 
-Last verified: 2026-06-26
-Verified by: Codex local catalog hardening pass
+Last verified: 2026-09-04
+Verified by: Codex maintainer-outreach refresh against current upstream documentation
 
 - oneMath GitHub: https://github.com/uxlfoundation/oneMath
 - oneMath documentation: https://uxlfoundation.github.io/oneMath/
@@ -15,6 +15,8 @@ Verified by: Codex local catalog hardening pass
 - Integrating a third-party library: https://uxlfoundation.github.io/oneMath/create_new_backend.html
 - Compatibility-header incident: https://github.com/uxlfoundation/oneMath/issues/623
 - Compatibility-header fix: https://github.com/uxlfoundation/oneMath/pull/625
+
+The September 2026 refresh confirmed that the upstream project still distinguishes runtime and compile-time dispatch, documents DPC++ and AdaptiveCpp builds, and publishes backend/platform support as a current matrix. The skill therefore keeps support claims behind an explicit upstream recheck instead of embedding that matrix.
 
 ## Refresh Rule
 

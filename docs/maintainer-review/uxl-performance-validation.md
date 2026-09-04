@@ -23,7 +23,7 @@ The initial ask is a 45-minute review of the benchmark contract and ownership mo
 - Public card: `skill-cards/uxl-performance-validation.md`
 - Harbor matrix: `evaluation/harbor/suites.json` (`uxl-performance-validation`)
 
-Coverage state: 4 of 6 declared tasks implemented; no current task retains measured skill headroom, so the suite does not yet prove quality lift. One executable task is sourced from a oneTBB maintainer incident. Planned tasks need transfer-inclusive and profiler-after-regression evidence on declared target lanes.
+Coverage state: 4 of 6 declared tasks implemented; no current task retains measured skill headroom, so the suite does not yet prove quality lift. One executable task is sourced from a oneTBB maintainer incident. Planned tasks need transfer-inclusive and profiler-after-regression evidence on declared target lanes. Official sources were rechecked on 2026-09-04.
 
 ## Suggested reviewers
 

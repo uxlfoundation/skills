@@ -22,7 +22,7 @@ The initial ask is a 30–45 minute accuracy review and a decision on periodic o
 - Public card: `skill-cards/uxl-onedpl.md`
 - Harbor matrix: `evaluation/harbor/suites.json` (`uxl-onedpl`)
 
-Coverage state: 4 of 6 declared tasks implemented; 1 discriminating task retains measured headroom; 2 live tasks are sourced from maintainer incidents. Planned coverage still needs a host-versus-device selection task and a transfer-inclusive benchmark. Sources were last checked on 2026-08-12 and should be refreshed during review.
+Coverage state: 4 of 6 declared tasks implemented; 1 discriminating task retains measured headroom; 2 live tasks are sourced from maintainer incidents. Planned coverage still needs a host-versus-device selection task and a transfer-inclusive benchmark. Sources were rechecked on 2026-09-04; maintainers should still validate current policy and backend nuances.
 
 ## Suggested reviewers
 

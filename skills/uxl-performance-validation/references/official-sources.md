@@ -2,6 +2,9 @@
 
 Use project-specific benchmark and validation docs first. Common starting points:
 
+Last verified: 2026-09-04
+Verified by: Codex maintainer-outreach refresh against current project-owned benchmark and contribution documentation
+
 - oneDNN `benchdnn` docs: https://github.com/uxlfoundation/oneDNN/tree/main/tests/benchdnn/doc
 - oneMath tests and examples: https://github.com/uxlfoundation/oneMath/tree/develop/tests
 - oneDAL docs: https://uxlfoundation.github.io/oneDAL/index.html

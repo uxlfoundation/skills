@@ -6,6 +6,7 @@
 - Owner project: UXL cross-project
 - Target source of truth: central catalog
 - Maintainer review: needed
+- Last source verification: 2026-09-04
 
 ## Purpose
 

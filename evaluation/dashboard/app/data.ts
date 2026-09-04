@@ -148,3 +148,7 @@ export function sourceFreshness(skill: Skill) {
 export function githubSkillUrl(skill: Skill) {
   return `https://github.com/uxlfoundation/skills/blob/main/${skill.skillCard}`;
 }
+
+export function maintainerDeckUrl(skill: Skill, format: "pdf" | "pptx") {
+  return `../decks/${skill.name}-maintainer-briefing.${format}`;
+}

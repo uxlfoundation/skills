@@ -56,7 +56,10 @@ export function SiteFooter({ prefix = "" }: { prefix?: string }) {
         <img src={`${prefix}uxl-foundation-icon-color.svg`} alt="" aria-hidden="true" />
         <span className="brand-name">UXL Skills Evaluator</span>
       </div>
-      <p>Public portfolio scorecard. Raw trajectories and private-machine evidence remain access-controlled.</p>
+      <p>
+        Public portfolio scorecard. <a href={`${prefix}decks/uxl-skills-maintainer-overview.pdf`}>Maintainer overview</a>
+        {" · "}<a href={`${prefix}decks/uxl-specialized-target-onboarding.pdf`}>Target onboarding</a>
+      </p>
       <a href="#top">Back to top ↑</a>
     </footer>
   );
