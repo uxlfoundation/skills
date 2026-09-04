@@ -23,6 +23,8 @@ This repository is the central distribution catalog for UXL skills. Skill status
 
 The catalog manifest is [skills.yaml](skills.yaml). Human-readable review records live in [skill-cards](skill-cards).
 
+For project outreach, use the [current status brief](docs/project-status-2026-09-04.md) and the [maintainer review hub](docs/maintainer-review/README.md), which includes UXL-branded decks and project-specific email drafts.
+
 ## Proposed Placement Model
 
 Use this repo as an incubator first. Once project maintainers review the skill contents, copy each project skill into the matching repository under `skills/<skill-name>/`, then mirror it back here with provenance in release metadata.

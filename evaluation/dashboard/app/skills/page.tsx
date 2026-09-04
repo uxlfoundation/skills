@@ -1,5 +1,5 @@
 import { PageIntro, SiteFooter, SiteHeader, StatusPill } from "../components";
-import { capabilityCoverage, githubSkillUrl, skillStats, skills, sourceFreshness, titleCase } from "../data";
+import { capabilityCoverage, githubSkillUrl, maintainerDeckUrl, skillStats, skills, sourceFreshness, titleCase } from "../data";
 
 export const dynamic = "force-static";
 
@@ -54,6 +54,8 @@ export default function SkillsPage() {
                 </dl>
                 <div className="skill-links">
                   <a href={githubSkillUrl(skill)}>Read skill card ↗</a>
+                  <a href={maintainerDeckUrl(skill, "pdf")}>Maintainer deck (PDF) ↓</a>
+                  <a href={maintainerDeckUrl(skill, "pptx")}>Editable deck (PowerPoint) ↓</a>
                   <a href={skill.ownerRepo}>Owning project ↗</a>
                 </div>
               </div>

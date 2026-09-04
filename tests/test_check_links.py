@@ -26,6 +26,27 @@ class LinkCheckTests(unittest.TestCase):
     def test_checks_non_loopback_http_urls(self) -> None:
         self.assertTrue(check_links.should_check_external("https://github.com/example/project"))
 
+    def test_validates_committed_pages_deck_without_network(self) -> None:
+        handled, error = check_links.check_published_asset(
+            "https://uxlfoundation.github.io/skills/decks/manifest.json"
+        )
+        self.assertTrue(handled)
+        self.assertIsNone(error)
+
+    def test_rejects_missing_pages_deck(self) -> None:
+        handled, error = check_links.check_published_asset(
+            "https://uxlfoundation.github.io/skills/decks/not-published.pdf"
+        )
+        self.assertTrue(handled)
+        self.assertIn("missing committed Pages asset", error or "")
+
+    def test_does_not_claim_unrelated_pages_url(self) -> None:
+        handled, error = check_links.check_published_asset(
+            "https://uxlfoundation.github.io/skills/methodology/"
+        )
+        self.assertFalse(handled)
+        self.assertIsNone(error)
+
     def test_ignores_links_and_cpp_lambdas_inside_fenced_code(self) -> None:
         content = """\
 [real](https://example.com/real)

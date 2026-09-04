@@ -1,0 +1,15 @@
+{
+  "generatedFor": "2026-09-04",
+  "decks": [
+    "uxl-skills-maintainer-overview.pptx",
+    "uxl-specialized-target-onboarding.pptx",
+    "uxl-onednn-maintainer-briefing.pptx",
+    "uxl-onemath-maintainer-briefing.pptx",
+    "uxl-onedal-maintainer-briefing.pptx",
+    "uxl-onetbb-maintainer-briefing.pptx",
+    "uxl-onedpl-maintainer-briefing.pptx",
+    "uxl-oneccl-maintainer-briefing.pptx",
+    "uxl-sycl-build-debug-maintainer-briefing.pptx",
+    "uxl-performance-validation-maintainer-briefing.pptx"
+  ]
+}

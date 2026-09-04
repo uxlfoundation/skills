@@ -14,6 +14,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PAGES_DECK_PREFIX = "/skills/decks/"
+PAGES_DECK_ROOT = ROOT / "evaluation" / "dashboard" / "public" / "decks"
 URL_RE = re.compile(r"https?://[^\s)>\"]+")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
@@ -102,6 +104,22 @@ def check_local(path: Path, link: str) -> str | None:
     return None
 
 
+def check_published_asset(url: str) -> tuple[bool, str | None]:
+    """Validate committed GitHub Pages deck assets before their first deployment."""
+    parsed = urllib.parse.urlparse(url)
+    if parsed.hostname != "uxlfoundation.github.io" or not parsed.path.startswith(PAGES_DECK_PREFIX):
+        return False, None
+    relative_path = urllib.parse.unquote(parsed.path.removeprefix(PAGES_DECK_PREFIX))
+    target = (PAGES_DECK_ROOT / relative_path).resolve()
+    try:
+        target.relative_to(PAGES_DECK_ROOT.resolve())
+    except ValueError:
+        return True, f"{url}: published asset escapes the deck directory"
+    if not target.is_file():
+        return True, f"{url}: missing committed Pages asset"
+    return True, None
+
+
 def is_transient_network_error(exc: Exception) -> bool:
     text = f"{type(exc).__name__}: {exc}".lower()
     reason = getattr(exc, "reason", None)
@@ -158,7 +176,11 @@ def main(argv: list[str]) -> int:
         for link in extract_links(path):
             parsed = urllib.parse.urlparse(link)
             if parsed.scheme in {"http", "https"} and should_check_external(link):
-                external_links.add(link)
+                handled, error = check_published_asset(link)
+                if error:
+                    errors.append(error)
+                elif not handled:
+                    external_links.add(link)
             else:
                 error = check_local(path, link)
                 if error:
