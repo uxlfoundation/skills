@@ -127,6 +127,11 @@ class WindowsWslRunnerControlTemplateTests(unittest.TestCase):
         self.assertIn("$localConfig.agentName -ne $RunnerName", self.launcher)
         self.assertIn("$localConfig.gitHubUrl.TrimEnd('/') -ne $repoUrl", self.launcher)
 
+    def test_launcher_renews_a_completed_ephemeral_registration(self) -> None:
+        self.assertIn("./config.sh remove --local", self.launcher)
+        self.assertIn("$registrationMode = 'renewed-after-ephemeral-job'", self.launcher)
+        self.assertIn("Clearing the completed ephemeral registration", self.launcher)
+
 
 if __name__ == "__main__":
     unittest.main()
