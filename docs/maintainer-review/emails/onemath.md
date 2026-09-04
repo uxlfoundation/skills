@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneMath. It helps coding agents choose 
 Start here:
 
 - [oneMath skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-onemath/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onemath-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onemath-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-onemath)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneMath or its hardware support.

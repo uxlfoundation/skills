@@ -40,13 +40,15 @@ const ids = {
   },
 };
 
+const projectDeckSourceSlides = [1, 3, 4, 5, 6, 7];
+const projectDeckSourceIndexes = projectDeckSourceSlides.map((slideNumber) => slideNumber - 1);
+
 const crossProjectDecks = [
   {
     slug: "uxl-sycl-build-debug-maintainer-briefing",
     skill: "uxl-sycl-build-debug",
     slides: [
       ["UXL SKILLS EVALUATOR\nSYCL Build & Debug Skill", "Portable build and runtime triage across UXL projects\nSeptember 2026 · 8 of 8 evaluation tasks implemented"],
-      ["Why this is useful across UXL projects", "\u00A0Shorten recurring triage — Agents classify configure, compile, link, loader, and device-selection failures before proposing fixes.\n\u00A0Capture the environment once — OS, shell, compiler, CMake, target, runtime, device, and first error travel with the report.\n\u00A0Keep hypotheses separate — Compiler, package, backend, loader, device, and threading-runtime failures are tested independently.\n\u00A0Route domain questions correctly — General SYCL mechanics stay shared; exact library behavior returns to its owning project."],
       ["What the skill tells an agent today", "\u00A0Classify the failing phase — Configure, compile, link, runtime load, or device selection.\n\u00A0Record a reproducible environment — Include toolchain versions, target, commands, first error, and a safe local probe.\n\u00A0Prove the selected device — Enumerate it and run a minimal workload before blaming a library.\n\u00A0Check compile-time and runtime paths separately — CMake cache, link targets, loader paths, and plugins can fail independently.\n\u00A0Verify current support upstream — The skill does not embed a permanent backend matrix."],
       ["Evaluation inventory: all 8 tasks implemented", "\u00A0Device and runtime — Windows/WSL discovery, loader/plugin mismatch, and silent CPU fallback.\n\u00A0Build contracts — Compiler cache, backend link, compile-time backend selection, and transitive target linking.\n\u00A0Runtime composition — oneDNN plus threading-runtime integration.\n\u00A0What remains — Maintainer ownership and matched evidence across representative toolchains, not more task-count filling."],
       ["How we chose the content", "\u00A0Project-owned sources — SYCL toolchain docs plus UXL library build, example, test, and incident evidence.\n\u00A0Failure-shaped coverage — Each task starts at a boundary maintainers repeatedly diagnose.\n\u00A0Portable checks — Verifiers test observed build/runtime behavior rather than vendor names.\n\u00A0Honest limits — Specialized hardware enters only when hosted systems cannot reproduce the task faithfully."],
@@ -59,7 +61,6 @@ const crossProjectDecks = [
     skill: "uxl-performance-validation",
     slides: [
       ["UXL SKILLS EVALUATOR\nPerformance Validation Skill", "Correctness-first benchmark and claim discipline across UXL projects\nSeptember 2026 · 4 of 6 evaluation tasks implemented"],
-      ["Why this is useful across UXL projects", "\u00A0Stop premature speedup claims — Correctness and a valid baseline must pass before performance is discussed.\n\u00A0Make timing comparable — Setup, transfer, warmup, steady state, synchronization, topology, and resource limits are declared.\n\u00A0Handle numerical reality — Tolerances and non-associative reductions are part of the test contract.\n\u00A0Keep claims bounded — Results describe the measured software, model, harness, toolchain, and hardware cell—not a universal score."],
       ["What the skill tells an agent today", "\u00A0Write the user-visible correctness contract first — Outputs, metrics, tolerances, and failure criteria.\n\u00A0Choose the baseline and scope — State exactly which work each timing includes.\n\u00A0Warm up and repeat — Report distribution and variance, not a single best run.\n\u00A0Synchronize asynchronous work — Host timers stop only after the measured operation completes.\n\u00A0Profile after a validated regression — Profilers explain a measured problem; they do not create one."],
       ["Evaluation inventory: 4 implemented, 2 target gaps", "\u00A0Implemented — Tiny async GPU claim; benchmark report repair; floating-reduction tolerance; cgroup concurrency quota.\n\u00A0Incident evidence — The concurrency task is grounded in a oneTBB maintainer incident.\n\u00A0Planned — Transfer-inclusive comparison and profile-after-regression on declared target lanes.\n\u00A0What this proves — Current tasks test evidence discipline; none yet retains measured skill headroom for promotion."],
       ["How we chose the content", "\u00A0Project-native benchmarks first — Each library's tests and benchmark tools remain authoritative.\n\u00A0Cross-project invariants — Correctness, baseline, scope, synchronization, variance, provenance, and claim language recur everywhere.\n\u00A0Adversarial scenarios — Tasks target tempting but invalid conclusions, not just command recall.\n\u00A0Visible gaps — Target-dependent measurement remains planned until qualified lanes and authentic regressions exist."],
@@ -75,6 +76,16 @@ function replaceText(presentation, id, oldText, newText) {
 
 function setShapeText(presentation, id, text) {
   presentation.resolve(id).text = text;
+}
+
+function renumberSlideFooters(presentation) {
+  for (const [index, slide] of presentation.slides.items.entries()) {
+    if (index === 0) continue;
+    for (const shape of slide.shapes.items) {
+      const current = shape.text?.toString?.() ?? "";
+      if (/^\s*\d+\s*$/.test(current)) shape.text.replace(current, String(index + 1));
+    }
+  }
 }
 
 async function replaceImage(presentation, id, imagePath, alt) {
@@ -104,7 +115,7 @@ async function importDeck(templatePath) {
   return PresentationFile.importPptx(await FileBlob.load(templatePath));
 }
 
-async function finalizeDeck(presentation, templatePath, slug, slideCount) {
+async function finalizeDeck(presentation, templatePath, slug, slideCount, requiredTemplateReferenceSlides = Array.from({ length: slideCount }, (_, index) => index + 1)) {
   const stageDir = path.join(stagingRoot, slug);
   const finalPath = path.join(outputDir, `${slug}.pptx`);
   const candidatePath = path.join(stageDir, "candidate.pptx");
@@ -132,7 +143,7 @@ async function finalizeDeck(presentation, templatePath, slug, slideCount) {
     requiredNativeTableOwnerSlides: [],
     requiredNativeChartOwnerSlides: [],
     sourceTemplatePath: templatePath,
-    requiredTemplateReferenceSlides: Array.from({ length: slideCount }, (_, index) => index + 1),
+    requiredTemplateReferenceSlides,
     minimumTemplateCoverageRatio: 1,
     fontPolicy: {
       basis: "reference",
@@ -156,16 +167,19 @@ async function buildExistingProjectDeck(slug) {
   replaceText(presentation, ids.project.titles[0], `${displayName} Skills`, `${displayName} Skill`);
   const subtitle = presentation.resolve(ids.project.bodies[0]);
   subtitle.text.replace("Maintainer briefing ·", "September 2026 ·");
-  return finalizeDeck(presentation, templatePath, slug, 7);
+  presentation.slides.remove(1);
+  renumberSlideFooters(presentation);
+  return finalizeDeck(presentation, templatePath, slug, 6, projectDeckSourceSlides);
 }
 
 async function buildCrossProjectDeck(deck) {
   const templatePath = path.join(sourceDir, "uxl-onednn-maintainer-briefing-template.pptx");
   const presentation = await importDeck(templatePath);
   for (let index = 0; index < deck.slides.length; index += 1) {
-    setShapeText(presentation, ids.project.titles[index], deck.slides[index][0]);
-    setShapeText(presentation, ids.project.bodies[index], deck.slides[index][1]);
-    presentation.resolve(ids.project.notes[index]).setText([
+    const sourceIndex = projectDeckSourceIndexes[index];
+    setShapeText(presentation, ids.project.titles[sourceIndex], deck.slides[index][0]);
+    setShapeText(presentation, ids.project.bodies[sourceIndex], deck.slides[index][1]);
+    presentation.resolve(ids.project.notes[sourceIndex]).setText([
       "[Sources]",
       `- https://github.com/uxlfoundation/skills/tree/main/skills/${deck.skill}`,
       `- https://github.com/uxlfoundation/skills/blob/main/skill-cards/${deck.skill}.md`,
@@ -177,7 +191,9 @@ async function buildCrossProjectDeck(deck) {
       `Speaker cue: ${deck.slides[index][0].replace(/\n/g, ": ")}`,
     ].join("\n"));
   }
-  return finalizeDeck(presentation, templatePath, deck.slug, 7);
+  presentation.slides.remove(1);
+  renumberSlideFooters(presentation);
+  return finalizeDeck(presentation, templatePath, deck.slug, 6, projectDeckSourceSlides);
 }
 
 async function buildOverview() {

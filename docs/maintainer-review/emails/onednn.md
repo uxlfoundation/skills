@@ -9,7 +9,7 @@ I built a first-pass UXL agent skill for oneDNN. It gives coding agents project-
 Start here:
 
 - [oneDNN skill](https://github.com/uxlfoundation/skills/blob/main/skills/uxl-onednn/SKILL.md)
-- [Seven-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onednn-maintainer-briefing.pdf)
+- [Six-slide maintainer briefing](https://uxlfoundation.github.io/skills/decks/uxl-onednn-maintainer-briefing.pdf)
 - [Dashboard detail](https://uxlfoundation.github.io/skills/skills/#uxl-onednn)
 
 The dashboard reports the health and coverage of the skill and its Harbor evaluations; it is not a score of oneDNN or its hardware support.
