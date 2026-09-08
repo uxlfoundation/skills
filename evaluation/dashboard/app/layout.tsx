@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: siteUrl },
+  icons: {
+    icon: [{ url: `${siteUrl}/uxl-foundation-icon-color.svg`, type: "image/svg+xml" }],
+  },
   openGraph: {
     title,
     description,

@@ -11,6 +11,36 @@ export default function SkillsPage() {
         Each project view connects maturity, source freshness, capability coverage, evaluation evidence, and the next promotion action.
       </PageIntro>
 
+      <section className="maintainer-materials section-pad" aria-labelledby="maintainer-materials-title">
+        <div className="materials-heading">
+          <div>
+            <p className="section-label">Maintainer materials</p>
+            <h2 id="maintainer-materials-title">Start here.</h2>
+          </div>
+          <p>Review the portfolio overview first. Use the target guide when an evaluation needs project-owned hardware outside hosted CI.</p>
+        </div>
+        <div className="materials-grid">
+          <article className="material-card primary">
+            <span>01 / Portfolio</span>
+            <h3>UXL Skills maintainer overview</h3>
+            <p>Current skills, evaluation method, architecture, dashboards, and maintainer ownership.</p>
+            <div className="material-links">
+              <a href="../decks/uxl-skills-maintainer-overview.pdf">Open PDF ↓</a>
+              <a href="../decks/uxl-skills-maintainer-overview.pptx">Download PowerPoint ↓</a>
+            </div>
+          </article>
+          <article className="material-card">
+            <span>02 / Infrastructure</span>
+            <h3>Specialized target onboarding</h3>
+            <p>Exact steps for attaching a private or project-owned machine while keeping access and evidence controlled.</p>
+            <div className="material-links">
+              <a href="../decks/uxl-specialized-target-onboarding.pdf">Open PDF ↓</a>
+              <a href="../decks/uxl-specialized-target-onboarding.pptx">Download PowerPoint ↓</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section className="skill-index section-pad" aria-label="Skill index">
         {skills.map((skill) => {
           const stats = skillStats(skill);

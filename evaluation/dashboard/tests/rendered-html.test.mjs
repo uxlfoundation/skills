@@ -83,6 +83,11 @@ test("exports skill, evaluation, platform, and methodology drill-downs", async (
   ]);
 
   assert.match(skillHtml, /Eight accountable portfolios/);
+  assert.match(skillHtml, /Maintainer materials/);
+  assert.match(skillHtml, /uxl-skills-maintainer-overview\.pdf/);
+  assert.match(skillHtml, /uxl-skills-maintainer-overview\.pptx/);
+  assert.match(skillHtml, /uxl-specialized-target-onboarding\.pdf/);
+  assert.match(skillHtml, /uxl-specialized-target-onboarding\.pptx/);
   assert.match(skillHtml, /oneDNN/);
   assert.match(skillHtml, /oneCCL/);
   assert.match(skillHtml, /maintainer review needed/);
@@ -120,6 +125,7 @@ test("keeps generated data, source, publishing, and privacy contracts reviewable
   assert.match(nextConfig, /output: "export"/);
   assert.match(nextConfig, /assetPrefix: publishingToGitHubPages \? "\/skills"/);
   assert.match(layout, /Vendor-neutral portfolio health/);
+  assert.match(layout, /icons:[\s\S]*uxl-foundation-icon-color\.svg/);
   assert.match(page, /capabilityCoverage/);
   assert.match(readme, /Raw Harbor job records.*remain in the private/s);
   assert.match(readme, /GitHub Pages/);
