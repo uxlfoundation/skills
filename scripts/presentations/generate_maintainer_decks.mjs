@@ -44,6 +44,92 @@ const projectDeckSourceSlides = [1, 3, 4, 5, 6, 7];
 const projectDeckSourceIndexes = projectDeckSourceSlides.map((slideNumber) => slideNumber - 1);
 const overviewDeckSourceSlides = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
+const projectPresenterConfigs = {
+  onednn: {
+    displayName: "oneDNN",
+    coverage: "5 of 6 evaluation tasks are implemented",
+    focus: "primitive and graph selection, memory descriptors and reorders, fusion parity, numeric checks, and benchdnn-based diagnosis",
+    workflow: "start from operation semantics, make layouts explicit, compare primitive and graph paths, isolate reorder cost, and finish with a reproducible correctness check",
+    inventory: "five runnable scenarios cover core integration risks; the remaining framework/regression scenario needs a more authentic fixture",
+    sourceFocus: "official oneDNN documentation, examples, tests, and recurring descriptor, reorder, fusion, scratchpad, and blocked-layout failure boundaries",
+  },
+  onemath: {
+    displayName: "oneMath",
+    coverage: "3 of 6 evaluation tasks are implemented",
+    focus: "domain and API choice, queue and dependency handling, backend dispatch, linking, storage, workspace, and reproducibility",
+    workflow: "choose the computation model first, record backend and runtime details, respect storage and workspace contracts, and separate compile, link, runtime, and numeric failures",
+    inventory: "three runnable scenarios establish smoke and evidence checks; RNG chaining, backend integration, and dispatch-overhead scenarios still need authentic project cases",
+    sourceFocus: "official oneMath documentation, examples, tests, and maintainer evidence, with version-specific backend claims deferred to current upstream sources",
+  },
+  onedal: {
+    displayName: "oneDAL",
+    coverage: "5 of 6 evaluation tasks are implemented",
+    focus: "native and scikit-learn-style APIs, host and distributed modes, table shape and orientation, result parity, conversion cost, and quality checks",
+    workflow: "choose the interface and execution mode from the data and memory model, make table contracts explicit, compare outputs with a stated metric, and include conversion costs",
+    inventory: "five runnable scenarios cover interface, data-contract, parity, and distributed concerns; the remaining quality-regression case needs a representative maintainer fixture",
+    sourceFocus: "official oneDAL documentation, examples, tests, and failure boundaries around tables, distributed execution, conversion, and model-quality validation",
+  },
+  onetbb: {
+    displayName: "oneTBB",
+    coverage: "all 7 evaluation tasks are implemented",
+    focus: "parallel patterns, partitioning and grain size, shared state, flow-graph bounds, arenas, cancellation, and exception behavior",
+    workflow: "choose the parallel pattern before tuning, isolate mutable state, justify grain and partitioner choices with evidence, and validate cancellation and exception paths",
+    inventory: "all seven scenarios are runnable, but task count is not evidence of skill benefit; maintainers should distinguish smoke coverage from genuinely discriminating cases",
+    sourceFocus: "official oneTBB documentation, examples, tests, and incident-shaped cases involving oversubscription, unsafe state, flow control, cancellation, and exceptions",
+  },
+  onedpl: {
+    displayName: "oneDPL",
+    coverage: "4 of 6 evaluation tasks are implemented",
+    focus: "host and device execution policies, iterator validity, data lifetime, synchronization, ordering, and toolchain/runtime boundaries",
+    workflow: "select the execution policy and device deliberately, validate iterator and lifetime contracts, synchronize before observing results, and separate toolchain, runtime, and algorithm failures",
+    inventory: "four hosted scenarios test portable contracts; two device-dependent gaps remain until a qualified target lane can exercise them without favoring a vendor",
+    sourceFocus: "official oneDPL and SYCL documentation, examples, tests, and failure boundaries around policies, iterators, lifetime, synchronization, and fallback behavior",
+  },
+  oneccl: {
+    displayName: "oneCCL",
+    coverage: "5 of 7 evaluation tasks are implemented",
+    focus: "collective contracts, rank agreement, operation ordering, counts and datatypes, completion waits, plugin selection, and rank-local diagnosis",
+    workflow: "make every rank's contract explicit, capture rank-local evidence, wait for completion before reading results, and isolate API, version, transport, and plugin assumptions",
+    inventory: "five runnable scenarios cover core collective contracts, including a real zero-count fixture; multi-node and device-dependent cases remain planned",
+    sourceFocus: "official oneCCL documentation, examples, tests, and distributed failure evidence involving rank mismatch, ordering, completion, transport, and plugins",
+  },
+};
+
+function projectPresenterNotes(config) {
+  return [
+    {
+      purpose: `Introduce the draft ${config.displayName} skill and its current evaluation coverage.`,
+      explain: `The skill helps coding agents reason about ${config.focus}.`,
+      emphasize: "This is a UXL-authored starting point awaiting project review, not approved maintainer guidance.",
+    },
+    {
+      purpose: "Walk through the behavior the skill asks an agent to follow today.",
+      explain: `The intended sequence is to ${config.workflow}.`,
+      emphasize: "A useful answer ends with reproducible evidence and a clear failure classification, not a plausible-looking command alone.",
+    },
+    {
+      purpose: "Separate evaluation inventory from evidence that the skill improves outcomes.",
+      explain: `${config.coverage}; ${config.inventory}.`,
+      emphasize: "Implemented means the task can run. It does not mean the task passes, discriminates between treatments, or supports a promotion claim.",
+    },
+    {
+      purpose: "Show how the draft guidance and task set were selected.",
+      explain: `The starting material comes from ${config.sourceFocus}.`,
+      emphasize: "Maintainers should correct, remove, or replace anything that does not reflect current project practice.",
+    },
+    {
+      purpose: "Clarify the proposed ownership boundary.",
+      explain: `${config.displayName} maintainers own triggers, API truth, source freshness, limitations, and authentic cases; UXL maintains the catalog, Harbor integration, comparison design, and dashboard.`,
+      emphasize: "The skill cannot move beyond its incubating state without named project review.",
+    },
+    {
+      purpose: "End with a small, concrete review request.",
+      explain: "Ask maintainers to check the trigger and technical guidance, judge the task inventory, and name a reviewer or owner.",
+      emphasize: "The desired output is specific corrections and realistic cases, not blanket endorsement of the draft.",
+    },
+  ];
+}
+
 const crossProjectDecks = [
   {
     slug: "uxl-sycl-build-debug-maintainer-briefing",
@@ -55,6 +141,38 @@ const crossProjectDecks = [
       ["How we chose the content", "\u00A0Project-owned sources — SYCL toolchain docs plus UXL library build, example, test, and incident evidence.\n\u00A0Failure-shaped coverage — Each task starts at a boundary maintainers repeatedly diagnose.\n\u00A0Portable checks — Verifiers test observed build/runtime behavior rather than vendor names.\n\u00A0Honest limits — Specialized hardware enters only when hosted systems cannot reproduce the task faithfully."],
       ["What shared ownership would look like", "\u00A0UXL working-group reviewers own — Shared terminology, routing rules, safe probes, and vendor-neutral limitations.\n\u00A0Project maintainers validate hand-offs — Each library confirms where general SYCL triage ends and project behavior begins.\n\u00A0Toolchain owners refresh sources — Compiler, loader, plugin, and package changes update the source ledger and affected tasks.\n\u00A0UXL infrastructure maintains — Validators, Harbor execution, dashboards, and specialized-lane contracts."],
       ["A focused 30-minute maintainer review", "\u00A01. Confirm the five-phase triage model — Configure, compile, link, runtime load, device selection.\n\u00A02. Correct one routing boundary — Identify advice that belongs in a library-specific skill instead.\n\u00A03. Judge the eight tasks — Mark smoke coverage versus tasks worth matched model trials.\n\u00A04. Name a shared reviewer — One person or small working-group team is enough.\n\u00A0Outcome — A common first-response playbook that produces reproducible reports across UXL projects."],
+    ],
+    notes: [
+      {
+        purpose: "Introduce the shared SYCL build-and-debug skill and its current 8-of-8 runnable task inventory.",
+        explain: "It gives agents a portable first-response method for failures that cross compiler, loader, runtime, device-selection, and library boundaries.",
+        emphasize: "This shared skill complements project-specific guidance; it does not replace a library maintainer's diagnosis.",
+      },
+      {
+        purpose: "Explain the five-phase triage path used by the skill.",
+        explain: "Agents classify configure, compile, link, runtime-load, and device-selection failures separately, record the environment, and prove the selected device with a minimal workload.",
+        emphasize: "The portable observation is authoritative; the skill deliberately avoids a permanent vendor or backend support matrix.",
+      },
+      {
+        purpose: "Interpret the eight implemented tasks accurately.",
+        explain: "The tasks cover discovery, loader and plugin mismatch, silent fallback, compiler cache, backend linking, compile-time selection, transitive targets, and runtime composition.",
+        emphasize: "Complete task inventory is not the same as measured skill benefit; matched model and toolchain cells are still needed.",
+      },
+      {
+        purpose: "Describe how the shared content was chosen.",
+        explain: "The draft combines official toolchain and project sources with recurring failure boundaries, then verifies observed behavior rather than checking vendor names.",
+        emphasize: "Specialized hardware is introduced only when hosted systems cannot reproduce a case faithfully.",
+      },
+      {
+        purpose: "Set expectations for cross-project ownership.",
+        explain: "Shared reviewers own terminology and safe probes; library maintainers validate hand-offs; toolchain owners refresh changing source facts; UXL operates evaluation infrastructure.",
+        emphasize: "Every routing boundary needs an identifiable upstream owner so advice does not become stale or contradictory.",
+      },
+      {
+        purpose: "Conclude with a focused review request.",
+        explain: "Ask reviewers to confirm the five phases, correct one routing boundary, classify the eight tasks, and identify a shared owner.",
+        emphasize: "Success is a common, reproducible first-response playbook—not universal approval of every draft sentence.",
+      },
     ],
   },
   {
@@ -68,8 +186,215 @@ const crossProjectDecks = [
       ["What shared ownership would look like", "\u00A0Working-group reviewers own — The common evidence and claim contract.\n\u00A0Project benchmark owners supply — Approved commands, metrics, tolerances, representative sizes, and interpretation limits.\n\u00A0Hardware owners qualify lanes — They prove the environment, not the skill's value.\n\u00A0UXL infrastructure maintains — Matched evaluation cells, provenance schemas, Harbor artifacts, and public dashboards."],
       ["A focused 30-minute maintainer review", "\u00A01. Confirm the evidence order — Correctness, baseline, scope, repetitions, variance, then profiling.\n\u00A02. Correct one benchmark assumption — Add a project-specific limitation or required metric.\n\u00A03. Judge the six tasks — Keep, rewrite, or remove; nominate an authentic regression with headroom.\n\u00A04. Name a shared owner — Include project benchmark owners in periodic review.\n\u00A0Outcome — Agents produce reproducible, narrowly scoped evidence before making performance claims."],
     ],
+    notes: [
+      {
+        purpose: "Introduce the shared performance-validation skill and its current 4-of-6 runnable task inventory.",
+        explain: "The skill teaches correctness-first benchmark and claim discipline that applies across UXL projects.",
+        emphasize: "It does not replace each project's benchmark suite, approved metrics, or interpretation by performance owners.",
+      },
+      {
+        purpose: "Explain the evidence order the skill expects.",
+        explain: "Define correctness, baseline, and timing scope; warm up and repeat; synchronize asynchronous work; report variance; profile only after a regression is established.",
+        emphasize: "A faster number is not useful unless the compared work and user-visible result are demonstrably equivalent.",
+      },
+      {
+        purpose: "Interpret the implemented and planned evaluation tasks.",
+        explain: "Four tasks exercise asynchronous timing, report repair, floating tolerance, and constrained concurrency; transfer-inclusive and profile-after-regression cases remain target-dependent gaps.",
+        emphasize: "The current tasks test evidence discipline, but none yet supports a broad claim that the skill improves performance work.",
+      },
+      {
+        purpose: "Describe the design principles behind the content.",
+        explain: "Project-native tools stay authoritative while shared invariants—correctness, scope, synchronization, variance, provenance, and claim language—shape adversarial scenarios.",
+        emphasize: "Target-dependent gaps stay visible until qualified lanes and authentic regressions exist.",
+      },
+      {
+        purpose: "Clarify ownership of performance guidance and evidence.",
+        explain: "Shared reviewers own the common evidence contract; project benchmark owners supply commands and interpretation limits; lane owners qualify environments; UXL maintains matched trials and artifacts.",
+        emphasize: "Hardware qualification proves the lane, not the value of the skill or the validity of a performance claim.",
+      },
+      {
+        purpose: "Conclude with a focused review request.",
+        explain: "Ask reviewers to confirm the evidence order, correct a benchmark assumption, judge the six tasks, and identify a shared owner.",
+        emphasize: "The goal is reproducible, narrowly scoped evidence before an agent makes any performance claim.",
+      },
+    ],
   },
 ];
+
+const overviewPresenterNotes = [
+  {
+    purpose: "Frame the UXL Skills Evaluator for project maintainers and working-group leads.",
+    explain: "It is an incubating, open project that pairs maintainable agent guidance with reproducible evaluations and a public health dashboard.",
+    emphasize: "The deck explains what exists now and how maintainers can shape it; it is not a claim that the current drafts are project-approved.",
+  },
+  {
+    purpose: "Give a factual snapshot of the current catalog and evaluation inventory.",
+    explain: "There are eight skills, 52 defined tasks, 41 implemented tasks, a public dashboard, Harbor-based execution, and a portable target-lane contract.",
+    emphasize: "These numbers describe inventory and maturity, not an aggregate pass rate or quality score.",
+  },
+  {
+    purpose: "Orient the audience to the catalog structure.",
+    explain: "Six skills are specific to oneAPI library projects and two cover shared SYCL troubleshooting and performance-validation practices.",
+    emphasize: "Each catalog card links to the skill, its sources, its task inventory, current evidence, and a maintainer briefing.",
+  },
+  {
+    purpose: "Explain the software architecture from source material to public evidence.",
+    explain: "Maintainer-owned docs inform a versioned skill; Harbor runs task cells through hosted or qualified target lanes; artifacts feed the static dashboard.",
+    emphasize: "A specialized machine changes the execution adapter and environment evidence, not the task or verification contract.",
+  },
+  {
+    purpose: "Show what a manager can learn from the dashboard's top-level view.",
+    explain: "The overview highlights maturity, coverage, freshness, ownership, platform evidence, and visible gaps across the catalog.",
+    emphasize: "Health is intentionally multidimensional; the dashboard avoids compressing unlike environments into one universal score.",
+  },
+  {
+    purpose: "Demonstrate how maintainers drill from a skill card into evaluation details.",
+    explain: "The skill and evaluation views expose triggers, guidance, tasks, verifiers, treatments, results, artifacts, and known limitations.",
+    emphasize: "The dashboard is a navigation and evidence layer over repository data, so every claim remains reviewable in GitHub.",
+  },
+  {
+    purpose: "State the guiding evaluation philosophy.",
+    explain: "Verify correctness and task completion first, test claims separately, preserve provenance, and keep smoke coverage distinct from discriminating evidence.",
+    emphasize: "Passing an environment qualification or a task does not by itself prove that a skill improved an agent's behavior.",
+  },
+  {
+    purpose: "Explain how comparisons remain meaningful across changing models and tools.",
+    explain: "A matched evaluation cell fixes the task, model, harness, toolchain, software, environment, and verifier; only the skill treatment changes.",
+    emphasize: "Results from incompatible cells are reported side by side rather than pooled into a universal benchmark number.",
+  },
+  {
+    purpose: "Address expected questions about model, harness, and version coverage.",
+    explain: "The project uses representative risk-based cells, publishes untested gaps, re-runs affected cells after material changes, and uses hidden checks and negative controls to limit overfitting.",
+    emphasize: "When every treatment passes, the task remains smoke coverage and supports no claim of skill lift.",
+  },
+  {
+    purpose: "Describe the hardware-neutral execution model.",
+    explain: "GitHub-hosted runners handle portable work; qualified machines add GPUs, multi-node systems, or other specialized targets through the same task and artifact contract.",
+    emphasize: "No hardware vendor receives priority from the dashboard, and qualification is separate from matched skill evaluation.",
+  },
+  {
+    purpose: "Make the ongoing maintainer workflow concrete.",
+    explain: "A typical change updates guidance or sources, adds or revises a task, runs validation, reviews evidence, and lands through a normal pull request.",
+    emphasize: "The intended maintenance burden is small and periodic, with automation handling catalog checks and dashboard publication.",
+  },
+  {
+    purpose: "Clarify which responsibilities stay with projects and which stay with UXL infrastructure.",
+    explain: "Project maintainers own technical truth, triggers, limitations, and authentic cases; UXL owns schemas, validators, Harbor integration, comparison discipline, and presentation of evidence.",
+    emphasize: "Named project ownership is required before an incubating skill can be treated as maintained guidance.",
+  },
+  {
+    purpose: "Close with the smallest useful maintainer commitment.",
+    explain: "Ask each project to correct its draft skill, validate or replace its task inventory, and identify a reviewer or owner for future changes.",
+    emphasize: "A concrete correction or realistic issue is more valuable at this stage than broad approval of the whole system.",
+  },
+];
+
+const targetPresenterNotes = [
+  {
+    purpose: "Introduce the target-onboarding guide for engineers adding specialized execution capacity.",
+    explain: "The guide applies to GPUs, accelerators, multi-node systems, and other machines that hosted runners cannot represent faithfully.",
+    emphasize: "It is intentionally vendor-neutral; the target adapter changes while the public task, verifier, and evidence contract remain stable.",
+  },
+  {
+    purpose: "Name the five pieces that make a target lane trustworthy.",
+    explain: "A public task, target adapter, machine registration, hardware oracle, and reviewable evidence bundle work together as one contract.",
+    emphasize: "A reachable runner alone is not a qualified lane.",
+  },
+  {
+    purpose: "Explain the capability contract that the machine owner must publish.",
+    explain: "Labels identify the target; provenance records software and hardware; an allowlist scopes tasks; limitations state what the lane cannot establish.",
+    emphasize: "Use observable capabilities and constraints rather than vendor marketing names as the contract.",
+  },
+  {
+    purpose: "Separate the public integration surface from machine-specific configuration.",
+    explain: "Tasks, schemas, qualification records, and reviewed adapter behavior live in the public repository; credentials and dispatch controls remain private.",
+    emphasize: "Keeping the public surface small makes a new target easier to review and reproduce.",
+  },
+  {
+    purpose: "Describe the hardware oracle and why it gates evaluation.",
+    explain: "The oracle verifies the requested source revision, records the host, maps the intended device, runs a minimal workload, and proves the result is correct.",
+    emphasize: "No model trial should run until the oracle shows that the requested target—not a fallback device—actually executed.",
+  },
+  {
+    purpose: "Explain why dispatch and secrets belong in a private control plane.",
+    explain: "The public repository defines what to run and what evidence to return; the private control repository stores machine enrollment, credentials, and restricted workflow details.",
+    emphasize: "Private control protects the machine without making task definitions or accepted evidence opaque.",
+  },
+  {
+    purpose: "Walk through safe machine preparation and runner registration.",
+    explain: "Create a least-privilege account, pin required software, isolate the workspace, register ephemerally with narrow labels, and make reboot recovery unambiguous.",
+    emphasize: "The machine owner must be able to stop the service and revoke access independently of the public repository.",
+  },
+  {
+    purpose: "Explain the reviewed workflow that reaches the target.",
+    explain: "A workflow dispatch selects an immutable commit and declared adapter; the runner verifies both before the oracle and Harbor execution begin.",
+    emphasize: "Do not allow arbitrary repository code or unreviewed commands to execute merely because a job can reach the runner.",
+  },
+  {
+    purpose: "Describe the operator's end-to-end run sequence.",
+    explain: "Start or resume the runner, dispatch the approved workflow, watch the oracle gate, preserve the complete artifact ZIP, then clean the ephemeral workspace.",
+    emphasize: "Preserve evidence before troubleshooting or cleanup so a failed run remains diagnosable.",
+  },
+  {
+    purpose: "Explain how private artifacts become public evidence safely.",
+    explain: "The importer verifies hashes, stages a sanitized qualification record, and keeps trajectories or logs with sensitive machine details access-controlled.",
+    emphasize: "Publication is a reviewed step; a raw runner artifact should never appear on the public dashboard automatically.",
+  },
+  {
+    purpose: "Place model trials after environment qualification.",
+    explain: "Use tasks with measured headroom, hold the entire evaluation cell fixed, and compare skill and control treatments only after the lane is stable.",
+    emphasize: "The oracle establishes execution integrity; it does not prove the skill helps or justify pooling results across environments.",
+  },
+  {
+    purpose: "Define done for a new specialized target lane.",
+    explain: "The lane is reproducible, least-privilege, oracle-gated, reviewable, documented, owned, and able to produce schema-valid sanitized evidence.",
+    emphasize: "A named owner and explicit limitations are required; the project should not treat a private machine as an unexamined black box.",
+  },
+];
+
+const overviewSources = [
+  "https://github.com/uxlfoundation/skills",
+  "https://uxlfoundation.github.io/skills/",
+  "https://github.com/uxlfoundation/skills/blob/main/skills.yaml",
+  "https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md",
+];
+
+const targetSources = [
+  "https://github.com/uxlfoundation/skills/blob/main/docs/target-device-adapter.md",
+  "https://github.com/uxlfoundation/skills/blob/main/docs/private-machine-runner.md",
+  "https://github.com/uxlfoundation/skills/tree/main/evaluation/runner",
+  "https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md",
+];
+
+function skillSources(skill) {
+  return [
+    `https://github.com/uxlfoundation/skills/tree/main/skills/${skill}`,
+    `https://github.com/uxlfoundation/skills/blob/main/skill-cards/${skill}.md`,
+    `https://github.com/uxlfoundation/skills/blob/main/docs/maintainer-review/${skill}.md`,
+    "https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/suites.json",
+    "https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md",
+  ];
+}
+
+function applyPresenterNotes(presentation, notes, sources) {
+  if (presentation.slides.items.length !== notes.length) {
+    throw new Error(`Speaker-note count ${notes.length} does not match slide count ${presentation.slides.items.length}.`);
+  }
+  for (const [index, note] of notes.entries()) {
+    const speakerNotes = presentation.slides.items[index].speakerNotes;
+    speakerNotes.textFrame.setText([
+      "[Sources]",
+      ...sources.map((source) => `- ${source}`),
+      "[/Sources]",
+      "",
+      "Presenter guidance",
+      `Purpose: ${note.purpose}`,
+      `Explain: ${note.explain}`,
+      `Emphasize: ${note.emphasize}`,
+    ].join("\n"));
+    speakerNotes.setVisible(true);
+  }
+}
 
 function replaceText(presentation, id, oldText, newText) {
   presentation.resolve(id).text.replace(oldText, newText);
@@ -163,13 +488,14 @@ async function buildExistingProjectDeck(slug) {
   const templatePath = path.join(sourceDir, `${slug}-template.pptx`);
   const presentation = await importDeck(templatePath);
   const projectName = slug.replace(/^uxl-/, "").replace(/-maintainer-briefing$/, "");
-  const displayNames = { onednn: "oneDNN", onemath: "oneMath", onedal: "oneDAL", onetbb: "oneTBB", onedpl: "oneDPL", oneccl: "oneCCL" };
-  const displayName = displayNames[projectName];
+  const config = projectPresenterConfigs[projectName];
+  const displayName = config.displayName;
   replaceText(presentation, ids.project.titles[0], `${displayName} Skills`, `${displayName} Skill`);
   const subtitle = presentation.resolve(ids.project.bodies[0]);
   subtitle.text.replace("Maintainer briefing ·", "September 2026 ·");
   presentation.slides.remove(1);
   renumberSlideFooters(presentation);
+  applyPresenterNotes(presentation, projectPresenterNotes(config), skillSources(`uxl-${projectName}`));
   return finalizeDeck(presentation, templatePath, slug, 6, projectDeckSourceSlides);
 }
 
@@ -180,20 +506,10 @@ async function buildCrossProjectDeck(deck) {
     const sourceIndex = projectDeckSourceIndexes[index];
     setShapeText(presentation, ids.project.titles[sourceIndex], deck.slides[index][0]);
     setShapeText(presentation, ids.project.bodies[sourceIndex], deck.slides[index][1]);
-    presentation.resolve(ids.project.notes[sourceIndex]).setText([
-      "[Sources]",
-      `- https://github.com/uxlfoundation/skills/tree/main/skills/${deck.skill}`,
-      `- https://github.com/uxlfoundation/skills/blob/main/skill-cards/${deck.skill}.md`,
-      `- https://github.com/uxlfoundation/skills/blob/main/docs/maintainer-review/${deck.skill}.md`,
-      "- https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/suites.json",
-      "- https://github.com/uxlfoundation/skills/blob/main/evaluation/harbor/EVALUATOR_POLICY.md",
-      "[/Sources]",
-      "",
-      `Speaker cue: ${deck.slides[index][0].replace(/\n/g, ": ")}`,
-    ].join("\n"));
   }
   presentation.slides.remove(1);
   renumberSlideFooters(presentation);
+  applyPresenterNotes(presentation, deck.notes, skillSources(deck.skill));
   return finalizeDeck(presentation, templatePath, deck.slug, 6, projectDeckSourceSlides);
 }
 
@@ -214,6 +530,7 @@ async function buildOverview() {
   await replaceImage(presentation, "im/2lcz2l0n", path.join(screenshotDir, "platforms.png"), "UXL Skills Evaluator platform evidence page");
   presentation.slides.remove(1);
   renumberSlideFooters(presentation);
+  applyPresenterNotes(presentation, overviewPresenterNotes, overviewSources);
   return finalizeDeck(presentation, templatePath, "uxl-skills-maintainer-overview", 13, overviewDeckSourceSlides);
 }
 
@@ -230,6 +547,7 @@ async function buildTargetGuide() {
   setShapeText(presentation, "sh/cbu58j2h", "\u00A0Download — Keep the complete artifact ZIP intact; it carries provenance, results, trajectories, verifier output, configs, and probes.\n\u00A0Stage — Run python scripts/import_harbor_artifact.py <artifact.zip>; the importer checks hashes and stages a sanitized candidate.\n\u00A0Review — Check the public labels and limitations, then publish only qualification-record.json through normal review.\n\u00A0Audit — Inspect the task, verifier, trajectory, artifacts, configs, and provenance before accepting the lane.\n\u00A0Classify failures — Provisioning, network, driver, container, and runner failures are infrastructure failures, not skill failures.");
   replaceText(presentation, "sh/0f2lgnmp", "\u00A0Reviewable anywhere — The complete artifact imports into the standard Harbor viewers without platform-specific dashboard code.", "\u00A0Reviewable anywhere — Private logs stay access-controlled; the sanitized qualification record uses the shared dashboard and schema.");
   replaceText(presentation, "sh/0f2lgnmp", "\u00A0Owned and maintainable — A named platform owner keeps labels, probes, images, runtime guidance, and limitations current.", "\u00A0Owned and maintainable — A named lane owner keeps target-adapter.json, labels, probes, images, runtime guidance, and limitations current.");
+  applyPresenterNotes(presentation, targetPresenterNotes, targetSources);
   return finalizeDeck(presentation, templatePath, "uxl-specialized-target-onboarding", 12);
 }
 
