@@ -42,6 +42,7 @@ const ids = {
 
 const projectDeckSourceSlides = [1, 3, 4, 5, 6, 7];
 const projectDeckSourceIndexes = projectDeckSourceSlides.map((slideNumber) => slideNumber - 1);
+const overviewDeckSourceSlides = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
 const crossProjectDecks = [
   {
@@ -211,7 +212,9 @@ async function buildOverview() {
   await replaceImage(presentation, "im/byxwryh8", path.join(screenshotDir, "evaluations.png"), "UXL Skills Evaluator evaluation explorer");
   await replaceImage(presentation, "im/ixcj6lgb", path.join(screenshotDir, "methodology.png"), "UXL Skills Evaluator methodology page");
   await replaceImage(presentation, "im/2lcz2l0n", path.join(screenshotDir, "platforms.png"), "UXL Skills Evaluator platform evidence page");
-  return finalizeDeck(presentation, templatePath, "uxl-skills-maintainer-overview", 14);
+  presentation.slides.remove(1);
+  renumberSlideFooters(presentation);
+  return finalizeDeck(presentation, templatePath, "uxl-skills-maintainer-overview", 13, overviewDeckSourceSlides);
 }
 
 async function buildTargetGuide() {
