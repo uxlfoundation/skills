@@ -2,6 +2,8 @@
 
 Public catalog for agent skills that teach AI coding agents how to use UXL Foundation oneAPI libraries correctly.
 
+[Skills website and dashboard](https://uxlfoundation.github.io/skills/) — Browse the catalog, evaluation evidence, and maintainer review status.
+
 This repository is the central distribution catalog for UXL skills. Skill status is still explicit: the current catalog release is public, while individual skills remain `incubating` or `pilot` until reviewed by the owning projects. The working recommendation, subject to UXL project review, is a hybrid source-of-truth model:
 
 - Library-owned skills live first in the owning project repositories.
